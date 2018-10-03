@@ -5,7 +5,7 @@ Authors@R: person("First", "Last", email = "first.last@example.com", role = c("a
 Description: herdersTA provides functions in order to process and summarise GPS based
   trajectories of individuals. 
 Depends: 
-  R (>= 3.4.0),
+  R (>= 3.2.0),
   trajectories,
   sp,
   rgdal,
