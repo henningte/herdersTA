@@ -4,26 +4,26 @@
 \alias{identifyBlocksVariable}
 \title{Identifies data value groups within a \code{data.frame} column.}
 \usage{
-identifyBlocksVariable(track, variable, value)
+identifyBlocksVariable(currenttrack, variable, value)
 }
 \arguments{
-\item{track}{A \code{\link[trajectories]{Track}} object (or
+\item{currenttrack}{A \code{\link[trajectories]{Track}} object (or
 \code{data.frame} object) with a boolean column \code{gap} in
-\code{track@data}. Data values have to be regularly spaced (may
+\code{currenttrack@data}. Data values have to be regularly spaced (may
 be achieved for example with \code{\link{reorganizeTracks}}).}
 
 \item{variable}{A character value indicating the name of a
-variable in \code{track@data} to group for.}
+variable in \code{currenttrack@data} to group for.}
 
-\item{value}{A value of the \code{track@data$variable} for
+\item{value}{A value of the \code{currenttrack@data$variable} for
 which to identify blocks of subsequent rows.}
 }
 \value{
 A \code{matrix} with two columns and rows for each identified
-block. The first column indicates the row of \code{track@data} where
-the block begins and the second column indicates the row of
-\code{track@data} where the block ends or \code{NULL} if \code{value}
-does not exist for \code{variable}.
+block. The first column indicates the row of \code{currenttrack@data}
+where the block begins and the second column indicates the row of
+\code{currenttrack@data} where the block ends or \code{NULL} if
+\code{value} does not exist for \code{variable}.
 }
 \description{
 \code{identifyBlocksVariable} identifies blocks of rows in the

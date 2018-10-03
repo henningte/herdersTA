@@ -4,11 +4,11 @@
 \alias{fillGapTracks}
 \title{Imputes gaps in a \code{\link[trajectories]{Tracks}} object.}
 \usage{
-fillGapTracks(tracks, maxduration, maxdistance, timeinterval, cores = 1,
-  clcall = NULL)
+fillGapTracks(currenttracks, maxduration, maxdistance, timeinterval,
+  cores = 1, clcall = NULL)
 }
 \arguments{
-\item{tracks}{A \code{\link[trajectories]{Tracks}} object with
+\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object with
 \code{\link[trajectories]{Track}} objects with a
 boolean column \code{gap} in \code{track@data}. Data values
 have to be regularly spaced (may be achieved for example with

@@ -4,11 +4,11 @@
 \alias{fillGapTrack}
 \title{Imputes gaps in a \code{\link[trajectories]{Track}} object.}
 \usage{
-fillGapTrack(track, maxduration, maxdistance, timeinterval)
+fillGapTrack(currenttrack, maxduration, maxdistance, timeinterval)
 }
 \arguments{
-\item{track}{A \code{\link[trajectories]{Track}} object with a
-boolean column \code{gap} in \code{track@data}. Data values
+\item{currenttrack}{A \code{\link[trajectories]{Track}} object with a
+boolean column \code{gap} in \code{currenttrack@data}. Data values
 have to be regularly spaced (may be achieved for example with
 \code{\link{reorganizeTracks}}).}
 
@@ -21,7 +21,8 @@ value before a gap and the spatial position of the first data
 value after a gap that is filled [m].}
 
 \item{timeinterval}{A numerical value reperesenting the duration
-of a time interval represented by one data value of \code{track} [s].}
+of a time interval represented by one data value of
+\code{currenttrack} [s].}
 }
 \value{
 The input \code{\link[trajectories]{Track}} object with filled
