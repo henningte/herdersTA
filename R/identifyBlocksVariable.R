@@ -11,70 +11,70 @@ NULL
 #' block is defined as a set of directly subsequent rows with the
 #' same value for the specified variable.
 #'
-#' @param track A \code{\link[trajectories]{Track}} object (or
+#' @param currenttrack A \code{\link[trajectories]{Track}} object (or
 #' \code{data.frame} object) with a boolean column \code{gap} in
-#' \code{track@data}. Data values have to be regularly spaced (may
+#' \code{currenttrack@data}. Data values have to be regularly spaced (may
 #' be achieved for example with \code{\link{reorganizeTracks}}).
 #' @param variable A character value indicating the name of a
-#' variable in \code{track@data} to group for.
-#' @param value A value of the \code{track@data$variable} for
+#' variable in \code{currenttrack@data} to group for.
+#' @param value A value of the \code{currenttrack@data$variable} for
 #' which to identify blocks of subsequent rows.
 #' @return A \code{matrix} with two columns and rows for each identified
-#' block. The first column indicates the row of \code{track@data} where
-#' the block begins and the second column indicates the row of
-#' \code{track@data} where the block ends or \code{NULL} if \code{value}
-#' does not exist for \code{variable}.
+#' block. The first column indicates the row of \code{currenttrack@data}
+#' where the block begins and the second column indicates the row of
+#' \code{currenttrack@data} where the block ends or \code{NULL} if
+#' \code{value} does not exist for \code{variable}.
 #' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
 #' \code{\link{redefineIndices}}, \code{\link{fillGapTrack}},
 #' \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-identifyBlocksVariable <- function(track, variable, value){
+identifyBlocksVariable <- function(currenttrack, variable, value){
 
-  # get indices of entries representing gaps
-  if(inherits(track, "data.frame")){
-    which.gaps <- which(track[variable] == value)
+  # get indices of entries equal to the specified value
+  if(inherits(currenttrack, "data.frame")){
+    whichvalue <- which(currenttrack[variable] == value)
   }else{
-    which.gaps <- which(track@data[variable] == value)
+    whichvalue <- which(currenttrack@data[variable] == value)
   }
 
-  # identify blocks of gaps within track
-  if(length(which.gaps) == 0){
-    blocks.gaps1 <- NULL
+  # identify blocks of the value within currenttrack
+  if(length(whichvalue) == 0){
+    blocksvalue1 <- NULL
   }else{
-    if(length(which.gaps) > 1){
-      blocks.gaps <- which.gaps[-1] - which.gaps[-length(which.gaps)]
-      blocks.gaps1 <- NULL
+    if(length(whichvalue) > 1){
+      blocksvalue <- whichvalue[-1] - whichvalue[-length(whichvalue)]
+      blocksvalue1 <- NULL
       block <- NULL
-      for(i in seq_along(blocks.gaps)){
+      for(i in seq_along(blocksvalue)){
 
         # start of first block
         if(i == 1){
-          block <- which.gaps[i]
+          block <- whichvalue[i]
         }
 
         # end of last block
-        if(i == length(blocks.gaps)){
-          block <- c(block, which.gaps[i+1])
-          blocks.gaps1 <- rbind(blocks.gaps1, block)
+        if(i == length(blocksvalue)){
+          block <- c(block, whichvalue[i+1])
+          blocksvalue1 <- rbind(blocksvalue1, block)
         }
 
         # end and start of intermediate block
-        if(length(block) == 1 && blocks.gaps[i] != 1){
-          block <- c(block, which.gaps[i])
-          blocks.gaps1 <- rbind(blocks.gaps1, block)
-          block <- which.gaps[i+1]
+        if(length(block) == 1 && blocksvalue[i] != 1){
+          block <- c(block, whichvalue[i])
+          blocksvalue1 <- rbind(blocksvalue1, block)
+          block <- whichvalue[i+1]
         }else{
           next
         }
 
       }
     }else{
-      blocks.gaps1 <- matrix(rep(which.gaps, 2), nrow = 1, ncol = 2)
+      blocksvalue1 <- matrix(rep(whichvalue, 2), nrow = 1, ncol = 2)
     }
   }
 
   # return result
-  return(blocks.gaps1)
+  return(blocksvalue1)
 
 }
