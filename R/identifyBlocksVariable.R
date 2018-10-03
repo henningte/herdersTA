@@ -32,7 +32,11 @@ NULL
 identifyBlocksVariable <- function(currenttrack, variable, value){
 
   # get indices of entries equal to the specified value
-  whichvalue <- ifelse(inherits(currenttrack, "data.frame"), which(currenttrack[variable] == value), which(currenttrack@data[variable] == value))
+  if(inherits(currenttrack, "data.frame")){
+    whichvalue <- which(currenttrack[variable] == value)
+  }else{
+    whichvalue <- which(currenttrack@data[variable] == value)
+  }
 
   # identify blocks of the value within currenttrack
   if(length(whichvalue) == 0){
