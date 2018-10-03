@@ -34,6 +34,9 @@ NULL
 #' @export
 fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
 
+  # get the input CRS of the track
+  inputcrs <- proj4string(currenttrack)
+
   # identify blocks of representing gaps
   blocksgaps1 <- identifyBlocksVariable(currenttrack, variable = "gap", value = TRUE)
 
@@ -117,8 +120,9 @@ fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
   currenttrack <- Track(STIDF(sp = SpatialPoints(cbind(currenttrack@data$lon, currenttrack@data$lat)), time = as.POSIXct(currenttrack@data$time) , data = currenttrack@data, endTime = as.POSIXct(currenttrack@data$time)))
 
   # set crs
-  crs(currenttrack@sp) <- proj4string(currenttrack)
+  crs(currenttrack@sp) <- inputcrs
 
   # return result
   return(currenttrack)
+
 }
