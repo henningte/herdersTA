@@ -107,8 +107,7 @@ NULL
 locationsTracks <- function(currenttrack,
                             radius = 200,
                             tmin = 345600,
-                            summary = TRUE
-){
+                            summary = TRUE){
 
   # convert track to SpatialPointsDataFrame and transform to UTM
   trsSP <- TrackToSpatialPointsDataFrame(currenttrack)
@@ -127,7 +126,7 @@ locationsTracks <- function(currenttrack,
 
   # find order of campsite visits
   ordercampsitevisits <- lapply(unique(initiallocationids)[unique(initiallocationids) != 0], function(x){
-    identifyBlocksVariable(track = trsSP, variable = "campsites", value = x)}
+    identifyBlocksVariable(currenttrack = trsSP, variable = "campsites", value = x)}
   )
   ordercampsitevisits <- as.matrix(do.call(rbind, ordercampsitevisits))
   ordercampsitevisits <- ordercampsitevisits[order(ordercampsitevisits[,1]),]
@@ -175,20 +174,20 @@ locationsTracks <- function(currenttrack,
   campsitesvar <- redefineIndices(df = campsitesvar, indices = "location", time = "arrivaltime", notchange = 0)
 
   # get mean position data for each location visit
-  centr.coords <- data.frame()
+  centroidcoords <- data.frame()
   for(visit_i in c(1:length(ordercampsitevisits))){
 
-    centr.coords <- rbind(centr.coords, apply(matrix(trsSP@coords[ordercampsitevisits[[visit_i]],], ncol = 2), 2 , mean))
+    centroidcoords <- rbind(centroidcoords, apply(matrix(trsSP@coords[ordercampsitevisits[[visit_i]],], ncol = 2), 2 , mean))
 
   }
-  centr.coords$alt <- sapply(ordercampsitevisits, function(x){mean(trsSP$HEIGHT[x])})
-  names(centr.coords) <- c("lon", "lat", "alt")
+  centroidcoords$alt <- sapply(ordercampsitevisits, function(x){mean(trsSP$HEIGHT[x])})
+  names(centroidcoords) <- c("lon", "lat", "alt")
 
   # convert to SP
-  centr.coords <- SpatialPoints(centr.coords[,-3], proj4string = CRS(proj4string(trsSP)))
+  centroidcoords <- SpatialPoints(centroidcoords[,-3], proj4string = CRS(proj4string(trsSP)))
 
   # transform back to WGS84 longitude latitude
-  a <- spTransform(centr.coords, currenttrack@sp@proj4string)
+  a <- spTransform(centroidcoords, currenttrack@sp@proj4string)
 
   # add variables to campsitesvar
   campsitesvar$lon <- a@coords[,1]
@@ -247,6 +246,6 @@ locationsTracks <- function(currenttrack,
   currenttrack@data$visitscampsite <- visitscampsite
 
   # return the result
-  ifelse(summary == TRUE, campsitesvar, currenttrack){
+  ifelse(summary == TRUE, campsitesvar, currenttrack)
 
 }

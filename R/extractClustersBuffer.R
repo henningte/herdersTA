@@ -36,16 +36,16 @@ extractClustersBuffer <- function(trsSP, radius = 200){
 
   # indices with points that have not been assigned to a cluster yet
   leftover <- c(1:length(trsSP))
-  leftover.old <- leftover
+  leftoverold <- leftover
   first <- TRUE
 
   while(length(leftover) != 0){
 
     # subset points for buffering (1%)
-    ind.select <- leftover[seq(1, length(leftover), length.out = length(leftover)*0.01)]
+    indselect <- leftover[seq(1, length(leftover), length.out = length(leftover)*0.01)]
 
     # compute buffer
-    buffer.trs <- gBuffer(trsSP[ind.select,], width = radius, quadsegs = 25)
+    buffer.trs <- gBuffer(trsSP[indselect,], width = radius, quadsegs = 25)
 
     # get intersecting points
     a.new <- over(trsSP, disaggregate(buffer.trs))
@@ -53,32 +53,32 @@ extractClustersBuffer <- function(trsSP, radius = 200){
     if(first == TRUE){
       # get intersecting points
       buffer.trs.tot <- buffer.trs
-      a.tot <- a.new
+      initiallocationids <- a.new
 
       first = FALSE
     }
 
     # define points that were inside a buffer at any loop run
-    a.tot[which(is.na(a.tot))] <- a.new[which(is.na(a.tot))]
+    initiallocationids[which(is.na(initiallocationids))] <- a.new[which(is.na(initiallocationids))]
 
     # define total buffer range
     buffer.trs.tot <- gUnion(buffer.trs, buffer.trs.tot)
 
     # subset leftover
-    if(length(which(is.na(a.tot))) != 0){
-      leftover <- leftover.old[which(is.na(a.tot))]
+    if(length(which(is.na(initiallocationids))) != 0){
+      leftover <- leftoverold[which(is.na(initiallocationids))]
     }else{
       leftover = NULL
 
-      a.tot <- over(trsSP, disaggregate(buffer.trs.tot))
+      initiallocationids <- over(trsSP, disaggregate(buffer.trs.tot))
     }
 
   }
 
   # set location of gaps to 0
-  a.tot[which(trsSP@data$gap == T)] <- 0
+  initiallocationids[which(trsSP@data$gap == T)] <- 0
 
   # return result
-  return(a.tot)
+  return(initiallocationids)
 
 }
