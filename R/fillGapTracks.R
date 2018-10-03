@@ -15,7 +15,7 @@ NULL
 #' value before the gap and the spatial position of the first data
 #' value after the gap is $\le$ a user specified distance threshold.
 #'
-#' @param tracks A \code{\link[trajectories]{Tracks}} object with
+#' @param currenttracks A \code{\link[trajectories]{Tracks}} object with
 #' \code{\link[trajectories]{Track}} objects with a
 #' boolean column \code{gap} in \code{track@data}. Data values
 #' have to be regularly spaced (may be achieved for example with
@@ -39,7 +39,12 @@ NULL
 #' \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-fillGapTracks <- function(tracks, maxduration, maxdistance, timeinterval, cores = 1, clcall = NULL){
+fillGapTracks <- function(currenttracks,
+                          maxduration,
+                          maxdistance,
+                          timeinterval,
+                          cores = 1,
+                          clcall = NULL){
 
   # set up cluster
   cl <- makeCluster(cores, outfile="", type = "PSOCK")
@@ -50,26 +55,29 @@ fillGapTracks <- function(tracks, maxduration, maxdistance, timeinterval, cores 
   clusterCall(cl, function(){library("spacetime")})
   clusterCall(cl, function(){library("trajectories")})
   clusterCall(cl, function(){library("raster")})
-  clusterExport(cl = cl, varlist = list("tracks", "maxduration", "maxdistance", "timeinterval", "identifyBlocksVariable", "fillGapTrack"), envir=environment())
+  clusterExport(cl = cl, varlist = list("currenttracks", "maxduration", "maxdistance", "timeinterval", "identifyBlocksVariable", "fillGapTrack"), envir=environment())
 
-  new.tracks <- parLapply(cl, tracks@tracks, fun = function(x){
+  newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
 
-    new.tracks1 <- fillGapTrack(track = x, maxduration = maxduration, maxdistance = maxdistance, timeinterval = timeinterval)
+    newtracks1 <- fillGapTrack(currenttrack = x,
+                               maxduration = maxduration,
+                               maxdistance = maxdistance,
+                               timeinterval = timeinterval)
 
     # set crs
-    crs(new.tracks1@sp) <- proj4string(tracks)
+    crs(newtracks1@sp) <- proj4string(currenttracks)
 
-    return(new.tracks1)
-  }
-  )
+    return(newtracks1)
+
+  })
 
   # convert to Tracks object
-  new.tracks <- Tracks(new.tracks)
+  newcurrenttracks <- Tracks(newcurrenttracks)
 
   # stop cluster
   stopCluster(cl)
 
   # return result
-  return(new.tracks)
+  return(newcurrenttracks)
 
 }
