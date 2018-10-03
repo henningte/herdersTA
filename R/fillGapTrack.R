@@ -35,25 +35,25 @@ NULL
 fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
 
   # identify blocks of representing gaps
-  blocks.gaps1 <- identifyBlocksVariable(currenttrack, variable = "gap", value = T)
+  blocksgaps1 <- identifyBlocksVariable(currenttrack, variable = "gap", value = TRUE)
 
-  # test if blocks.gaps1 == NULL
-  if(is.null(blocks.gaps1)){
-    currenttrack@data$filled = F
+  # test if blocksgaps1 == NULL
+  if(is.null(blocksgaps1)){
+    currenttrack@data$filled = FALSE
     return(currenttrack)
   }
 
   # remove the first and the last gap (cannot be filled)
-  if(1 %in% blocks.gaps1[,1]){
-    blocks.gaps1 <- blocks.gaps1[-which(blocks.gaps1[,1] == 1),]
+  if(1 %in% blocksgaps1[,1]){
+    blocksgaps1 <- blocksgaps1[-which(blocksgaps1[,1] == 1),]
   }
-  if(nrow(currenttrack@data) %in% blocks.gaps1[,2]){
-    blocks.gaps1 <- blocks.gaps1[-which(blocks.gaps1[,2] == nrow(currenttrack@data)),]
+  if(nrow(currenttrack@data) %in% blocksgaps1[,2]){
+    blocksgaps1 <- blocksgaps1[-which(blocksgaps1[,2] == nrow(currenttrack@data)),]
   }
 
   # get duration of gaps
-  discard.gaps <-
-    apply(blocks.gaps1, 1, function(x){
+  discardgaps <-
+    apply(blocksgaps1, 1, function(x){
       if(length(x[1]:x[2])*timeinterval > maxduration){
         0
       }else{
@@ -62,21 +62,21 @@ fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
     })
 
   # discard gaps > maxduration
-  if(length(which(discard.gaps == 0)) > 0){
-    blocks.gaps1 <- blocks.gaps1[-which(discard.gaps == 0),]
+  if(length(which(discardgaps == 0)) > 0){
+    blocksgaps1 <- blocksgaps1[-which(discardgaps == 0),]
   }
 
-  # test if blocks.gaps1 == NULL
-  if(is.null(blocks.gaps1)){
-    currenttrack@data$filled = F
+  # test if blocksgaps1 == NULL
+  if(is.null(blocksgaps1)){
+    currenttrack@data$filled = FALSE
     return(currenttrack)
   }
 
   # get distance between points adjacent to each gap block
-  discard.gaps <-
-    apply(blocks.gaps1, 1, function(x){
+  discardgaps <-
+    apply(blocksgaps1, 1, function(x){
 
-      block.dist <- pointDistance(c(currenttrack@data$lon[x[1]-1], currenttrack@data$lat[x[1]-1]), c(currenttrack@data$lon[x[2]+1], currenttrack@data$lat[x[2]+1]), lonlat = T)
+      block.dist <- pointDistance(c(currenttrack@data$lon[x[1]-1], currenttrack@data$lat[x[1]-1]), c(currenttrack@data$lon[x[2]+1], currenttrack@data$lat[x[2]+1]), lonlat = TRUE)
       if(is.na(block.dist)){
         0
       } else{
@@ -90,28 +90,28 @@ fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
     })
 
   # discard gaps with differing locations between points adjacent to each gap block
-  if(length(which(discard.gaps == 0)) > 0){
-    blocks.gaps1 <- blocks.gaps1[-which(discard.gaps == 0),]
+  if(length(which(discardgaps == 0)) > 0){
+    blocksgaps1 <- blocksgaps1[-which(discardgaps == 0),]
   }
 
-  # test if blocks.gaps1 == NULL
-  if(is.null(blocks.gaps1)){
-    currenttrack@data$filled = F
+  # test if blocksgaps1 == NULL
+  if(is.null(blocksgaps1)){
+    currenttrack@data$filled = FALSE
     return(currenttrack)
   }
 
   # fill gaps
   currenttrack1 <- currenttrack
-  currenttrack@data[as.vector(unlist(apply(blocks.gaps1, 1, function(x){x[1]:x[2]}))),] <-
-    do.call(rbind, apply(blocks.gaps1, 1, function(x){
-      do.call(rbind, replicate(length(x[1]:x[2]), currenttrack@data[x[1]-1,], simplify = F))
+  currenttrack@data[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]}))),] <-
+    do.call(rbind, apply(blocksgaps1, 1, function(x){
+      do.call(rbind, replicate(length(x[1]:x[2]), currenttrack@data[x[1]-1,], simplify = FALSE))
     }))
-  currenttrack@data$time[as.vector(unlist(apply(blocks.gaps1, 1, function(x){x[1]:x[2]})))] <-
-    currenttrack1@data$time[as.vector(unlist(apply(blocks.gaps1, 1, function(x){x[1]:x[2]})))]
+  currenttrack@data$time[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]})))] <-
+    currenttrack1@data$time[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]})))]
 
   # create a variable to classify filled gaps
-  currenttrack@data$filled <- rep(F, nrow(currenttrack@data))
-  currenttrack@data$filled[as.vector(unlist(apply(blocks.gaps1, 1, function(x){x[1]:x[2]})))] <- T
+  currenttrack@data$filled <- rep(FALSE, nrow(currenttrack@data))
+  currenttrack@data$filled[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]})))] <- TRUE
 
   # recreate currenttrack as Track object
   currenttrack <- Track(STIDF(sp = SpatialPoints(cbind(currenttrack@data$lon, currenttrack@data$lat)), time = as.POSIXct(currenttrack@data$time) , data = currenttrack@data, endTime = as.POSIXct(currenttrack@data$time)))
