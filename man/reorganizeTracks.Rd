@@ -4,8 +4,8 @@
 \alias{reorganizeTracks}
 \title{Reorganises \code{\link[trajectories]{Tracks}} objects.}
 \usage{
-reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT",
-  cores = 1, clcall = NULL)
+reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT", cores = 1,
+  clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
