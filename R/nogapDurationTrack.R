@@ -21,7 +21,7 @@ NULL
 #' @return A \code{\link[trajectories]{Track}} object identical to
 #' \code{currenttrack}, except for a new column
 #' \code{currenttrack@data$duration_nogap}
-#' representing the temporal duration of of not missing values within the
+#' representing the temporal duration of not missing values within the
 #' corresponding time interval specified by
 #' \code{currenttrack@data$id_timeinterval}.
 #' @seealso \code{\link{identifyTimeIntervals}}, \code{\link{removeDataTrack}},

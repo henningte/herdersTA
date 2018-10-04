@@ -29,7 +29,7 @@ NULL
 #' @return A \code{\link[trajectories]{Tracks}} object identical to
 #' \code{currenttracks}, except for a new column
 #' \code{currenttrack@data$duration_nogap}
-#' representing the temporal duration of of not missing values within the
+#' representing the temporal duration of not missing values within the
 #' corresponding time interval specified by
 #' \code{currenttrack@data$id_timeinterval} for
 #' each \code{\link[trajectories]{Track}} object (\code{currenttrack}).
