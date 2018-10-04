@@ -14,6 +14,10 @@ NULL
 #'
 #' @param currenttrackscollection A
 #' \code{\link[trajectories]{TracksCollection}} object.
+#' @param cores An integer value representing the number of cores to
+#' use in parallel computing.
+#' @param clcall A function that is passed to
+#' \code{\link[parallel]{clusterCall}}.
 #' @return A \code{\link[trajectories]{Tracks}} object with
 #' a \code{\link[trajectories]{Track}} object for each former
 #' \code{\link[trajectories]{Tracks}} object containing
