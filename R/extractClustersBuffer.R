@@ -78,6 +78,7 @@ extractClustersBuffer <- function(trsSP, radius = 200){
   # set location of gaps to 0
   initiallocationids[which(trsSP@data$gap == TRUE)] <- 0
 
+
   # return result
   return(initiallocationids)
 
