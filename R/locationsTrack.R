@@ -38,7 +38,7 @@ NULL
 #' information.
 #' @return A \code{\link[trajectories]{Track}} object that is:
 #' \describe{
-#'   \item{If (\code{summary = TRUE})}{identical to the input
+#'   \item{If (\code{summary = FALSE})}{identical to the input
 #'   \code{\link[trajectories]{Track}} object, but has four additional
 #'   columns in the \code{data} slot:
 #'   \describe{
@@ -59,7 +59,7 @@ NULL
 #'   Gaps, as indicated by the column \code{gap}, have \code{NA} values for
 #'   all four variables.
 #'   }
-#'   \item{If (\code{summary = FALSE})}{A \code{\link[trajectories]{Track}}
+#'   \item{If (\code{summary = TRUE})}{A \code{\link[trajectories]{Track}}
 #'   object summarising the locations and visits of the input
 #'   \code{\link[trajectories]{Track}} object with the following variables:
 #'   \describe{
