@@ -53,10 +53,19 @@ identifyBlocksVariable <- function(currenttrack, variable, value){
           block <- whichvalue[i]
         }
 
-        # end of last block
+        # end of last block(s)
         if(i == length(blocksvalue)){
-          block <- c(block, whichvalue[i+1])
-          blocksvalue1 <- rbind(blocksvalue1, block)
+          # if the last values represent two independent blocks
+          if(whichvalue[i+1] != whichvalue[i] + 1){
+            block <- c(block, block)
+            blocksvalue1 <- rbind(blocksvalue1,
+                                  block,
+                                  c(whichvalue[i+1], whichvalue[i+1]))
+          # if the last values belong to the same block
+          }else{
+            block <- c(block, whichvalue[i+1])
+            blocksvalue1 <- rbind(blocksvalue1, block)
+          }
         }
 
         # end and start of intermediate block
