@@ -8,7 +8,9 @@ NULL
 #'
 #' \code{TrackToSpatialPointsDataFrame} converts a
 #' \code{\link[trajectories]{Track}} object to a
-#' \code{\link[sp]{SpatialPointsDataFrame}}.
+#' \code{\link[sp]{SpatialPointsDataFrame}} and projects it to
+#' "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs
+#' +ellps=WGS84 +towgs84=0,0,0".
 #'
 #' @param currenttrack A \code{\link[trajectories]{Track}} object.
 #' @return A \code{\link[sp]{SpatialPointsDataFrame}} object
