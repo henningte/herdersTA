@@ -46,7 +46,9 @@ identifyBlocksVariable <- function(currenttrack, variable, value){
       blocksvalue <- whichvalue[-1] - whichvalue[-length(whichvalue)]
       blocksvalue1 <- NULL
       block <- NULL
-      for(i in seq_along(blocksvalue)){
+      for(i in seq_along(blocksvalue)[-length(blocksvalue)]){
+
+        #if(i == 95){break}
 
         # start of first block
         if(i == 1){
@@ -54,7 +56,8 @@ identifyBlocksVariable <- function(currenttrack, variable, value){
         }
 
         # end of last block(s)
-        if(i == length(blocksvalue)){
+        if(i == length(blocksvalue)-1){
+          print(i)
           # if the last values represent two independent blocks
           if(whichvalue[i+1] != whichvalue[i] + 1){
             block <- c(block, block)
@@ -73,6 +76,7 @@ identifyBlocksVariable <- function(currenttrack, variable, value){
           block <- c(block, whichvalue[i])
           blocksvalue1 <- rbind(blocksvalue1, block)
           block <- whichvalue[i+1]
+
         }else{
           next
         }
