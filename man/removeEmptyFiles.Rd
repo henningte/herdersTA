@@ -2,7 +2,6 @@
 % Please edit documentation in R/removeEmptyFiles.R, R/removeEmptyFolders.R
 \name{removeEmptyFiles}
 \alias{removeEmptyFiles}
-\alias{removeEmptyFiles}
 \title{Finds non-empty .csv files in a directory.}
 \usage{
 removeEmptyFiles(listname)
