@@ -43,44 +43,37 @@ identifyBlocksVariable <- function(currenttrack, variable, value){
     blocksvalue1 <- NULL
   }else{
     if(length(whichvalue) > 1){
+
+      # get the difference between whichvalue
       blocksvalue <- whichvalue[-1] - whichvalue[-length(whichvalue)]
-      blocksvalue1 <- NULL
-      block <- NULL
-      for(i in seq_along(blocksvalue)){
 
-        # start of first block
-        if(i == 1){
-          block <- whichvalue[i]
-        }
+      # get the indices of gaps
+      blocksvalueindices <- which(blocksvalue > 1)
 
-        # end of last block(s)
-        if(i == length(blocksvalue)){
-          # if the last values represent two independent blocks
-          if(whichvalue[i+1] != whichvalue[i] + 1){
-            block <- c(block, block)
-            blocksvalue1 <- rbind(blocksvalue1,
-                                  block,
-                                  c(whichvalue[i+1], whichvalue[i+1]))
-          # if the last values belong to the same block
+      if(length(blocksvalueindices) == 0){
+        blocksvalueindices <- length(whichvalue)
+        blocksvalue1 <- matrix(c(whichvalue[1], whichvalue[blocksvalueindices[1]]), nrow = 1)
+      }else{
+        # get the indices of the first block
+        firstblock <- c(whichvalue[1], whichvalue[blocksvalueindices[1]])
+
+        # get the indices of the remaining blocks
+        intermediateblocks <- t(sapply(seq_along(blocksvalueindices), function(x){
+          if(x != length(blocksvalueindices)){
+            c(whichvalue[blocksvalueindices[x]+1],whichvalue[blocksvalueindices[x+1]])
           }else{
-            block <- c(block, whichvalue[i+1])
-            blocksvalue1 <- rbind(blocksvalue1, block)
+            c(whichvalue[blocksvalueindices[x]+1],whichvalue[length(whichvalue)])
           }
-        }
+        }))
 
-        # end and start of intermediate block
-        if(length(block) == 1 && blocksvalue[i] != 1){
-          block <- c(block, whichvalue[i])
-          blocksvalue1 <- rbind(blocksvalue1, block)
-          block <- whichvalue[i+1]
-        }else{
-          next
-        }
-
+        # merge firstblock and intermediateblocks
+        blocksvalue1 <- rbind(firstblock, intermediateblocks)
       }
+
     }else{
-      blocksvalue1 <- matrix(rep(whichvalue, 2), nrow = 1, ncol = 2)
+      blocksvalue1 <- matrix(c(whichvalue, whichvalue), nrow = 1)
     }
+
   }
 
   # return result
