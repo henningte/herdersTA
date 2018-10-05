@@ -32,6 +32,13 @@ NULL
 #' time at a specific location is larger than \code{tmin}) in
 #' contrast to short-term visits of locations. The default is
 #' \code{tmin = 345600}, i.e. 4 days.
+#' @param tmaxinterstices The maximum time between subsequent visits
+#' at the same location in case of which the duration of these visits
+#' will be added in order to classify both visits together as long-term
+#' visit (campsite) or short-term visit, based on \code{tmin}.
+#' @param timeinterval A numerical value reperesenting the duration
+#' of a time interval represented by one data value of
+#' \code{currenttrack} [s].
 #' @param summary Logical value indicating if the information on the
 #' locations and visits should be summarised (\code{summary = TRUE})
 #' or not (\code{summary = FALSE}). See the details section for further
@@ -255,6 +262,8 @@ locationsTracks <- function(currenttrack,
 locationsTracks <- function(currenttrack,
                             radius = 200,
                             tmin = 345600,
+                            tmaxinterstices = 345600,
+                            timeinterval = 30*60,
                             summary = TRUE){
 
   # convert track to SpatialPointsDataFrame and transform to UTM
@@ -272,133 +281,125 @@ locationsTracks <- function(currenttrack,
   # redefine indices of locations (according to arrival time)
   trsSP@data <- redefineIndices(df = trsSP@data, indices = "location", time = "time", notchange = 0)
 
-  # detect the number of repeated visits at a location
-  trsSP$visitsloc <-
-  identifyBlocksVariable(currenttrack = trsSP, variable = "location", value = 1)
+  # extract the data value indices of visits at each locations
+  trackindicesvisits <- do.call(rbind, lapply(unique(trsSP$location), function(x){
 
-  # find the correct order of location visits
-  orderlocationvisits <- lapply(unique(trsSP$location)[unique(trsSP$location) != 0], function(x){
-    identifyBlocksVariable(currenttrack = trsSP, variable = "location", value = x)}
-  )
-  orderlocationvisits <- as.matrix(do.call(rbind, orderlocationvisits))
-  orderlocationvisits <- orderlocationvisits[order(orderlocationvisits[,1]),]
+    # get the block start and end indices for the current location
+    blockindices <- identifyBlocksVariable(currenttrack = trsSP, variable = "location", value = x)
+    row.names(blockindices) <- rep(x, nrow(blockindices))
+    return(blockindices)
 
-  # create a list with respective indices
-  orderlocationvisits <- lapply(seq_len(nrow(orderlocationvisits)), function(x){orderlocationvisits[x,1]:(orderlocationvisits[x,2])})
+  }))
 
-  # define a dataframe to store the results in (with the location id of each visit)
-  campsitesvar <- data.frame(location = trsSP$location[sapply(orderlocationvisits, function(x){x[1]})])
+  # extract the location information
+  locations <- as.numeric(row.names(trackindicesvisits))
 
-  # duration of each visit
-  campsitesvar$residencetime = sapply(ordercampsitevisits, function(x){difftime(trsSP$time[range(x)[2]], trsSP$time[range(x)[1]], units = "sec")})
+  # count the number of repeated visits at each location
+  trackindicesvisits <- countAllReapeatedVisits(trackindicesvisits, locations)
 
-  # classify visits as campsites or short term visits
-  campsitesvar$campsite <- rep(T, nrow(campsitesvar))
-  campsitesvar$campsite[which(campsitesvar$residencetime < tmin)] <- FALSE
+  # aggregate repeated visits at the same location if the interstice is < tmaxinterstices
+  trackindicesvisits <- aggregateRepeatedVisits(trackindicesvisits, locations, intersticesduration, timeinterval)
 
-  # arrival and departure time
-  campsitesvar$arrivaltime <- sapply(ordercampsitevisits, function(x){as.character(trsSP$time[x[1]])})
-  campsitesvar$departuretime <- sapply(ordercampsitevisits, function(x){as.character(trsSP$time[x[length(x)]])})
+  # compute the duration of the aggregated visits
+  trackindicesvisits <- do.call(rbind, lapply(seq_len(nrow(trackindicesvisits)), function(x){
 
-  # arrival and departure time as row indices
-  campsitesvar$arrivaltimeindex <- sapply(ordercampsitevisits, function(x){range(x)[1]})
-  campsitesvar$departuretimeindex <- sapply(ordercampsitevisits, function(x){range(x)[2]})
+    # define an index for the same location and aggregatedvisit
+    index <- which(row.names(trackindicesvisits) == row.names(trackindicesvisits)[x] & trackindicesvisits[,4] == trackindicesvisits[x,4])
+    c(trackindicesvisits[x,], sum(trackindicesvisits[index,2] - trackindicesvisits[index,1])+1)
 
-  # number of visits per location
-  visits <- rep(NA, nrow(campsitesvar))
-  for(loc_i in unique(campsitesvar$location)){
+  }))
 
-    visits[which(campsitesvar$location == loc_i)] <- seq(from = 1, to = length(which(campsitesvar$location == loc_i)))
+  # classify visits as long-term visit (campsite) or short-term visit
+  trackindicesvisits <- classifyVisits(trackindicesvisits, tmin, timeinterval)
 
-  }
-  campsitesvar$visitsloc <- visits
+  # count the number of repeated long-term visits at each location
+  trackindicesvisits <- countAllReapeatedLongTermVisits(trackindicesvisits, locations)
 
-  # number of visits per campsite
-  visits <- rep(NA, nrow(campsitesvar))
-  for(loc_i in unique(campsitesvar$location)){
-
-    visits[which(campsitesvar$location == loc_i & campsitesvar$campsite == T)] <- seq(from = 1, to = length(which(campsitesvar$location == loc_i & campsitesvar$campsite == TRUE)))
-
-  }
-  campsitesvar$visitscampsite <- visits
-
-  # redefine indices of locations (according to arrival time)
-  campsitesvar <- redefineIndices(df = campsitesvar, indices = "location", time = "arrivaltime", notchange = 0)
-
-  # get mean position data for each location visit
-  centroidcoords <- data.frame()
-  for(visit_i in c(1:length(ordercampsitevisits))){
-
-    centroidcoords <- rbind(centroidcoords, apply(matrix(trsSP@coords[ordercampsitevisits[[visit_i]],], ncol = 2), 2 , mean))
-
-  }
-  centroidcoords$alt <- sapply(ordercampsitevisits, function(x){mean(trsSP$HEIGHT[x])})
-  names(centroidcoords) <- c("lon", "lat", "alt")
-
-  # convert to SP
-  centroidcoords <- SpatialPoints(centroidcoords[,-3], proj4string = CRS(proj4string(trsSP)))
-
-  # transform back to WGS84 longitude latitude
-  a <- spTransform(centroidcoords, currenttrack@sp@proj4string)
-
-  # add variables to campsitesvar
-  campsitesvar$lon <- a@coords[,1]
-  campsitesvar$lat <- a@coords[,2]
-  campsitesvar$alt <- sapply(ordercampsitevisits, function(x){mean(trsSP$HEIGHT[x])})
-
-  # get mean speed at each location visit
-  campsitesvar$speed <- sapply(ordercampsitevisits, function(x){mean(trsSP$SPEED[x])})
-
-  # create SpatialPointsDataFrame from campsitesvar
-  campsitesvar1 <- campsitesvar
-  campsitesvar <- SpatialPoints(coords = data.frame(lon = campsitesvar$lon, lat = campsitesvar$lat), proj4string = CRS(
-    "+proj=longlat +zone=46 +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
-  ))
-  campsitesvar <-
-    spTransform(
-      campsitesvar,
-      CRS(
-        "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-      )
-    )
-
-  # create Track object from campsitesvar
-  campsitesvar <- Track(STIDF(sp = campsitesvar, time = as.POSIXct(campsitesvar1$arrivaltime) , data = campsitesvar1, endTime = as.POSIXct(campsitesvar1$departuretime)))
-
-  # add information to currenttrack
-  locationid <- rep(NA, nrow(trsSP@data))
-  campsite <- rep(NA, nrow(trsSP@data))
-  visitsloc <- rep(NA, nrow(trsSP@data))
-  visitscampsite <- rep(NA, nrow(trsSP@data))
-  for(visit_i in c(1:nrow(campsitesvar))){
-
-    # get time interval of visit
-    timeint <- c(campsitesvar$arrivaltimeindex[visit_i], campsitesvar$departuretimeindex[visit_i])
-
-    # define condition
-    cond <- seq(timeint[1], timeint[2])
-
-    # add location id to locationid
-    locationid[cond] <- campsitesvar$location[visit_i]
-
-    # add information on campsite to campsite
-    campsite[cond] <- campsitesvar$campsite[visit_i]
-
-    # add information on number of visits to visitsloc
-    visitsloc[cond] <- campsitesvar$visitsloc[visit_i]
-
-    # add information on number of visits to visitscampsite
-    visitscampsite[cond] <- campsitesvar$visitscampsite[visit_i]
-  }
-
-  # add locationid, campsite and visit to currenttrack.df
-  currenttrack@data$location <- locationid
-  currenttrack@data$campsite <- campsite
-  currenttrack@data$visitsloc <- visitsloc
-  currenttrack@data$visitscampsite <- visitscampsite
-
-  # return the result
-  ifelse(summary == TRUE, campsitesvar, currenttrack)
 
 }
 
+# function in order to count the number of repeated visits at each location
+countAllReapeatedVisits <- function(trackindicesvisits, locations){
+
+  cbind(trackindicesvisits, do.call(c, lapply(unique(locations), function(x){
+
+    seq_along(which(locations == x))
+
+  })))
+
+}
+
+# function in order to aggregate repeated visits at the same location if the interstice is < tmaxinterstices
+aggregateRepeatedVisits <- function(trackindicesvisits, locations, intersticesduration, timeinterval){
+
+  do.call(rbind, lapply(unique(locations), function(x){
+
+    # get entries of trackindicesvisits of location x
+    index <- which(locations == x)
+
+    if(length(index) == 1){
+      matrix(c(trackindicesvisits[index,], 1), nrow = 1, dimnames = list(x, NULL))
+    }else{
+
+      # get the duration of interstices (add a 0 for the first visit)
+      intersticesduration <- c(0, lapply(index[-1], function(y){
+        trackindicesvisits[y,1] - trackindicesvisits[y-1,2]
+      }))
+
+      # define an aggregation index
+      iter <- 1
+      aggregatedvisits <- rep(0, length(index))
+      for(i in seq_along(intersticesduration)){
+        if(intersticesduration[i] < tmaxinterstices/timeinterval){
+          aggregatedvisits[i] <- iter
+        }else{
+          iter <- iter+1
+          aggregatedvisits[i] <- iter
+        }
+      }
+
+      trackindicesvisits1 <- cbind(trackindicesvisits[index,], aggregatedvisits)
+      colnames(trackindicesvisits1) <- rep("", ncol(trackindicesvisits1))
+      return(trackindicesvisits1)
+
+    }
+
+  }))
+
+}
+
+# function in order to classify visits as long-term visit (campsite) or short-term visit
+classifyVisits <- function(trackindicesvisits, tmin, timeinterval){
+
+  cbind(trackindicesvisits,
+        ifelse(trackindicesvisits[,5] >= tmin/timeinterval, 1, 0))
+
+}
+
+# function in order to count the number of repeated long-term visits at each location
+countAllReapeatedLongTermVisits <- function(trackindicesvisits, locations){
+
+  cbind(trackindicesvisits, do.call(c, lapply(unique(locations), function(x){
+
+    index <- which(locations == x)
+    iter <- 1
+    repeatedlongtermvisit <- rep(0, length(index))
+    if(trackindicesvisits[index[1], 6] == 1){
+      repeatedlongtermvisit[1] <- 1
+    }
+    for(i in seq_along(index)[-1]){
+
+      if(trackindicesvisits[index[i], 6] == 1){
+        if(trackindicesvisits[index[i], 4] != trackindicesvisits[index[i]-1, 4]){
+          iter <- iter + 1
+        }
+        repeatedlongtermvisit[i] <- iter
+      }
+
+    }
+
+    return(repeatedlongtermvisit)
+
+  })))
+
+}
