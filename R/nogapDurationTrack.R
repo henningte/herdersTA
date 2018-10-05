@@ -2,7 +2,7 @@
 #' @import trajectories
 NULL
 
-#' Determines the duration of gaps in GPS tracks.
+#' Determines the duration of non-gaps in GPS tracks.
 #'
 #' \code{nogapDurationTrack} compute the temporal duration of not missing
 #' values for time intervals of a \code{\link[trajectories]{Track}} object

@@ -4,7 +4,7 @@
 #' @import raster
 NULL
 
-#' Determines the duration of gaps in GPS tracks.
+#' Determines the duration of non-gaps in GPS tracks.
 #'
 #' \code{nogapDurationTracks} compute the temporal duration of not missing
 #' values for time intervals of all \code{\link[trajectories]{Track}} objects
