@@ -48,11 +48,11 @@ nogapDurationTracks <- function(currenttracks, timeinterval = 30 * 60, cores = 1
   clusterCall(cl, function(){library("raster")})
   clusterCall(cl, function(){library("spacetime")})
   clusterCall(cl, function(){library("trajectories")})
-  clusterExport(cl = cl, varlist = list("currenttracks", "timeinterval", "gapDurationTrack"), envir=environment())
+  clusterExport(cl = cl, varlist = list("currenttracks", "timeinterval", "nogapDurationTrack"), envir=environment())
 
   newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
 
-    newcurrenttracks1 <- gapDurationTrack(track = x, timeinterval = timeinterval)
+    newcurrenttracks1 <- nogapDurationTrack(currenttrack = x, timeinterval = timeinterval)
 
     return(newcurrenttracks1)
 

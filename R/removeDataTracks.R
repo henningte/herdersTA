@@ -82,9 +82,7 @@ removeDataTracks <- function(currenttracks,
 
   newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
 
-    new.tracks1 <- removeDataTrack(track = x, timeinterval = timeinterval, threshold = threshold)
-
-    return(new.tracks1)
+    removeDataTrack(currenttrack = x, timeinterval = timeinterval, threshold = threshold)
 
   })
 
