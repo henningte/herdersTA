@@ -9,7 +9,7 @@ NULL
 
 #' Identifies and classifies visits in GPS tracks.
 #'
-#' \code{locationsTrack} identifies clusters (locatons) of
+#' \code{locationsTrack} identifies clusters (locations) of
 #' points in GPS tracks (\code{\link[trajectories]{Track}}
 #' object) based on their spatial proximity using
 #' \code{\link{extractClustersBuffer}} and identifies individual
@@ -18,10 +18,10 @@ NULL
 #' (campsites) or short-term visits.
 #'
 #' The function can be used in order to assign to each data
-#' value of the input (\code{\link[trajectories]{Track}}
+#' value of the input \code{\link[trajectories]{Track}}
 #' object an id of the cluster it is assigned to (
 #' \code{summary = FALSE}) or to summarise the information
-#' for each visit of a location (\code{summary = TRUE})
+#' for each visit of a location (\code{summary = TRUE}).
 #'
 #' @param currenttrack A \code{\link[trajectories]{Track}} object.
 #' @param radius A numerical value representing the radius of the
@@ -43,11 +43,12 @@ NULL
 #' locations and visits should be summarised (\code{summary = TRUE})
 #' or not (\code{summary = FALSE}). See the details section for further
 #' information.
-#' @return A \code{\link[trajectories]{Track}} object that is:
+#' @return
 #' \describe{
-#'   \item{If (\code{summary = FALSE})}{identical to the input
-#'   \code{\link[trajectories]{Track}} object, but has four additional
-#'   columns in the \code{data} slot:
+#'   \item{If (\code{summary = FALSE})}{A
+#'   \code{\link[trajectories]{Track}} object that is identical
+#'   to the input \code{\link[trajectories]{Track}} object, but
+#'   has four additional columns in the \code{data} slot:
 #'   \describe{
 #'     \item {\code{location}}{An integer value for each identified
 #'     spatial point cluster (location) increasing with the time starting
@@ -66,7 +67,7 @@ NULL
 #'   Gaps, as indicated by the column \code{gap}, have \code{NA} values for
 #'   all four variables.
 #'   }
-#'   \item{If (\code{summary = TRUE})}{A \code{\link[trajectories]{Track}}
+#'   \item{If (\code{summary = TRUE})}{A \code{data.frame}
 #'   object summarising the locations and visits of the input
 #'   \code{\link[trajectories]{Track}} object with the following variables:
 #'   \describe{
