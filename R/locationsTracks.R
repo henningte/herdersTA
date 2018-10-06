@@ -116,7 +116,9 @@ locationsTracks <- function(currenttracks,
                             tmin = 345600,
                             tmaxinterstices = 345600,
                             timeinterval = 30*60,
-                            summary = TRUE){
+                            summary = TRUE,
+                            cores = 1,
+                            clcall = NULL){
 
   # set up cluster
   cl <- makeCluster(cores, outfile="", type = "PSOCK")
@@ -134,7 +136,8 @@ locationsTracks <- function(currenttracks,
                                         "extractClustersBuffer", "redefineIndices",
                                         "countAllReapeatedVisits",
                                         "aggregateRepeatedVisits", "classifyVisits",
-                                        "countAllReapeatedLongTermVisits"), envir=environment())
+                                        "countAllReapeatedLongTermVisits",
+                                        "locationsTrack"), envir=environment())
 
   # apply locationsTrack to each Track object
   currenttracks <- foreach(track_i = seq_len(length(currenttracks@tracks)), .multicombine = TRUE)%dopar%{
