@@ -2,7 +2,7 @@
 % Please edit documentation in R/nogapDurationTrack.R
 \name{nogapDurationTrack}
 \alias{nogapDurationTrack}
-\title{Determines the duration of gaps in GPS tracks.}
+\title{Determines the duration of non-gaps in GPS tracks.}
 \usage{
 nogapDurationTrack(currenttrack, timeinterval = 30 * 60)
 }
