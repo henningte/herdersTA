@@ -163,4 +163,8 @@ assigntendayinterval <- function(timedate){
 
   return(timeinterval)
 
+<<<<<<< HEAD
 }
+=======
+} # not tested yet for fixed ten-day interval resolution, moving window ten-day interval resolution, monthly resolution
+>>>>>>> 7ef088c30c605bce9da5d971e96e3f9e445e0ca2
