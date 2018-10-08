@@ -132,17 +132,17 @@ summaryIndicatorsTrack1 <- function(currenttrack,
       number_repeatedvisits_campsite <- length(which(number_visits_campsite > 1))
 
       # remove
-      remove <- currenttrack@remove[indextimeinterval[1:2]]
+      remove1 <- currenttrack$remove[indextimeinterval[1]]
 
       # collect all indices in a vector
       c(timeinterval_i, timeinterval_start, timeinterval_end, duration_nogaps,
         distance_tot, altitude_tot, altitude_distance, campsites_time,
-        nocampsites_time, number_campsites, number_repeatedvisits_campsite, remove)
+        nocampsites_time, number_campsites, number_repeatedvisits_campsite, remove1)
 
 
     }else{
 
-      c(timeinterval_i, timeinterval_start, timeinterval_end, duration_nogaps, NA, NA, NA, NA, NA, NA, NA, remove)
+      c(timeinterval_i, timeinterval_start, timeinterval_end, duration_nogaps, NA, NA, NA, NA, NA, NA, NA, remove1)
 
     }
 
