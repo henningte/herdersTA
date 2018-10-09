@@ -29,21 +29,38 @@ NULL
 #' @export
 extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
 
+  # extract the time information for currenttrack
+  switch(resolution,
+         days = {
+           # aggregate to daily resoltuion
+           currenttracktime <- strftime(currenttrack$time, "%Y-%m-%d")
+         },
+         fixedtendays = {
+           # aggregate to daily resoltuion
+           currenttracktime <- strftime(currenttrack$time, "%Y-%m-%d")
+         },
+         movingwindowtendays = {
+           # aggregate to daily resolution
+           currenttracktime <- as.POSIXct(strftime(x$time, "%Y-%m-%d"))
+         },
+         months = {
+           # aggregate to monthly resolution
+           currenttracktime <- strftime(currenttrack$time, "%Y-%m")
+         }
+  )
+
   # define an list collecting the data value indices of crrenttrack for each aggregated time value
   if(resolution != "movingwindowtendays"){
 
-    # get an index assigning each value of currenttrack to a time interval according to resolution
+    # get an index assigning each value of currenttrack to a time interval according to resolution and extract the time information from currenttrack
     indexcurrenttracktime <- assignTimeInterval(currenttrack, resolution)
 
     indexaggregatedtrackvalues <- lapply(unique(indexcurrenttracktime), function(x){
-      currenttracktime[indexcurrenttracktime == x]
+      seq_along(currenttracktime)[indexcurrenttracktime == x]
     })
     names(indexaggregatedtrackvalues) <- unique(currenttracktime)
 
   }else{
-
-    # aggregate to daily resolution
-    currenttracktime <- as.POSIXct(strftime(currenttrack$time, "%Y-%m-%d"))
 
     # get indices for each ten-day interval
     indexaggregatedtrackvalues  <-lapply(seq_along(unique(currenttracktime)), function(x){
