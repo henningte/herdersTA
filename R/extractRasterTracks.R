@@ -101,7 +101,7 @@ extractRasterTracks <- function(currenttracks, raster, timedate, resolution, cor
                                         "raster", "indexrasterlayertrackvalues"), envir=environment())
 
   # extract the values
-  parLapply(cl, seq_along(indexaggregatedtrackvalues), function(x){
+  extractedvalues <- parLapply(cl, seq_along(indexaggregatedtrackvalues), function(x){
 
     print(x)
 
@@ -122,6 +122,35 @@ extractRasterTracks <- function(currenttracks, raster, timedate, resolution, cor
 
   # stop cluster
   stopCluster(cl)
+
+  # reformat the output into a data.frame with a column for each input Track object
+  indexcurrenttracks <- lapply(seq_along(indexaggregatedtrackvalues), function(x){
+
+    # define an index for the current data values of currenttrack
+    index <- indexaggregatedtrackvalues[[x]]
+
+    do.call(c, lapply(seq_along(currenttracks@tracks), function(y){
+
+      rep(y, length(index))
+
+    }))
+
+  })
+
+  extractedvalues <- do.call(cbind, lapply(seq_along(currenttracks@tracks), function(x){
+
+    do.call("c", lapply(seq_along(extractedvalues), function(y){
+
+      extractedvalues[[y]][which(indexcurrenttracks[[y]] == x)]
+
+    }))
+
+  }))
+  extractedvalues <- as.data.frame(extractedvalues, stringsAsFactors = FALSE)
+  names(extractedvalues) <- row.names(currenttracks@tracksData)
+
+  # return extractedvalues
+  return(extractedvalues)
 
 } # not tested yet for fixed ten-day interval resolution, moving window ten-day interval resolution, monthly resolution
 
