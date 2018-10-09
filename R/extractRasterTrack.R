@@ -23,7 +23,8 @@ NULL
 #' @return A vector with a value for each data value of \code{currenttrack}.
 #' If a value of \code{raster} cannot be assigned to a respective data value,
 #' \code{NA} is returned for the respective data value.
-#' @seealso .
+#' @seealso \code{\link{assignFixedTenDayInterval}},
+#' \code{\link{extractRasterTracks}}.
 #' @examples #
 #' @export
 extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
@@ -44,7 +45,7 @@ extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
            currenttracktime <- strftime(currenttrack$time, "%Y-%m-%d")
 
            # get indices for each ten-day interval
-           indexcurrenttracktime <- assigntendayinterval(as.POSIXct(currenttracktime))
+           indexcurrenttracktime <- assignFixedTenDayInterval(as.POSIXct(currenttracktime), startnew = FALSE)
 
          },
          movingwindowtendays = {
@@ -101,67 +102,4 @@ extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
   }))
 
 } # not tested yet for fixed ten-day interval resolution, moving window ten-day interval resolution, monthly resolution
-
-# function in order to classify on a ten-day interval resolution
-assigntendayinterval <- function(timedate){
-
-  # get the years covered
-  years <- unique(strftime(timedate, format = "%Y"))
-
-  # get the number of days in each year
-  days <- list()
-  for(year_i in seq_along(years)){
-    days[[year_i]] <- seq(as.POSIXct(paste0(years[year_i], "-01-01"), tz = attr(timedate, "tzone")), as.POSIXct(paste0(years[year_i], "-12-31"), tz = attr(timedate, "tzone")), "day")
-  }
-
-  # create a list with indices for days
-  tendayintervals <- lapply(seq_along(days), function(y){
-
-    # extract months
-    months <- strftime(days[[y]], format = "%y-%m")
-
-    # define an additional offset value if data for several years exist there
-    offset <- (y - 1) * 36
-
-    # get a vector with ten day-intervals
-    tdi <- do.call(c, as.vector(sapply(seq_along(table(months)), function(x){
-
-      # get indices of ten day-intervals
-      if(which(names(table(months)) == names(table(months)[x])) == 1){
-        indices <- 1:3
-      }else{
-        indices <- seq((which(names(table(months)) == names(table(months)[x]))-1) * 3 + 1, (which(names(table(months)) == names(table(months)[x]))-1) * 3 + 3)
-      }
-
-      c(rep(indices[1], 10), rep(indices[2], 10), rep(indices[3], table(months)[x] - 20))
-
-    }))) + offset
-
-  })
-
-  # assign each day to a ten day-interval
-  tendayintervals <-
-    do.call(c, sapply(seq_along(days), function(x){
-      names(tendayintervals[[x]]) <- days[[x]]
-      return(tendayintervals[[x]])
-    }))
-
-  # get unique ten day-intervals for each data value in track
-  timeinterval <- rep(0, length(timedate))
-  days <- strftime(timedate, format = "%Y-%m-%d")
-  iter <- 1
-  iter2 <- 0
-  for(day_i in unique(days)){
-    timeinterval[which(days == day_i)] <- tendayintervals[which(names(tendayintervals) == day_i)] - iter2*36
-
-    # reset iter after one year
-    if((tendayintervals[which(names(tendayintervals) == day_i)] %% 36 == 0) && strftime(day_i, format = "%m-%d") == "12-31"){
-      iter <- 1
-      iter2 <- iter2 + 1
-    }
-  }
-
-  return(timeinterval)
-
-}
 
