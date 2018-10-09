@@ -29,7 +29,53 @@ NULL
 #' @export
 extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
 
-  # adjust the temporal resolution of currenttrack$time to timedate accoriding to resolution
+  # define an list collecting the data value indices of crrenttrack for each aggregated time value
+  if(resolution != "movingwindowtendays"){
+
+    # get an index assigning each value of currenttrack to a time interval according to resolution
+    indexcurrenttracktime <- assignTimeInterval(currenttrack, resolution)
+
+    indexaggregatedtrackvalues <- lapply(unique(indexcurrenttracktime), function(x){
+      currenttracktime[indexcurrenttracktime == x]
+    })
+    names(indexaggregatedtrackvalues) <- unique(currenttracktime)
+
+  }else{
+
+    # aggregate to daily resolution
+    currenttracktime <- as.POSIXct(strftime(currenttrack$time, "%Y-%m-%d"))
+
+    # get indices for each ten-day interval
+    indexaggregatedtrackvalues  <-lapply(seq_along(unique(currenttracktime)), function(x){
+
+      which(currenttracktime >= as.POSIXct(unique(currenttracktime)[[x]]) & currenttracktime <= as.POSIXct(unique(currenttracktime)[[x]]) + 10*24*60*60)
+
+    })
+    names(indexaggregatedtrackvalues) <- unique(currenttracktime)
+  }
+
+  # define an index assigning raster layers to elements of indexrasterlayertrackvalues
+  indexrasterlayertrackvalues <- which(timedate %in% names(indexaggregatedtrackvalues))
+
+  # extract the values
+  do.call(c, lapply(seq_along(indexaggregatedtrackvalues), function(x){
+
+    # define an index for the current data values of currenttrack
+    index <- indexaggregatedtrackvalues[[x]]
+
+    # extract the respective data values of currenttrack and convert it to a SpatialPointsDataFrame and project it
+    currenttracksubset <- TrackToSpatialPointsDataFrame(Track(track = STIDF(sp = currenttrack@sp[index], time = as.POSIXct(currenttrack$time[index]), data = currenttrack@data[index,], endTime = currenttrack$time[index])))
+
+    # extract the respective values
+    extract(raster[[indexrasterlayertrackvalues[x]]], currenttracksubset)
+
+  }))
+
+} # not tested yet for fixed ten-day interval resolution, moving window ten-day interval resolution, monthly resolution
+
+# function in order to assign each time value of a Track object to a time interval corresponding to the specified resolution
+assignTimeInterval <- function(currenttrack, resolution){
+
   switch(resolution,
          days = {
 
@@ -48,20 +94,6 @@ extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
            indexcurrenttracktime <- assignFixedTenDayInterval(as.POSIXct(currenttracktime), startnew = FALSE)
 
          },
-         movingwindowtendays = {
-
-           # aggregate to daily resolution
-           currenttracktime <- as.POSIXct(strftime(currenttrack$time, "%Y-%m-%d"))
-
-           # get indices for each ten-day interval
-           indexaggregatedtrackvalues  <-lapply(seq_along(unique(currenttracktime)), function(x){
-
-             which(currenttracktime >= as.POSIXct(unique(currenttracktime)[[x]]) & currenttracktime <= as.POSIXct(unique(currenttracktime)[[x]]) + 10*24*60*60)
-
-           })
-           names(indexaggregatedtrackvalues) <- unique(currenttracktime)
-
-         },
          months = {
 
            # aggregate to monthly resolution
@@ -72,34 +104,7 @@ extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
 
          })
 
-  # define an list collecting the data value indices of crrenttrack for each aggregated time value
-  if(resolution != "movingwindowtendays"){
+  # return indexcurrenttracktime
+  return(indexcurrenttracktime)
 
-    indexaggregatedtrackvalues <- lapply(unique(indexcurrenttracktime), function(x){
-      currenttracktime[indexcurrenttracktime == x]
-    })
-    names(indexaggregatedtrackvalues) <- unique(currenttracktime)
-
-  }
-
-  # define an index assigning raster layers to elements of indexrasterlayertrackvalues
-  indexrasterlayertrackvalues <- which(timedate %in% names(indexaggregatedtrackvalues))
-
-  # extract the values
-  do.call(c, lapply(seq_along(indexaggregatedtrackvalues), function(x){
-
-    print(x)
-
-    # define an index for the current data values of currenttrack
-    index <- indexaggregatedtrackvalues[[x]]
-
-    # extract the respective data values of currenttrack and convert it to a SpatialPointsDataFrame and project it
-    currenttracksubset <- TrackToSpatialPointsDataFrame(Track(track = STIDF(sp = currenttrack@sp[index], time = as.POSIXct(currenttrack$time[index]), data = currenttrack@data[index,], endTime = currenttrack$time[index])))
-
-    # extract the respective values
-    extract(raster[[indexrasterlayertrackvalues[x]]], currenttracksubset)
-
-  }))
-
-} # not tested yet for fixed ten-day interval resolution, moving window ten-day interval resolution, monthly resolution
-
+}
