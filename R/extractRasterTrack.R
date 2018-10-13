@@ -82,7 +82,7 @@ extractRasterTrack <- function(currenttrack, raster, timedate, resolution){
     ifelse(resolution != "movingwindowtendays", index <- indexaggregatedtrackvalues[[x]], index <- do.call(c, indexaggregatedtrackvalues[x:(x+9)]))
 
     # extract the respective data values of currenttrack and convert it to a SpatialPointsDataFrame and project it
-    currenttracksubset <- TrackToSpatialPointsDataFrame(Track(track = STIDF(sp = currenttrack@sp[index], time = as.POSIXct(currenttrack$time[index]), data = currenttrack@data[index,], endTime = currenttrack$time[index])))
+    currenttracksubset <- TrackToSpatialPointsDataFrame(Track(track = STIDF(sp = currenttrack@sp[index], time = as.POSIXct(currenttrack$time[index]), data = currenttrack@data[index,], endTime = currenttrack$time[index])), crs = currenttrack@sp@proj4string)
 
     # extract the respective values
     extract(raster[[indexrasterlayertrackvalues[x]]], currenttracksubset)
