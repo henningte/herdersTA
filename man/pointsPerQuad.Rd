@@ -4,13 +4,17 @@
 \alias{pointsPerQuad}
 \title{Counts the number of points in the cells of a spatial grid.}
 \usage{
-pointsPerQuad(currenttracks, targetQsize)
+pointsPerQuad(currenttrack, targetQsize,
+  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
-
 \item{targetQsize}{Numerical value representing the target size of the
 quadrats to create.}
+
+\item{crs}{A character string describing a projection and datum
+in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
+
+\item{currenttracks}{A \code{\link[trajectories]{Track}} object.}
 }
 \value{
 A \code{\link[sp]{SpatialGridDataFrame}} with quadrat cells
@@ -18,7 +22,7 @@ and the number of points within them.
 }
 \description{
 \code{pointsPerQuad} determines the number of points per
-cell (of a given size) in a \code{\link[trajectories]{Tracks}}
+cell (of a given size) in a \code{\link[trajectories]{Track}}
 object.
 }
 \details{

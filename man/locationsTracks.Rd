@@ -5,8 +5,9 @@
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
 locationsTracks(currenttracks, radius = 200, tmin = 345600,
-  tmaxinterstices = 345600, timeinterval = 30 * 60, summary = TRUE,
-  cores = 1, clcall = NULL)
+  tmaxinterstices = 345600, timeinterval = 30 * 60,
+  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
+  summary = TRUE, cores = 1, clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}

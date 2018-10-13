@@ -5,7 +5,9 @@
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
 locationsTrack(currenttrack, radius = 200, tmin = 345600,
-  tmaxinterstices = 345600, timeinterval = 30 * 60, summary = TRUE)
+  tmaxinterstices = 345600, timeinterval = 30 * 60,
+  csr = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
+  summary = TRUE)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
@@ -33,6 +35,9 @@ of a time interval represented by one data value of
 locations and visits should be summarised (\code{summary = TRUE})
 or not (\code{summary = FALSE}). See the details section for further
 information.}
+
+\item{crs}{A character string describing a projection and datum
+in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
 }
 \value{
 \describe{

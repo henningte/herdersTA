@@ -5,6 +5,7 @@
 \title{Reorganises \code{\link[trajectories]{Tracks}} objects.}
 \usage{
 reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT",
+  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
   cores = 1, clcall = NULL)
 }
 \arguments{
@@ -16,6 +17,9 @@ time interval to assign all data values to [s]. Default is
 
 \item{tz}{A character value indicating the time zone the temporal
 information orresponds to. Default is \code{tz = "GMT"}.}
+
+\item{crs}{A character string describing a projection and datum
+in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
 
 \item{cores}{An integer value representing the number of cores to
 use in parallel computing.}
