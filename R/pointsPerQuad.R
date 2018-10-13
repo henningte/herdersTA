@@ -6,16 +6,18 @@ NULL
 #' Counts the number of points in the cells of a spatial grid.
 #'
 #' \code{pointsPerQuad} determines the number of points per
-#' cell (of a given size) in a \code{\link[trajectories]{Tracks}}
+#' cell (of a given size) in a \code{\link[trajectories]{Track}}
 #' object.
 #'
 #' This function is used by function \code{\link{extractClusters}} to
 #' count the number of points within cells before determining clusters
 #' of points.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object.
+#' @param currenttracks A \code{\link[trajectories]{Track}} object.
 #' @param targetQsize Numerical value representing the target size of the
 #' quadrats to create.
+#' @param crs A character string describing a projection and datum
+#' in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).
 #' @return A \code{\link[sp]{SpatialGridDataFrame}} with quadrat cells
 #' and the number of points within them.
 #' @seealso \code{\link{qTopology}}, \code{\link{extractClusters}},
@@ -23,17 +25,10 @@ NULL
 #' \code{\link{clusterOrder}}.
 #' @examples #
 #' @export
-pointsPerQuad <- function(currenttracks, targetQsize){
+pointsPerQuad <- function(currenttrack, targetQsize, crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
 
   # transform the Tracks object to UTM
-  trsSP <- as(as(currenttracks, "SpatialLines"), "SpatialPoints")
-  trsSPtrans <-
-    spTransform(
-      trsSP,
-      CRS(
-        "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-      )
-    )
+  trsSPtrans <- TrackToSpatialPointsDataFrame(currenttrack = currenttrack, crs = crs)
 
   # convert the Tracks object to a ppp
   trsPPP <- as(trsSPtrans, "ppp")

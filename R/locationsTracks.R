@@ -116,6 +116,7 @@ locationsTracks <- function(currenttracks,
                             tmin = 345600,
                             tmaxinterstices = 345600,
                             timeinterval = 30*60,
+                            crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                             summary = TRUE,
                             cores = 1,
                             clcall = NULL){
@@ -137,7 +138,7 @@ locationsTracks <- function(currenttracks,
                                         "countAllReapeatedVisits",
                                         "aggregateRepeatedVisits", "classifyVisits",
                                         "countAllReapeatedLongTermVisits",
-                                        "locationsTrack"), envir=environment())
+                                        "locationsTrack", "crs"), envir=environment())
 
   # apply locationsTrack to each Track object
   currenttracks <- foreach(track_i = seq_len(length(currenttracks@tracks)), .multicombine = TRUE)%dopar%{
@@ -147,6 +148,7 @@ locationsTracks <- function(currenttracks,
                    tmin = tmin,
                    tmaxinterstices = tmaxinterstices,
                    timeinterval = timeinterval,
+                   crs = crs,
                    summary = summary)
 
   }

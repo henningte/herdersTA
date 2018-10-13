@@ -25,6 +25,8 @@ NULL
 #' \code{interval = 60*30}, i.e. 30 minutes.
 #' @param tz A character value indicating the time zone the temporal
 #' information orresponds to. Default is \code{tz = "GMT"}.
+#' @param crs A character string describing a projection and datum
+#' in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
@@ -38,6 +40,7 @@ NULL
 reorganizeTracks <- function(currenttracks,
                              interval = 60*30,
                              tz = "GMT",
+                             crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                              cores = 1,
                              clcall = NULL){
 
@@ -165,12 +168,7 @@ reorganizeTracks <- function(currenttracks,
     parLapply(cl, newtracks, function(x){
 
       # create sp object
-      newtracksp <- SpatialPoints(coords = data.frame(lon = x$lon, lat = x$lat), proj4string = CRS(
-        "+proj=longlat +zone=46 +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
-      ))
-
-      # return result
-      return(newtracksp)
+      SpatialPoints(coords = data.frame(lon = x$lon, lat = x$lat), proj4string = CRS(crs))
 
     })
 

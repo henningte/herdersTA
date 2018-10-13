@@ -39,6 +39,8 @@ NULL
 #' @param timeinterval A numerical value reperesenting the duration
 #' of a time interval represented by one data value of
 #' \code{currenttrack} [s].
+#' @param crs A character string describing a projection and datum
+#' in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).
 #' @param summary Logical value indicating if the information on the
 #' locations and visits should be summarised (\code{summary = TRUE})
 #' or not (\code{summary = FALSE}). See the details section for further
@@ -111,10 +113,11 @@ locationsTrack <- function(currenttrack,
                            tmin = 345600,
                            tmaxinterstices = 345600,
                            timeinterval = 30*60,
+                           csr = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                            summary = TRUE){
 
   # convert track to SpatialPointsDataFrame and transform to UTM
-  trsSP <- TrackToSpatialPointsDataFrame(currenttrack)
+  trsSP <- TrackToSpatialPointsDataFrame(currenttrack, crs)
 
   # cluster the data points
   trsSP$location <- extractClustersBuffer(trsSP, radius)
