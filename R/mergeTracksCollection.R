@@ -46,6 +46,9 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
 
 
   # convert newtracks to Tracks object and return the result
-  Tracks(newtracks)
+  newtracks <- Tracks(newtracks)
+
+  # set the Track names to the original names
+  names(newtracks@tracks) <- names(trackscollection@tracksCollection)
 
 }
