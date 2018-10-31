@@ -36,10 +36,10 @@ NULL
 #' \code{\link{removeDataTracks}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
 #' @export
-extractCoordinatesVisitsTrack <- function(currenttrack, aggregated = FALSE){
+extractCoordinatesVisitsTrack <- function(currenttrack, aggregated = FALSE, crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
 
   # convert currenttrack to a SpatialPointsDataFrame
-  trsSP <- TrackToSpatialPointsDataFrame(currenttrack)
+  trsSP <- TrackToSpatialPointsDataFrame(currenttrack, crs = crs)
 
   # define an index for the location-visit combination
   indexvisitlocation <- paste0(trsSP$location, "_", trsSP$visitsloc)
@@ -55,9 +55,13 @@ extractCoordinatesVisitsTrack <- function(currenttrack, aggregated = FALSE){
     alt = tapply(as.numeric(trsSP$HEIGHT), indexvisitlocation, mean)
     )
 
+  # convert to SpatialPoints object
+  meanvaluessp <- SpatialPoints(cords <- meanvalues[,2:3], proj4string = CRS(crs))
+  meanvaluessp <- spTransform(meanvaluessp, currenttrack@sp@proj4string)
+
   data.frame(
-    lon = do.call(c, lapply(unique(indexvisitlocation), function(x){rep(meanvalues[meanvalues[,1] == x, 2], length(which(indexvisitlocation == x)))})),
-    lat = do.call(c, lapply(unique(indexvisitlocation), function(x){rep(meanvalues[meanvalues[,1] == x, 3], length(which(indexvisitlocation == x)))})),
+    lon = do.call(c, lapply(unique(indexvisitlocation), function(x){rep(meanvaluessp@coords[meanvalues[,1] == x, 1], length(which(indexvisitlocation == x)))})),
+    lat = do.call(c, lapply(unique(indexvisitlocation), function(x){rep(meanvaluessp@coords[meanvalues[,1] == x, 2], length(which(indexvisitlocation == x)))})),
     alt = do.call(c, lapply(unique(indexvisitlocation), function(x){rep(meanvalues[meanvalues[,1] == x, 4], length(which(indexvisitlocation == x)))}))
   )
 
