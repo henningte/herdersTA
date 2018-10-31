@@ -30,8 +30,12 @@ exDataTracks <- function(currenttracks){
 
   # merge the individual data.frame objects
   df1 <- df[[1]]
-  for(i in c(2:length(df))){
-    df1 <- merge(df1, df[[i]], all = T)
+  if(length(df) > 1){
+
+    for(i in c(2:length(df))){
+      df1 <- merge(df1, df[[i]], all = T)
+    }
+
   }
 
   # order the entries according to the time
