@@ -44,7 +44,7 @@ classifyNightTracks <- function(currenttracks, night){
   }
 
   # extract the time information (hours) of the first Track object in currenttracks
-  time <- as.numeric(strftime(currenttracks@tracks$time, "%H"))
+  time <- as.numeric(strftime(currenttracks@tracks[[1]]$time, "%H"))
 
   # classify the values of time as night (TRUE) or day (FALSE) and add the result as attribute night to currenttracks
   attributes(currenttracks)$night <- ifelse(time >= night[1] & time <= night[2], TRUE, FALSE)
