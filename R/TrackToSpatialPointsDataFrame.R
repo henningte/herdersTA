@@ -12,7 +12,7 @@ NULL
 #' a user specified coordinate reference system if specified.
 #'
 #' @param currenttrack A \code{\link[trajectories]{Track}} object.
-#' @param project A logical value indicating if the Track object
+#' @param toproject A logical value indicating if the Track object
 #' should be projected to a coordinate reference system as defined
 #' by \code{crs} (\code{project = TRUE}) or not
 #' (\code{project = FALSE}).
@@ -24,7 +24,7 @@ NULL
 #' @seealso
 #' @examples #
 #' @export
-TrackToSpatialPointsDataFrame <- function(currenttrack, project = TRUE, crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
+TrackToSpatialPointsDataFrame <- function(currenttrack, toproject = TRUE, crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
 
   # get the Track data
   trsdf <- currenttrack@data
@@ -33,7 +33,7 @@ TrackToSpatialPointsDataFrame <- function(currenttrack, project = TRUE, crs = "+
   trsSP <- as(as(currenttrack, "SpatialLines"), "SpatialPoints")
 
   # transform trsSP to the specified crs
-  if(project == TRUE){
+  if(toproject == TRUE){
     trsSP <-
     spTransform(
       trsSP,

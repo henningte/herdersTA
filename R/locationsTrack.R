@@ -113,11 +113,11 @@ locationsTrack <- function(currenttrack,
                            tmin = 345600,
                            tmaxinterstices = 345600,
                            timeinterval = 30*60,
-                           csr = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
+                           crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                            summary = TRUE){
 
   # convert track to SpatialPointsDataFrame and transform to UTM
-  trsSP <- TrackToSpatialPointsDataFrame(currenttrack, crs)
+  trsSP <- TrackToSpatialPointsDataFrame(currenttrack, crs, toproject = TRUE)
 
   # cluster the data points
   trsSP$location <- extractClustersBuffer(trsSP, radius)
