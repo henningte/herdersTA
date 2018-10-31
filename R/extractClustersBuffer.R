@@ -5,6 +5,7 @@
 #' @import rgdal
 #' @import sp
 #' @import rgeos
+#' @import dbscan
 NULL
 
 #' Identifies clusters of points of GPS tracks.
@@ -19,10 +20,21 @@ NULL
 #' the result of the function
 #' \code{\link{TrackToSpatialPointsDataFrame}}. \code{trsSP} must
 #' have a logical variable \code{gap} as created by
-#' \code{\link{reorganizeTracks}}.
+#' \code{\link{reorganizeTracks}} and an attribute \code{night} as
+#' created by \code{\link{classifyNightTrack}}.
 #' @param radius A numerical value representing the radius of the
 #' buffers computed around each point [m] which are used for
 #' clustering values to locations. Default is \code{radius = 200} [m].
+#' @param onlytimeinterval A logical value indicating if the extraction
+#' of locations should in the first place only consider data values with
+#' a corresponding value \code{TRUE} in \code{attributes(trsSP)$night}
+#' (\code{onlytimeinterval = TRUE}) or all data values simultaneously
+#' (\code{onlytimeinterval = FALSE}). If \code{onlytimeinterval = TRUE},
+#' first all values relating to \code{attributes(trsSP)$night = TRUE} are
+#' clustered and afterwards, all values relating to
+#' \code{attributes(trsSP)$night = FALSE} are assigned to the next location
+#' within a distance of \code{radius} or if there is no location within
+#' a distance of \code{radius}, form a new location.
 #' @return An integer vector with the same length as the number of points in
 #' \code{trsSP} indicating to which cluster each point is assigned. Cluster
 #' indices are not ordered, however points of \code{trsSP} representing gaps
@@ -32,54 +44,15 @@ NULL
 #' \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-extractClustersBuffer <- function(trsSP, radius = 200){
+extractClustersBuffer <- function(trsSP, radius = 200, onlytimeinterval = TRUE){
 
-  # indices with points that have not been assigned to a cluster yet
-  leftover <- c(1:length(trsSP))
-  leftoverold <- leftover
-  first <- TRUE
+  # use density based clustering in order to identify locations
+  b <- dbscan(x = trsSP@coords, eps = radius, minPts = 5)
 
-  while(length(leftover) != 0){
+  # set the location id for gaps to 0
+  b$cluster[trsSP@data$gap == TRUE] <- 0
 
-    # subset points for buffering (1%)
-    indselect <- leftover[seq(1, length(leftover), length.out = length(leftover)*0.01)]
-
-    # compute buffer
-    buffer.trs <- gBuffer(trsSP[indselect,], width = radius, quadsegs = 25)
-
-    # get intersecting points
-    a.new <- over(trsSP, disaggregate(buffer.trs))
-
-    if(first == TRUE){
-      # get intersecting points
-      buffer.trs.tot <- buffer.trs
-      initiallocationids <- a.new
-
-      first = FALSE
-    }
-
-    # define points that were inside a buffer at any loop run
-    initiallocationids[which(is.na(initiallocationids))] <- a.new[which(is.na(initiallocationids))]
-
-    # define total buffer range
-    buffer.trs.tot <- gUnion(buffer.trs, buffer.trs.tot)
-
-    # subset leftover
-    if(length(which(is.na(initiallocationids))) != 0){
-      leftover <- leftoverold[which(is.na(initiallocationids))]
-    }else{
-      leftover = NULL
-
-      initiallocationids <- over(trsSP, disaggregate(buffer.trs.tot))
-    }
-
-  }
-
-  # set location of gaps to 0
-  initiallocationids[which(trsSP@data$gap == TRUE)] <- 0
-
-
-  # return result
-  return(initiallocationids)
+  # return the location ids
+  return(b$cluster)
 
 }
