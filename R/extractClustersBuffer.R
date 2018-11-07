@@ -5,15 +5,22 @@
 #' @import rgdal
 #' @import sp
 #' @import rgeos
-#' @import dbscan
 NULL
 
 #' Identifies clusters of points of GPS tracks.
 #'
 #' \code{extractClustersBuffer} identifies clusters of points in GPS
-#' tracks based on their spatial proximity. This is done by iteratively
-#' assigning points to buffers around selected points and merging
-#' intersecting buffers and point sets.
+#' tracks based on their spatial proximity. This is done by applying
+#' density based clustering on all points within a specific daily time
+#' interval (e.g. during night). Daytime data values are assigned to
+#' the respective location id (1) if the next value after and prior the
+#' daytime values (i.e. the last value of the previous night and the
+#' first value of the following night) are identical (i.e. are defined
+#' as gaps if both values are gaps or to a location id otherwise), then
+#' (2) if the next value of the previous night is not a gap to the
+#' respective location, and then (3) if the next value of the following
+#' night is not a gap to the respective location. Therefore, results
+#' reflect a daily resolution with respect to different locations.
 #'
 #' @param trsSP A \code{\link[sp]{SpatialPointsDataFrame}} object
 #' representing a \code{\link[trajectories]{Track}} object, i.e.
@@ -25,16 +32,6 @@ NULL
 #' @param radius A numerical value representing the radius of the
 #' buffers computed around each point [m] which are used for
 #' clustering values to locations. Default is \code{radius = 200} [m].
-#' @param onlytimeinterval A logical value indicating if the extraction
-#' of locations should in the first place only consider data values with
-#' a corresponding value \code{TRUE} in \code{attributes(trsSP)$night}
-#' (\code{onlytimeinterval = TRUE}) or all data values simultaneously
-#' (\code{onlytimeinterval = FALSE}). If \code{onlytimeinterval = TRUE},
-#' first all values relating to \code{attributes(trsSP)$night = TRUE} are
-#' clustered and afterwards, all values relating to
-#' \code{attributes(trsSP)$night = FALSE} are assigned to the next location
-#' within a distance of \code{radius} or if there is no location within
-#' a distance of \code{radius}, form a new location.
 #' @return An integer vector with the same length as the number of points in
 #' \code{trsSP} indicating to which cluster each point is assigned. Cluster
 #' indices are not ordered, however points of \code{trsSP} representing gaps
@@ -44,15 +41,19 @@ NULL
 #' \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-extractClustersBuffer <- function(trsSP, radius = 200, onlytimeinterval = TRUE){
+extractClustersBuffer <- function(trsSP, radius = 200){
 
   # use density based clustering in order to identify locations
-  b <- dbscan(x = trsSP@coords, eps = radius, minPts = 5)
+  locations_night <- dbscan(x = trsSP@coords[attributes(trsSP)$night == TRUE,], eps = radius, minPts = 5)
 
-  # set the location id for gaps to 0
-  b$cluster[trsSP@data$gap == TRUE] <- 0
+  # insert the location ids into a vector for all data values
+  locations_night_all <- rep(0, nrow(trsSP@data))
+  locations_night_all[attributes(trsSP)$night == TRUE] <- locations_night$cluster
 
-  # return the location ids
-  return(b$cluster)
+  # set the location id of gaps to 0
+  locations_night_all[trsSP$gap == TRUE] <- 0
+
+  # return the locations_night_all ids
+  return(locations_night_all)
 
 }
