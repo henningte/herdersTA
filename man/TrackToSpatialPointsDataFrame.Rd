@@ -4,13 +4,13 @@
 \alias{TrackToSpatialPointsDataFrame}
 \title{Converts a \code{\link[trajectories]{Track}} object to a \code{\link[sp]{SpatialPointsDataFrame}}.}
 \usage{
-TrackToSpatialPointsDataFrame(currenttrack, project = TRUE,
+TrackToSpatialPointsDataFrame(currenttrack, toproject = TRUE,
   crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
 
-\item{project}{A logical value indicating if the Track object
+\item{toproject}{A logical value indicating if the Track object
 should be projected to a coordinate reference system as defined
 by \code{crs} (\code{project = TRUE}) or not
 (\code{project = FALSE}).}

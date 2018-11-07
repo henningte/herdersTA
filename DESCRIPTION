@@ -14,7 +14,10 @@ Depends:
   doParallel,
   spacetime,
   xts,
-  lubridate
+  lubridate,
+  dbscan,
+  ggplot2,
+  cowplot
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

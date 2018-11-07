@@ -4,7 +4,7 @@
 \alias{extractRasterTracks}
 \title{Extracts corresponding raster values for GPS tracks.}
 \usage{
-extractRasterTracks(currenttracks, raster, timedate, resolution,
+extractRasterTracks(currenttracks, raster, timedate, resolution, aggregation,
   cores = 1, clcall = NULL)
 }
 \arguments{

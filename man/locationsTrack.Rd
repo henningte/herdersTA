@@ -5,8 +5,8 @@
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
 locationsTrack(currenttrack, radius = 200, tmin = 345600,
-  tmaxinterstices = 345600, timeinterval = 30 * 60,
-  csr = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
+  tmaxinterstices = 345600, timeinterval = 30 * 60, night = c(16, 20),
+  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
   summary = TRUE)
 }
 \arguments{
@@ -31,13 +31,21 @@ visit (campsite) or short-term visit, based on \code{tmin}.}
 of a time interval represented by one data value of
 \code{currenttrack} [s].}
 
+\item{night}{An integer vector with two elements:
+\enumerate{
+  \item The first element specifies the start hour of the night, e.g. \code{0}
+  for 0 o'clock.
+  \item The first element specifies the start hour of the night, e.g. \code{4}
+  for 4 o'clock.
+}}
+
+\item{crs}{A character string describing a projection and datum
+in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
+
 \item{summary}{Logical value indicating if the information on the
 locations and visits should be summarised (\code{summary = TRUE})
 or not (\code{summary = FALSE}). See the details section for further
 information.}
-
-\item{crs}{A character string describing a projection and datum
-in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
 }
 \value{
 \describe{
@@ -105,7 +113,15 @@ object) based on their spatial proximity using
 \code{\link{extractClustersBuffer}} and identifies individual
 visits of the same cluster (location) along the track.
 Additionally, visits are classified as long-term visits
-(campsites) or short-term visits.
+(campsites) or short-term visits. During the identification of
+clusters, data values within a user defined daily time interval
+are considered. The remaining values are set to the next
+location identified for the adjacent time intervals. This
+procedure can be used in order to identify campsites by
+assuming that a household has a campsite where it stayed
+over night. If values outside the defined time interval
+have a too far distance, they are classified as short-term
+visit.
 }
 \details{
 The function can be used in order to assign to each data

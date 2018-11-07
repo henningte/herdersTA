@@ -4,7 +4,7 @@
 \alias{extractClustersBuffer}
 \title{Identifies clusters of points of GPS tracks.}
 \usage{
-extractClustersBuffer(trsSP, radius = 200)
+extractClustersBuffer(trsSP, radius = 200, onlytimeinterval = TRUE)
 }
 \arguments{
 \item{trsSP}{A \code{\link[sp]{SpatialPointsDataFrame}} object
@@ -12,11 +12,23 @@ representing a \code{\link[trajectories]{Track}} object, i.e.
 the result of the function
 \code{\link{TrackToSpatialPointsDataFrame}}. \code{trsSP} must
 have a logical variable \code{gap} as created by
-\code{\link{reorganizeTracks}}.}
+\code{\link{reorganizeTracks}} and an attribute \code{night} as
+created by \code{\link{classifyNightTrack}}.}
 
 \item{radius}{A numerical value representing the radius of the
 buffers computed around each point [m] which are used for
 clustering values to locations. Default is \code{radius = 200} [m].}
+
+\item{onlytimeinterval}{A logical value indicating if the extraction
+of locations should in the first place only consider data values with
+a corresponding value \code{TRUE} in \code{attributes(trsSP)$night}
+(\code{onlytimeinterval = TRUE}) or all data values simultaneously
+(\code{onlytimeinterval = FALSE}). If \code{onlytimeinterval = TRUE},
+first all values relating to \code{attributes(trsSP)$night = TRUE} are
+clustered and afterwards, all values relating to
+\code{attributes(trsSP)$night = FALSE} are assigned to the next location
+within a distance of \code{radius} or if there is no location within
+a distance of \code{radius}, form a new location.}
 }
 \value{
 An integer vector with the same length as the number of points in

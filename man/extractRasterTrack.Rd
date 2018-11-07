@@ -4,7 +4,8 @@
 \alias{extractRasterTrack}
 \title{Extracts corresponding raster values for GPS tracks.}
 \usage{
-extractRasterTrack(currenttrack, raster, timedate, resolution)
+extractRasterTrack(currenttrack, raster, timedate, resolution,
+  aggregation = "allvisits")
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories]{Track}} object that
@@ -20,6 +21,19 @@ values.}
 \item{resolution}{A character value indicating the temporal resolution
 of \code{raster} and \code{timedate}, respectively. One of \code{"days"},
 \code{"fixedtendays"}, \code{"movingwindowtendays"} and \code{"months"}.}
+
+\item{aggregation}{A character value indicating for which spatial
+aggregation of data values of \code{currenttrack} values of  \code{raster}
+should be extracted:
+\describe{
+  \item{\code{"raw"}}{Values of  \code{raster} will be extracted for the
+  data values of the original \code{\link[trajectories]{Track}} object.
+  This may take a long time depending on the value of \code{resolution}
+  and the amount of values of \code{currentrack}.}
+  \item{\code{"allvisits"}}{Values of  \code{raster} will be extracted values
+  aggregated for each visit, whereby it is distinguished between long-term
+  visits (campsites) and short-term visits.}
+}}
 }
 \value{
 A vector with a value for each data value of \code{currenttrack}.
