@@ -15,7 +15,15 @@ NULL
 #' \code{\link{extractClustersBuffer}} and identifies individual
 #' visits of the same cluster (location) along the track.
 #' Additionally, visits are classified as long-term visits
-#' (campsites) or short-term visits.
+#' (campsites) or short-term visits. During the identification of
+#' clusters, data values within a user defined daily time interval
+#' are considered. The remaining values are set to the next
+#' location identified for the adjacent time intervals. This
+#' procedure can be used in order to identify campsites by
+#' assuming that a household has a campsite where it stayed
+#' over night. If values outside the defined time interval
+#' have a too far distance, they are classified as short-term
+#' visit.
 #'
 #' The function can be used in order to assign to each data
 #' value of the input \code{\link[trajectories]{Track}}
@@ -39,6 +47,13 @@ NULL
 #' @param timeinterval A numerical value reperesenting the duration
 #' of a time interval represented by one data value of
 #' \code{currenttrack} [s].
+#' @param night An integer vector with two elements:
+#' \enumerate{
+#'   \item The first element specifies the start hour of the night, e.g. \code{0}
+#'   for 0 o'clock.
+#'   \item The first element specifies the start hour of the night, e.g. \code{4}
+#'   for 4 o'clock.
+#' }
 #' @param crs A character string describing a projection and datum
 #' in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).
 #' @param summary Logical value indicating if the information on the
@@ -113,11 +128,16 @@ locationsTrack <- function(currenttrack,
                            tmin = 345600,
                            tmaxinterstices = 345600,
                            timeinterval = 30*60,
+                           night = c(16, 20),
                            crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                            summary = TRUE){
 
   # convert track to SpatialPointsDataFrame and transform to UTM
   trsSP <- TrackToSpatialPointsDataFrame(currenttrack, crs, toproject = TRUE)
+
+  # append the information on whether a data value was ecorded during night or day
+  currenttrack <- classifyNightTrack(currenttrack, night)
+  attributes(trsSP)$night <- attributes(currenttrack)$night
 
   # cluster the data points
   trsSP$location <- extractClustersBuffer(trsSP, radius)
@@ -172,11 +192,18 @@ locationsTrack <- function(currenttrack,
   # order the entries of trackindicesvisits
   trackindicesvisits <- trackindicesvisits[order(trackindicesvisits[,1]),]
 
+  # convert trackindicesvisits to a data.frame
+  trackindicesvisits <- as.data.frame(trackindicesvisits, stringsAsFactors = FALSE)
+  names(trackindicesvisits) <- c("start", "end", "repeatedvisit", "aggregation", "duration", "campsite", "repeatedcampsite", "location")
+
+  # define a new aggregation variable in order to define the arrivals/departures at/from a campsite
+  trackindicesvisits <- aggregateRepeatedCampsiteVisits(trackindicesvisits)
+
   # add all values to the input track object
   tracklocationsvisits <- do.call(rbind, lapply(seq_len(nrow(trackindicesvisits)), function(x){
 
     do.call(rbind, lapply(trackindicesvisits[x, 1]:trackindicesvisits[x, 2], function(y){
-      trackindicesvisits[x, c(8, 6, 3, 7)]
+      trackindicesvisits[x, c(8, 6, 3, 7, 9)]
     }))
 
   }))
@@ -184,9 +211,13 @@ locationsTrack <- function(currenttrack,
   currenttrack$campsite <- tracklocationsvisits[,2]
   currenttrack$visitsloc <- tracklocationsvisits[,3]
   currenttrack$visitscampsite <- tracklocationsvisits[,4]
+  currenttrack$aggregationcampsite <- tracklocationsvisits[,5]
 
   # set the values for location, campsite, visitsloc and visitscampsite to NA for gaps
   currenttrack@data[which(currenttrack$location == 0),(ncol(currenttrack@data)-3):ncol(currenttrack@data)] <- NA
+
+  # identify arrivals at/departures from a campsite
+  currenttrack <- movedTrack(currenttrack)
 
   # summarise the values for each visit and location
   if(summary == TRUE){
@@ -210,7 +241,7 @@ locationsTrack <- function(currenttrack,
       departuretime = as.POSIXct(sapply(unique(indexvisitlocation), function(x) currenttrack$time[indexvisitlocation == x][length(which(indexvisitlocation == x))]), origin = "1970-01-01 00:00:00"),
       residencetime = sapply(unique(indexvisitlocation), function(x) difftime(currenttrack$time[indexvisitlocation == x][length(which(indexvisitlocation == x))], currenttrack$time[indexvisitlocation == x][1], units = "sec")),
       speed = sapply(unique(indexvisitlocation), function(x) mean(as.numeric(currenttrack$SPEED[indexvisitlocation == x])))
-        )
+    )
 
     summaryvisitslocation[-is.na(summaryvisitslocation$location),]
 
@@ -303,5 +334,60 @@ countAllReapeatedLongTermVisits <- function(trackindicesvisits, locations){
     return(repeatedlongtermvisit)
 
   })))
+
+}
+
+# function in order to define indices representing the aggregation of visits for campsites
+aggregateRepeatedCampsiteVisits <- function(trackindicesvisits){
+
+  trackindicesvisits$newaggregation <- rep(0, nrow(trackindicesvisits))
+  for(i in unique(trackindicesvisits[,8])[-1]){
+
+    index <- trackindicesvisits[,8] == i
+
+    cond <- which(trackindicesvisits[,6] == 1 & index)
+
+    if(length(cond) > 0){
+
+      listaggregations <- tapply(cond, trackindicesvisits[cond,4], function(x) x)
+
+      for(j in seq_along(listaggregations)){
+        trackindicesvisits$newaggregation[listaggregations[[j]][1]:listaggregations[[j]][length(listaggregations[[j]])]] <- paste0(i, "_", j)
+      }
+
+    }
+
+  }
+
+  # return trackindicesvisits
+  return(trackindicesvisits)
+
+}
+
+# function in order to identify arrivals at/departures from a campsite
+movedTrack <- function(currenttrack){
+
+  # identify arrivals
+  arrival <- c(0, sapply(seq_len(nrow(currenttrack@data))[-1], function(x){
+    if(currenttrack@data$aggregationcampsite[x] != currenttrack@data$aggregationcampsite[x-1] && !is.na(currenttrack@data$aggregationcampsite[x]) && !is.na(currenttrack@data$aggregationcampsite[x-1])){
+      TRUE
+    }else{
+      FALSE
+    }
+  }))
+
+  # identify departures
+  departure <- rep(FALSE, length(arrival))
+  departure[which(arrival)-1] <- TRUE
+
+  # add arrival and departure to currenttrack
+  currenttrack$arrival <- arrival
+  currenttrack$departure <- departure
+
+  # remove currenttrack$aggregationcampsite
+  currenttrack$aggregationcampsite <- NULL
+
+  # return currenttrack
+  return(currenttrack)
 
 }
