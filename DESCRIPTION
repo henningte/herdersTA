@@ -17,7 +17,8 @@ Depends:
   lubridate,
   dbscan,
   ggplot2,
-  cowplot
+  cowplot,
+  ggrepel
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
