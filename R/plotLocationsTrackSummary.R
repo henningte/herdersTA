@@ -1,6 +1,9 @@
 #'@importFrom Rdpack reprompt
 #'@import spacetime
 #'@import lubridate
+#'@imoprt ggplot2
+#'@import cowplot
+#'@import ggrepel
 NULL
 
 #' Plots Summarised Tracks as Returned by \code{\link{locaitonsTrack}}.
