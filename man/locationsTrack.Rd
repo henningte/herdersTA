@@ -5,7 +5,8 @@
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
 locationsTrack(currenttrack, radius = 200, tmin = 345600,
-  tmaxinterstices = 345600, timeinterval = 30 * 60, night = c(16, 20),
+  tmaxinterstices = 345600, timeinterval = 30 * 60, night = c(16,
+  20),
   crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
   summary = TRUE)
 }

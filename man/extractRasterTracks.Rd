@@ -4,8 +4,8 @@
 \alias{extractRasterTracks}
 \title{Extracts corresponding raster values for GPS tracks.}
 \usage{
-extractRasterTracks(currenttracks, raster, timedate, resolution, aggregation,
-  cores = 1, clcall = NULL)
+extractRasterTracks(currenttracks, raster, timedate, resolution,
+  aggregation, cores = 1, clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories]{Tracks}} object with

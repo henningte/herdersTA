@@ -4,8 +4,8 @@
 \alias{summaryIndicatorsTrack1}
 \title{Computes summary indicators for GPS tracks.}
 \usage{
-summaryIndicatorsTrack1(currenttrack, normalise = TRUE, timeinterval = 30 *
-  60, aggregation = "allvisits")
+summaryIndicatorsTrack1(currenttrack, normalise = TRUE,
+  timeinterval = 30 * 60, aggregation = "allvisits")
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories]{Track}} object that
