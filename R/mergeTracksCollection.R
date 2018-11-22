@@ -31,11 +31,11 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
     # set up cluster
     cl <- makeCluster(cores, outfile="", type = "PSOCK")
     registerDoParallel(cl)
-    clusterCall(cl, function(){library("lubridate")})
-    clusterCall(cl, function(){library("spacetime")})
     if(is.null(clcall) == FALSE){
       clusterCall(cl, clcall)
     }
+    clusterCall(cl, function(){library("lubridate")})
+    clusterCall(cl, function(){library("spacetime")})
     clusterExport(cl = cl, varlist = list("exDataTracks", "mergeTracks", "trackscollection"), envir=environment())
 
     # merge the Track objects of each Tracks object
