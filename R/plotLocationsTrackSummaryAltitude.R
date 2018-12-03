@@ -57,16 +57,25 @@ plotLocationsTrackSummaryAltitude <- function(x, seasons = data.frame(start = c(
   labels <- paste0("step: ", seq_len(nrow(x)), ", ", "loc: ", x$location, ", ",
                    "vis.: ", x$visitscampsite, ",\n",
                    "arr.: ", strftime(x$arrivaltime, format = "%Y-%m-%d"), ", ",
-                   "alt: ", round(x$alt, 0), " m")
+                   "alt: ", round(x$alt, 0), " m, ",
+                   "dep.: ", strftime(x$departuretime, format = "%Y-%m-%d"))
 
   # data.frame for plotting the points
-  plotdfpoints <- data.frame(time = unlist(lapply(seq_len(nrow(x)), function(z) as.character(x[z,which(names(x) %in% c("arrivaltime", "departuretime"))]))), alt = rep(x$alt, each = 2), stringsAsFactors = FALSE)
+  plotdfpoints <- data.frame(time = unlist(lapply(seq_len(nrow(x)), function(z) as.character(x[z,which(names(x) %in% c("arrivaltime", "departuretime"))]))), alt = rep(x$alt, each = 2), campsite = rep(x$campsite, each = 2), stringsAsFactors = FALSE)
   plotdfpoints$time <- as.POSIXct(as.numeric(plotdfpoints$time), origin = "1970-01-01 00:00:00")
+
+  plotdfsegmentsgaps <- data.frame(xstart = as.POSIXct(x$departuretime[-nrow(x)]),
+                               xend = as.POSIXct(x$arrivaltime[-1]),
+                               ystart = x$alt[-nrow(x)],
+                               yend = x$alt[-1])
 
   # plot
   ggplot(data = plotdfpoints, aes(x = time, y = alt)) +
-    geom_point() +
     geom_path() +
+    geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
+    geom_point(aes(fill = plotdfpoints$campsite), shape = 21, size = 3) +
+    scale_fill_manual(values = c("white", "black")) +
+    theme(legend.position = "none") +
     # arrow
     # geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend), arrow = arrow(length = unit(0.03, "npc"))) +
     geom_label_repel(data = plotdfpoints[seq(1, nrow(plotdfpoints)-1, by = 2),], aes(x = time, y = alt, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival]))
