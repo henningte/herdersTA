@@ -151,79 +151,152 @@ locationsTrack <- function(currenttrack,
   # redefine indices of locations (according to arrival time)
   trsSP@data <- redefineIndices(df = trsSP@data, indices = "location", time = "time", notchange = 0)
 
-  # extract the data value indices of visits at each locations
+  # extract the data value indices of visits at each location
   trackindicesvisits <- do.call(rbind, lapply(unique(trsSP$location), function(x){
 
     # get the block start and end indices for the current location
     blockindices <- identifyBlocksVariable(currenttrack = trsSP, variable = "location", value = x)
 
     row.names(blockindices) <- rep(x, nrow(blockindices))
-    return(blockindices)
+    return(cbind(x, blockindices))
 
   }))
 
-  # extract the location information
-  locations <- as.numeric(row.names(trackindicesvisits))
+  # aggregate values at the same locations to blocks if interstices between them are < tmaxinterstices
+  trackindicesvisits <- aggregateRepeatedVisits(trackindicesvisits, locations = trackindicesvisits[,1], intersticesduration, tmaxinterstices, timeinterval)
 
-  # count the number of repeated visits at each location
-  trackindicesvisits <- countAllReapeatedVisits(trackindicesvisits, locations)
-
-  # aggregate repeated visits at the same location if the interstice is < tmaxinterstices
-  trackindicesvisits <- aggregateRepeatedVisits(trackindicesvisits, locations, intersticesduration, timeinterval)
+  # get an index of aggregated blocks
+  indexaggregatedvisits <- paste0(trackindicesvisits[,1], "_", trackindicesvisits[,4])
 
   # compute the duration of the aggregated visits
-  trackindicesvisits <- do.call(rbind, lapply(seq_len(nrow(trackindicesvisits)), function(x){
-
-    # define an index for the same location and aggregatedvisit
-    index <- which(row.names(trackindicesvisits) == row.names(trackindicesvisits)[x] & trackindicesvisits[,4] == trackindicesvisits[x,4])
-    c(trackindicesvisits[x,], sum(trackindicesvisits[index,2] - trackindicesvisits[index,1])+1)
-
-  }))
+  blockduration <- tapply(seq_len(nrow(trackindicesvisits)), indexaggregatedvisits, function(x){
+    block <- as.vector(trackindicesvisits[x,c(2,3)])
+    (block[length(block)] - block[1])
+  })
+  trackindicesvisits <- cbind(trackindicesvisits, duration = do.call("c", lapply(unique(indexaggregatedvisits), function(x) rep(blockduration[names(blockduration) == x], length(which(indexaggregatedvisits == x))))))
 
   # classify visits as long-term visit (campsite) or short-term visit
   trackindicesvisits <- classifyVisits(trackindicesvisits, tmin, timeinterval)
 
   # count the number of repeated long-term visits at each location
-  trackindicesvisits <- countAllReapeatedLongTermVisits(trackindicesvisits, locations)
+  trackindicesvisits <- countAllReapeatedLongTermVisits(trackindicesvisits, locations = trackindicesvisits[,1])
+  # does not work if there is a repeated visit at the same location, but the previous visit was not a campsite 20181203
 
-  # add locations to trackindicesvisits
-  trackindicesvisits <- cbind(trackindicesvisits, locations)
+  # order indexaggregatedvisits
+  indexaggregatedvisits <- indexaggregatedvisits[order(trackindicesvisits[,2])]
 
   # order the entries of trackindicesvisits
-  trackindicesvisits <- trackindicesvisits[order(trackindicesvisits[,1]),]
+  trackindicesvisits <- trackindicesvisits[order(trackindicesvisits[,2]),]
+  trackindicesvisits <- cbind(trackindicesvisits, indexaggregatedvisits)
 
-  # convert trackindicesvisits to a data.frame
-  trackindicesvisits <- as.data.frame(trackindicesvisits, stringsAsFactors = FALSE)
-  names(trackindicesvisits) <- c("start", "end", "repeatedvisit", "aggregation", "duration", "campsite", "repeatedcampsite", "location")
+  # identify adjacent visits of locations
+  nextvisits <- do.call(rbind, lapply(unique(indexaggregatedvisits[trackindicesvisits[,1] != 0]), function(y){
 
-  # define a new aggregation variable in order to define the arrivals/departures at/from a campsite
-  trackindicesvisits <- aggregateRepeatedCampsiteVisits(trackindicesvisits)
+    x <- seq_len(nrow(trackindicesvisits))[trackindicesvisits[,1] != 0][indexaggregatedvisits[trackindicesvisits[,1] != 0] == y]
+
+    # define the row index range in trackindicesvisits
+    blockindicesrange <- range(x)
+
+    # search for the next adjacent block that is not a gap (i.e. location != 0)
+    # search the next previous block
+    isgap <- TRUE
+    iter <- 1
+    if(blockindicesrange[1] == 1){
+      # if the block is the first value in the track, there is no previous block
+      previousblock <- NA
+    }else{
+      while(isgap){
+        if(trackindicesvisits[blockindicesrange[1]-iter, 1] != 0){
+          # if the value iter before is not a gap, set previousblock to the data value index in currenttrack that is the last data value of this previous block
+          previousblock <- trackindicesvisits[blockindicesrange[1]-iter, 3]
+          isgap <- FALSE
+        }else{
+          if(blockindicesrange[1]-iter == 1){
+            # if the next previous value is the first value, there is no previous block
+            previousblock <- NA
+            isgap <- FALSE
+          }
+          iter <- iter + 1
+        }
+      }
+    }
+
+    # search the next following block
+    isgap <- TRUE
+    iter <- 1
+    if(blockindicesrange[2] == nrow(trackindicesvisits)){
+      # if the block is the last value in the track, there is no next foloowing block
+      nextblock <- NA
+    }else{
+      while(isgap){
+        if(trackindicesvisits[blockindicesrange[2]+iter, 1] != 0){
+          # if the value iter before is not a gap, set nextblock to the data value index in currenttrack that is the first data value of this next block
+          nextblock <- trackindicesvisits[blockindicesrange[2]+iter, 2]
+          isgap <- FALSE
+        }else{
+          if(blockindicesrange[2]+iter == nrow(trackindicesvisits)){
+            # if the next following value is the last value, there is no next following block
+            nextblock <- NA
+            isgap <- FALSE
+          }
+          iter <- iter + 1
+        }
+      }
+    }
+
+    data.frame(indexaggregatedvisits = y, blockstart = trackindicesvisits[blockindicesrange[1], 3], blockend = trackindicesvisits[blockindicesrange[2], 2], previousblock = previousblock, nextblock = nextblock)
+
+  }))
+  nextvisits[,-1] <- apply(nextvisits[,-1], 2, function(x) as.numeric(as.character(x)))
+
+  # check if time interval between two visits at different locations is < tmaxintersites (i.e. it is assumed that it can be determined of a household arrived or left a location)
+  nextvisits$arrivaldet <- ifelse((nextvisits$blockstart - nextvisits$previousblock) * timeinterval < tmaxinterstices, TRUE, FALSE)
+  nextvisits$departuredet <- ifelse((nextvisits$nextblock - nextvisits$blockend) * timeinterval < tmaxinterstices, TRUE, FALSE)
+
+  # detect if the number of repeated visits should be set to NA because it is considered unreliable
+  nextvisitlocation <- sapply(strsplit(as.character(nextvisits[,1]), split = "_"), function(x) x[1])
+  nextvisitvisit <- sapply(strsplit(as.character(nextvisits[,1]), split = "_"), function(x) x[2])
+  nextvisits$repeatedvisitsreliable <- c(TRUE, sapply(seq_len(nrow(nextvisits))[-1], function(x){
+    if(nextvisitlocation[x] == nextvisitlocation[x-1]){
+      FALSE
+    }else{
+      TRUE
+    }
+  }))
 
   # add all values to the input track object
   tracklocationsvisits <- do.call(rbind, lapply(seq_len(nrow(trackindicesvisits)), function(x){
 
-    do.call(rbind, lapply(trackindicesvisits[x, 1]:trackindicesvisits[x, 2], function(y){
-      trackindicesvisits[x, c(8, 6, 3, 7, 9)]
+    do.call(rbind, lapply(trackindicesvisits[x, 2]:trackindicesvisits[x, 3], function(y){
+      trackindicesvisits[x, c(1, 6, 7, 8)]
     }))
 
   }))
   currenttrack$location <- tracklocationsvisits[,1]
   currenttrack$campsite <- tracklocationsvisits[,2]
-  currenttrack$visitsloc <- tracklocationsvisits[,3]
-  currenttrack$visitscampsite <- tracklocationsvisits[,4]
-  currenttrack$aggregationcampsite <- tracklocationsvisits[,5]
+  currenttrack$visitscampsite <- tracklocationsvisits[,3]
+  currenttrack$visitscampsite[currenttrack$location %in% nextvisitlocation[nextvisits$repeatedvisitsreliable == FALSE] & currenttrack$visitscampsite %in% nextvisitvisit[nextvisits$repeatedvisitsreliable == FALSE]] <- NA
+  currenttrack$indexaggregatedvisits <- tracklocationsvisits[,4]
 
-  # set the values for location, campsite, visitsloc and visitscampsite to NA for gaps
-  currenttrack@data[which(currenttrack$location == 0),(ncol(currenttrack@data)-3):ncol(currenttrack@data)] <- NA
+  # add information to currenttrack on departures and arrivals
+  currenttrack$arrived <- rep(FALSE, nrow(currenttrack@data))
+  currenttrack$arrived[nextvisits$blockstart[nextvisits$arrivaldet == TRUE]] <- TRUE
+  currenttrack$left <- rep(FALSE, nrow(currenttrack@data))
+  currenttrack$left[nextvisits$blockend[nextvisits$departuredet == TRUE]] <- TRUE
 
-  # identify arrivals at/departures from a campsite
-  currenttrack <- movedTrack(currenttrack)
+  # set the number of campsite visits to NA for short-term visits
+  currenttrack$visitscampsite[currenttrack$campsite == 0] <- NA
+
+  # set the values for location, campsite, arrived, left and visitscampsite to NA for gaps
+  currenttrack@data[which(currenttrack$location == 0),(ncol(currenttrack@data)-4):ncol(currenttrack@data)] <- NA
 
   # summarise the values for each visit and location
   if(summary == TRUE){
 
-    # define an index for each location and visit
-    indexvisitlocation <- paste0(currenttrack$location, "_", currenttrack$visitsloc)
+    # define an index for each location and campsite
+    # indexvisitlocation <- paste0(currenttrack$location, "_", currenttrack$visitscampsite)
+    indexvisitlocation <- currenttrack@data$indexaggregatedvisits
+    indexvisitlocation[is.na(indexvisitlocation)] <- "0_NA"
 
     # compute mean coordinates for each visit
     coordinatesvisitlocation <- SpatialPoints(t(sapply(unique(indexvisitlocation), function(x) c(mean(trsSP@coords[indexvisitlocation == x,1]), mean(trsSP@coords[indexvisitlocation == x,2])))), proj4string = trsSP@proj4string)
@@ -233,8 +306,7 @@ locationsTrack <- function(currenttrack,
       location = sapply(unique(indexvisitlocation), function(x) currenttrack$location[indexvisitlocation == x][1]),
       lon = coordinatesvisitlocation[,1],
       lat = coordinatesvisitlocation[,2],
-      alt = sapply(unique(indexvisitlocation), function(x) mean(as.numeric(currenttrack$HEIGHT[indexvisitlocation == x]))),
-      visitsloc = sapply(unique(indexvisitlocation), function(x) currenttrack$visitsloc[indexvisitlocation == x][1]),
+      alt = sapply(unique(indexvisitlocation), function(x) median(as.numeric(currenttrack$HEIGHT[indexvisitlocation == x]))),
       campsite = sapply(unique(indexvisitlocation), function(x) currenttrack$campsite[indexvisitlocation == x][1]),
       visitscampsite = sapply(unique(indexvisitlocation), function(x) currenttrack$visitscampsite[indexvisitlocation == x][1]),
       arrivaltime = as.POSIXct(sapply(unique(indexvisitlocation), function(x) currenttrack$time[indexvisitlocation == x][1]), origin = "1970-01-01 00:00:00"),
@@ -243,7 +315,8 @@ locationsTrack <- function(currenttrack,
       speed = sapply(unique(indexvisitlocation), function(x) mean(as.numeric(currenttrack$SPEED[indexvisitlocation == x])))
     )
 
-    summaryvisitslocation[-is.na(summaryvisitslocation$location),]
+    # summaryvisitslocation[-is.na(summaryvisitslocation$location),]
+    summaryvisitslocation[summaryvisitslocation$location != 0,]
 
   }else{
     return(currenttrack)
@@ -263,7 +336,7 @@ countAllReapeatedVisits <- function(trackindicesvisits, locations){
 }
 
 # function in order to aggregate repeated visits at the same location if the interstice is < tmaxinterstices
-aggregateRepeatedVisits <- function(trackindicesvisits, locations, intersticesduration, timeinterval){
+aggregateRepeatedVisits <- function(trackindicesvisits, locations, intersticesduration, tmaxinterstices, timeinterval){
 
   do.call(rbind, lapply(unique(locations), function(x){
 
@@ -276,7 +349,7 @@ aggregateRepeatedVisits <- function(trackindicesvisits, locations, intersticesdu
 
       # get the duration of interstices (add a 0 for the first visit)
       intersticesduration <- c(0, lapply(index[-1], function(y){
-        trackindicesvisits[y,1] - trackindicesvisits[y-1,2]
+        trackindicesvisits[y,2] - trackindicesvisits[y-1,3]
       }))
 
       # define an aggregation index
