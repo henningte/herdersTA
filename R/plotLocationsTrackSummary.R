@@ -57,7 +57,8 @@ plotLocationsTrackSummary <- function(x, seasons = data.frame(start = c(3, 5, 9,
   labels <- paste0("step: ", seq_len(nrow(x)), ", ", "loc: ", x$location, ", ",
                    "vis.: ", x$visitscampsite, ",\n",
                    "arr.: ", strftime(x$arrivaltime, format = "%Y-%m-%d"), ", ",
-                   "alt: ", round(x$alt, 0), " m")
+                   "alt: ", round(x$alt, 0), " m, ",
+                   "dep.: ", strftime(x$departuretime, format = "%Y-%m-%d"))
 
   # data.frame in order to plot segments for gaps
   plotdfsegmentsgaps <- data.frame(xstart = x$lon[-nrow(x)],
