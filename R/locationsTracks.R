@@ -130,6 +130,7 @@ locationsTracks <- function(currenttracks,
   clusterCall(cl, function(){library("spacetime")})
   clusterCall(cl, function(){library("trajectories")})
   clusterCall(cl, function(){library("raster")})
+  clusterCall(cl, function(){library("dbscan")})
   clusterCall(cl, function(){library("sp")})
   clusterExport(cl = cl, varlist = list("currenttracks", "tmin",
                                         "tmaxinterstices", "timeinterval",
@@ -138,7 +139,12 @@ locationsTracks <- function(currenttracks,
                                         "countAllReapeatedVisits",
                                         "aggregateRepeatedVisits", "classifyVisits",
                                         "countAllReapeatedLongTermVisits",
-                                        "locationsTrack", "crs"), envir=environment())
+                                        "locationsTrack", "crs",
+                                        "TrackToSpatialPointsDataFrame",
+                                        "classifyNightTrack"), envir=environment())
+
+  # extract the names of currenttracks@tracks
+  currenttracksnames <- names(currenttracks@tracks)
 
   # apply locationsTrack to each Track object
   currenttracks <- foreach(track_i = seq_len(length(currenttracks@tracks)), .multicombine = TRUE)%dopar%{
@@ -156,6 +162,9 @@ locationsTracks <- function(currenttracks,
   # convert currenttracks to a Tracks object if summary == FALSE
   if(summary == FALSE){
     currenttracks <- Tracks(currenttracks)
+    names(currenttracks@tracks) <- currenttracksnames
+  }else{
+    names(currenttracks) <- currenttracksnames
   }
 
   stopCluster(cl)
