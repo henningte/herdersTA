@@ -66,7 +66,7 @@ plotLocationsTrackSummary <- function(x, seasons = data.frame(start = c(3, 5, 9,
                                    yend = x$lat[-1])
 
   # retain only segments for gaps >= 24h + 20h (for at least one night, there were no values)
-  plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(as.POSIXct(x$departuretime[-nrow(x)]) - as.POSIXct(x$arrivaltime[-1]) >= 44*60*60, TRUE, FALSE)),]
+  plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(difftime(as.POSIXct(x$departuretime[-nrow(x)]), as.POSIXct(x$arrivaltime[-1]), units = "sec") >= 44*60*60, TRUE, FALSE)),]
 
   # plot
   ggplot(data = x, aes(x = lon, y = lat)) +
