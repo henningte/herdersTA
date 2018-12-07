@@ -40,7 +40,7 @@ NULL
 reorganizeTracks <- function(currenttracks,
                              interval = 60*30,
                              tz = "GMT",
-                             crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
+                             crs = "+proj=longlat +ellps=WGS84",
                              cores = 1,
                              clcall = NULL){
 
