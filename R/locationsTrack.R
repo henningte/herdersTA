@@ -387,23 +387,37 @@ countAllReapeatedLongTermVisits <- function(trackindicesvisits, locations){
 
   cbind(trackindicesvisits, do.call(c, lapply(unique(locations), function(x){
 
+    # define an index for each block assigned to the current location
     index <- which(locations == x)
+
+    # set the counter to 1 by default
     iter <- 1
+
+    # create a dummy vector for the count values
     repeatedlongtermvisit <- rep(0, length(index))
+
+    # if the first block is a campsite, set the respective counter to 1
     if(trackindicesvisits[index[1], 6] == 1){
       repeatedlongtermvisit[1] <- 1
     }
+
+    # for all remaining blocks
     for(i in seq_along(index)[-1]){
 
+      # if the block is a campsite
       if(trackindicesvisits[index[i], 6] == 1){
-        if(trackindicesvisits[index[i], 4] != trackindicesvisits[index[i]-1, 4]){
+        # if the previous block is a different visit and any previous visit at the current location was a campsite
+        if(trackindicesvisits[index[i], 4] != trackindicesvisits[index[i]-1, 4] && any(trackindicesvisits[index[1]:(index[i]-1), 6] == 1)){
+          # increase the counter for campsite visits
           iter <- iter + 1
         }
+        # set the counter for the current block
         repeatedlongtermvisit[i] <- iter
       }
 
     }
 
+    # return repeatedlongtermvisit
     return(repeatedlongtermvisit)
 
   })))
