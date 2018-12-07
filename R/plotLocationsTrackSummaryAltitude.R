@@ -64,10 +64,14 @@ plotLocationsTrackSummaryAltitude <- function(x, seasons = data.frame(start = c(
   plotdfpoints <- data.frame(time = unlist(lapply(seq_len(nrow(x)), function(z) as.character(x[z,which(names(x) %in% c("arrivaltime", "departuretime"))]))), alt = rep(x$alt, each = 2), campsite = rep(x$campsite, each = 2), stringsAsFactors = FALSE)
   plotdfpoints$time <- as.POSIXct(as.numeric(plotdfpoints$time), origin = "1970-01-01 00:00:00")
 
+  # data.frame in order to plot segments for gaps
   plotdfsegmentsgaps <- data.frame(xstart = as.POSIXct(x$departuretime[-nrow(x)]),
-                               xend = as.POSIXct(x$arrivaltime[-1]),
-                               ystart = x$alt[-nrow(x)],
-                               yend = x$alt[-1])
+                                   xend = as.POSIXct(x$arrivaltime[-1]),
+                                   ystart = x$alt[-nrow(x)],
+                                   yend = x$alt[-1])
+
+  # retain only segments for gaps >= 24h + 20h (for at least one night, there were no values)
+  plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(plotdfsegmentsgaps$xend - plotdfsegmentsgaps$xstart >= 44*60*60, TRUE, FALSE)),]
 
   # plot
   ggplot(data = plotdfpoints, aes(x = time, y = alt)) +
