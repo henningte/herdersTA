@@ -86,7 +86,11 @@ assignFixedTenDayInterval <- function(timedate, startnew = TRUE){
     }
   }
 
-  ifelse(startnew == TRUE, timeinterval, tendayintervals)
+  if(startnew == TRUE){
+    timeinterval
+  }else{
+    tendayintervals
+  }
 
 }
 
