@@ -244,7 +244,7 @@ locationsTrack <- function(currenttrack,
       }
     }
 
-    data.frame(indexaggregatedvisits = y, blockstart = trackindicesvisits[blockindicesrange[1], 3], blockend = trackindicesvisits[blockindicesrange[2], 2], previousblock = previousblock, nextblock = nextblock)
+    data.frame(indexaggregatedvisits = y, blockstart = trackindicesvisits[blockindicesrange[1], 2], blockend = trackindicesvisits[blockindicesrange[2], 3], previousblock = previousblock, nextblock = nextblock)
 
   }))
   nextvisits[,-1] <- apply(nextvisits[,-1], 2, function(x) as.numeric(as.character(x)))
