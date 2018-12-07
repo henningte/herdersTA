@@ -59,12 +59,22 @@ plotLocationsTrackSummary <- function(x, seasons = data.frame(start = c(3, 5, 9,
                    "arr.: ", strftime(x$arrivaltime, format = "%Y-%m-%d"), ", ",
                    "alt: ", round(x$alt, 0), " m")
 
+  # data.frame in order to plot segments for gaps
+  plotdfsegmentsgaps <- data.frame(xstart = x$lon[-nrow(x)],
+                                   xend = x$lon[-1],
+                                   ystart = x$lat[-nrow(x)],
+                                   yend = x$lat[-1])
+
+  # retain only segments for gaps >= 24h + 20h (for at least one night, there were no values)
+  plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(as.POSIXct(x$departuretime[-nrow(x)]) - as.POSIXct(x$arrivaltime[-1]) >= 44*60*60, TRUE, FALSE)),]
+
   # plot
   ggplot(data = x, aes(x = lon, y = lat)) +
     geom_point() +
     # arrow
     # geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend), arrow = arrow(length = unit(0.03, "npc"))) +
     geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend)) +
+    geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
     geom_label_repel(data = x, aes(x = lon, y = lat, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival])) +
     coord_fixed() +
     theme(axis.text = element_blank()) +
