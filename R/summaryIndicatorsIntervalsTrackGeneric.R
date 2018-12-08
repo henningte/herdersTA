@@ -6,7 +6,7 @@ NULL
 #'
 #' \code{summaryIndicatorsIntervalsTrackGeneric} computes various summary indicators
 #' for a \code{\link[trajectories]{Track}} object that has been processed
-#' with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} and 
+#' with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} and
 #' \code{\link{aggregateDailyLocationsTrack}}. Summary
 #' indicators are computed for a temporal resolution of fixed ten-day intervals
 #' and additional for the transition between the first vale before
@@ -30,7 +30,7 @@ NULL
 #' interval as specified by \code{track@data$id_timeinterval} containing the
 #' following variables:
 #' \describe{
-#'   \item{\code{trackid}}{A character vector with the id (name) of 
+#'   \item{\code{trackid}}{A character vector with the id (name) of
 #'   \code{currenttrack}.}
 #'   \item{\code{ftdi}}{A character vector with the first day of the respective
 #'   fixed ten-day interval.}
@@ -55,30 +55,47 @@ summaryIndicatorsIntervalsTrackGeneric <- function(currenttrack,
                                     fun = mean,
                                     what
                                     ){
-  
+
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
     stop("currenttrack must be of class Track\n")
   }
-  
+
   # assign each day in currenttrack$day to a ftdi
   ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
   ftdi <- ftdi - min(ftdi) + 1
-  
+
   # summarise the values for each ftdi
   summarisedvalues <-
     as.data.frame(cbind(names(ftdi[!duplicated(ftdi)]), tapply(seq_along(ftdi), ftdi, function(x){
-    
+
     apply(matrix(currenttrack@data[x,what], ncol = length(what)), 2, function(y){
       fun(na.omit(y))
     })
-    
+
   })), stringsAsFactors = FALSE)
   names(summarisedvalues) <- c("ftdi", names(currenttrack@data)[what])
   summarisedvalues[,-1] <- apply(matrix(summarisedvalues[,-1], ncol = length(what)), 1, function(x) as.numeric(as.character(x)))
-  
+
+  # normalise
+  if(normalise == TRUE){
+
+    # compute the proportion of nogaps for each ftdi
+    nogapsproportionftdi <- tapply(seq_along(ftdi), ftdi, function(x){
+
+      apply(matrix(ifelse(currenttrack@data$nogapsproportion[x] > 0, 1, 0), ncol = 1), 2, function(y){
+        sum(y)/length(y)
+      })
+
+    })
+
+    # normalise the extracted values
+    summarisedvalues[,-1] <- apply(matrix(summarisedvalues[,-1], ncol = length(what)), 2, function(x) sapply(seq_along(nogapsproportionftdi), function(y) if(nogapsproportionftdi[y] == 0){NA}else{x[y]/nogapsproportionftdi[y]}))
+
+  }
+
   # return summarisedvalues
   return(summarisedvalues)
-  
+
 }
