@@ -264,6 +264,12 @@ locationsTrack <- function(currenttrack,
     }
   }))
 
+  # detect all visits within an aggregated visit (i.e. forming the interstice between two visits that form an aggregated visit)
+  visitstodelete <- which(sapply(seq_along(nextvisits$blockend)[-1], function(x) nextvisits$blockend[x] < nextvisits$blockend[x-1])) + 1
+  if(length(visitstodelete) > 0){
+    nextvisits <- nextvisits[-visitstodelete,]
+  }
+
   # add all values to the input track object
   tracklocationsvisits <- do.call(rbind, lapply(seq_len(nrow(trackindicesvisits)), function(x){
 
