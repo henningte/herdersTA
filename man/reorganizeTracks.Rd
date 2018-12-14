@@ -5,8 +5,7 @@
 \title{Reorganises \code{\link[trajectories]{Tracks}} objects.}
 \usage{
 reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT",
-  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
-  cores = 1, clcall = NULL)
+  crs = "+proj=longlat +ellps=WGS84", cores = 1, clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
