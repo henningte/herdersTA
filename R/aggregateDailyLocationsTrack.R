@@ -126,6 +126,31 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
   colnames(aggregatedcurrenttracksdata) <- c("day", "location", "longitude", "latitude", "altitude", "arrived", "left", "visitscampsite", "nogapsproportion")
   aggregatedcurrenttracksdata[,-c(1, 6, 7)] <- apply(aggregatedcurrenttracksdata[,-c(1, 6, 7)], 2, as.numeric)
 
+  # redefine the lon/lat data of gaps to the respective previous location
+  gapsblocks <- identifyBlocksVariable(currenttrack = aggregatedcurrenttracksdata, variable = "location", value = 0)
+
+  # if there are gaps
+  if(!is.null(gapsblocks)){
+
+    # remove the first block if present (there is no previous location)
+    if(gapsblocks[1,1] == 1){
+
+      # insert the coordinates of the next campsite (to avoid confusion when summarising)
+      aggregatedcurrenttracksdata$longitude[gapsblocks[1,1]:gapsblocks[1,2]] <- rep(aggregatedcurrenttracksdata$longitude[gapsblocks[1,2]+1], length = gapsblocks[1,1]:gapsblocks[1,2])
+      aggregatedcurrenttracksdata$latitude[gapsblocks[1,1]:gapsblocks[1,2]] <- rep(aggregatedcurrenttracksdata$latitude[gapsblocks[1,2]+1], length = gapsblocks[1,1]:gapsblocks[1,2])
+
+      # remove the first block from gapsblocks
+      gapsblocks <- gapsblocks[-1,]
+    }
+
+    # for remaining blocks, insert the lon/lat data of the previous location (that relates always to a campsite visit)
+    for(i in seq_len(nrow(gapsblocks))){
+      aggregatedcurrenttracksdata$longitude[gapsblocks[i,1]:gapsblocks[i,2]] <- rep(aggregatedcurrenttracksdata$longitude[gapsblocks[i,1]-1], length = gapsblocks[i,1]:gapsblocks[i,2])
+      aggregatedcurrenttracksdata$latitude[gapsblocks[i,1]:gapsblocks[i,2]] <- rep(aggregatedcurrenttracksdata$latitude[gapsblocks[i,1]-1], length = gapsblocks[i,1]:gapsblocks[i,2])
+    }
+
+  }
+
   # define the time vector of the new Track object
   newtime <- as.POSIXct(aggregatedcurrenttracksdata$day, format = "%Y-%m-%d")
 
