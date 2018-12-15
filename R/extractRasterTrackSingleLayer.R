@@ -7,10 +7,10 @@ NULL
 #'
 #' \code{extractRasterTrackSingleLayer} extracts values from \code{RasterLayer}
 #' (see: \code{\link[raster]{Raster-class}}) that corresponds to the the respective
-#' position of a \code{\link[trajectories]{Track}} object with
+#' position of a \code{\link[trajectories:Track-class]{Track}} object with
 #' daily resolution.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object that
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object that
 #' has a column \code{day} containing the time information of the data
 #' values.
 #' @param raster A \code{RasterLayer} (see: \code{\link[raster]{Raster-class}}).
@@ -60,7 +60,7 @@ extractRasterTrackSingleLayer <- function(currenttrack,
   extractedvalues <- do.call(cbind, raster::extract(x = raster, y = locationsdata, method = "simple", buffer = buffer, na.rm = TRUE))
 
   # filter the values for each day for the target location
-  extractedvalues <- sapply(seq_along(eachdaylocation), function(x) extractedvalues[which(locationsdata$location == eachdaylocation[x])])
+  extractedvalues <- unlist(sapply(seq_along(eachdaylocation), function(x) extractedvalues[which(locationsdata$location == eachdaylocation[x])]))
 
   # insert the values into res
   res[indexnongaps] <- extractedvalues
