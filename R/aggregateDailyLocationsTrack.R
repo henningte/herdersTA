@@ -130,23 +130,26 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
   gapsblocks <- identifyBlocksVariable(currenttrack = aggregatedcurrenttracksdata, variable = "location", value = 0)
 
   # if there are gaps
-  if(!is.null(gapsblocks)){
+  if(!is.null(gapsblocks) && length(unique(aggregatedcurrenttracksdata$location)) != 1){
 
     # remove the first block if present (there is no previous location)
     if(gapsblocks[1,1] == 1){
 
       # insert the coordinates of the next campsite (to avoid confusion when summarising)
-      aggregatedcurrenttracksdata$longitude[gapsblocks[1,1]:gapsblocks[1,2]] <- rep(aggregatedcurrenttracksdata$longitude[gapsblocks[1,2]+1], length = gapsblocks[1,1]:gapsblocks[1,2])
-      aggregatedcurrenttracksdata$latitude[gapsblocks[1,1]:gapsblocks[1,2]] <- rep(aggregatedcurrenttracksdata$latitude[gapsblocks[1,2]+1], length = gapsblocks[1,1]:gapsblocks[1,2])
+      aggregatedcurrenttracksdata$longitude[gapsblocks[1,1]:gapsblocks[1,2]] <- rep(aggregatedcurrenttracksdata$longitude[gapsblocks[1,2]+1], length = length(gapsblocks[1,1]:gapsblocks[1,2]))
+      aggregatedcurrenttracksdata$latitude[gapsblocks[1,1]:gapsblocks[1,2]] <- rep(aggregatedcurrenttracksdata$latitude[gapsblocks[1,2]+1], length = length(gapsblocks[1,1]:gapsblocks[1,2]))
 
       # remove the first block from gapsblocks
       gapsblocks <- gapsblocks[-1,]
+      if(length(gapsblocks) == 2){
+        gapsblocks <- matrix(gapsblocks, ncol = 2)
+      }
     }
 
     # for remaining blocks, insert the lon/lat data of the previous location (that relates always to a campsite visit)
     for(i in seq_len(nrow(gapsblocks))){
-      aggregatedcurrenttracksdata$longitude[gapsblocks[i,1]:gapsblocks[i,2]] <- rep(aggregatedcurrenttracksdata$longitude[gapsblocks[i,1]-1], length = gapsblocks[i,1]:gapsblocks[i,2])
-      aggregatedcurrenttracksdata$latitude[gapsblocks[i,1]:gapsblocks[i,2]] <- rep(aggregatedcurrenttracksdata$latitude[gapsblocks[i,1]-1], length = gapsblocks[i,1]:gapsblocks[i,2])
+      aggregatedcurrenttracksdata$longitude[gapsblocks[i,1]:gapsblocks[i,2]] <- rep(aggregatedcurrenttracksdata$longitude[gapsblocks[i,1]-1], length = length(gapsblocks[i,1]:gapsblocks[i,2]))
+      aggregatedcurrenttracksdata$latitude[gapsblocks[i,1]:gapsblocks[i,2]] <- rep(aggregatedcurrenttracksdata$latitude[gapsblocks[i,1]-1], length = length(gapsblocks[i,1]:gapsblocks[i,2]))
     }
 
   }
