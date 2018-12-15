@@ -3,10 +3,10 @@
 #' @import raster
 NULL
 
-#' Imputes gaps in a \code{\link[trajectories]{Track}} object.
+#' Imputes gaps in a \code{\link[trajectories]{Track-class}} object.
 #'
 #' \code{fillGapTrackNight} imputes missing values in a
-#' \code{\link[trajectories]{Track}} object. Gaps are filled
+#' \code{\link[trajectories:Track-class]{Track}} object. Gaps are filled
 #' if their duration is $\le$ a user specified duration threshold
 #' and if the distance between the spatial position of the last data
 #' value before the gap and the spatial position of the first data
@@ -25,7 +25,7 @@ NULL
 #' \code{4*24*60*60 + (24 - nightduration)*60*60}, whereby \code{nightduration}
 #' is the duration of the time interval specified as night in hours.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object with a
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object with a
 #' boolean column \code{gap} in \code{currenttrack@data}. Data values
 #' have to be regularly spaced (may be achieved for example with
 #' \code{\link{reorganizeTracks}}).
@@ -47,7 +47,7 @@ NULL
 #'   \item The first element specifies the start hour of the night, e.g. \code{4}
 #'   for 4 o'clock.
 #' }
-#' @return The input \code{\link[trajectories]{Track}} object with filled
+#' @return The input \code{\link[trajectories:Track-class]{Track}} object with filled
 #' gaps.
 #' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
 #' \code{\link{redefineIndices}},
@@ -75,6 +75,11 @@ fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, timeinterv
   # convert the block indices to respective indices of all values
   blocksgaps1 <- apply(blocksgaps1, 2, function(x) currentnighttrackindex[x])
 
+  # convert to a matrix if returned as vector
+  if(length(blocksgaps1) == 2){
+    blocksgaps1 <- matrix(blocksgaps1, ncol = 2, byrow = TRUE)
+  }
+
   # test if blocksgaps1 == NULL
   if(is.null(blocksgaps1)){
     currenttrack@data$filled = FALSE
@@ -101,7 +106,13 @@ fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, timeinterv
 
   # discard gaps > maxduration
   if(length(which(discardgaps == 0)) > 0){
-    blocksgaps1 <- blocksgaps1[-which(discardgaps == 0),]
+    blocksgaps1 <- blocksgaps1[which(discardgaps == 1),]
+    if(length(blocksgaps1) == 2){
+      blocksgaps1 <- matrix(blocksgaps1, ncol = 2, byrow = TRUE)
+    }
+    if(length(blocksgaps1) == 0){
+      blocksgaps1 <- NULL
+    }
   }
 
   # test if blocksgaps1 == NULL
@@ -129,7 +140,13 @@ fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, timeinterv
 
   # discard gaps with differing locations between points adjacent to each gap block
   if(length(which(discardgaps == 0)) > 0){
-    blocksgaps1 <- blocksgaps1[-which(discardgaps == 0),]
+    blocksgaps1 <- blocksgaps1[which(discardgaps == 1),]
+    if(length(blocksgaps1) == 2){
+      blocksgaps1 <- matrix(blocksgaps1, ncol = 2, byrow = TRUE)
+    }
+    if(length(blocksgaps1) == 0){
+      blocksgaps1 <- NULL
+    }
   }
 
   # test if blocksgaps1 == NULL

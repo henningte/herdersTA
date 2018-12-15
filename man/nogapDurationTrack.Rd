@@ -7,7 +7,7 @@
 nogapDurationTrack(currenttrack, timeinterval = 30 * 60)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object with a
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object with a
 \code{boolean} column \code{gap} in \code{currenttrack@data} and an
 \code{integer} column \code{timeinterval_id} in \code{currenttrack@data}. Data
 values have to be regularly spaced (may be achieved for example with
@@ -17,7 +17,7 @@ values have to be regularly spaced (may be achieved for example with
 time interval represented by one data value of \code{currenttrack} [s].}
 }
 \value{
-A \code{\link[trajectories]{Track}} object identical to
+A \code{\link[trajectories:Track-class]{Track}} object identical to
 \code{currenttrack}, except for a new column
 \code{currenttrack@data$duration_nogap}
 representing the temporal duration of not missing values within the
@@ -26,7 +26,7 @@ corresponding time interval specified by
 }
 \description{
 \code{nogapDurationTrack} compute the temporal duration of not missing
-values for time intervals of a \code{\link[trajectories]{Track}} object
+values for time intervals of a \code{\link[trajectories:Track-class]{Track}} object
 as returned by \code{removeDataTrack}, based on the classification of
 missing values as gaps by \code{reorganizeTracks} and on the
 classification of time intervals to consider during analyses by

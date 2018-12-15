@@ -7,7 +7,7 @@
 identifyTimeIntervals(currenttrack, timeinterval = "month")
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object with a
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object with a
 \code{POSIXct} column \code{time} in \code{currenttrack@data}. Data
 values have to be regularly spaced (may be achieved for example with
 \code{\link{reorganizeTracks}}).}
@@ -36,7 +36,7 @@ corresponding to the same time interval.
 }
 \description{
 \code{identifyTimeIntervals} assign each data value (row) in
-the \code{data} slot of a \code{\link[trajectories]{Track}}
+the \code{data} slot of a \code{\link[trajectories:Track-class]{Track}}
 object to a user specified time interval.
 }
 \examples{

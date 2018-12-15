@@ -3,20 +3,20 @@
 #'@import lubridate
 NULL
 
-#' Extracts data from a \code{\link[trajectories]{Tracks}} object.
+#' Extracts data from a \code{\link[trajectories:Track-class]{Tracks}} object.
 #'
 #' \code{exDataTracks} extracts data in the \code{data} slot and
-#' \code{time} slot of all \code{\link[trajectories]{Track}} objects
-#' of specified \code{\link[trajectories]{Tracks}} object and merges
+#' \code{time} slot of all \code{\link[trajectories:Track-class]{Track}} objects
+#' of specified \code{\link[trajectories:Track-class]{Tracks}} object and merges
 #' the values into a \code{data.frame} for each
-#' \code{\link[trajectories]{Track}} object
+#' \code{\link[trajectories:Track-class]{Track}} object
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object.
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @return A \code{data.frame} objects representing the merged slots
-#' \code{data} and \code{time} of the \code{\link[trajectories]{Track}}
-#' objects of the specified \code{\link[trajectories]{Tracks}}
+#' \code{data} and \code{time} of the \code{\link[trajectories:Track-class]{Track}}
+#' objects of the specified \code{\link[trajectories:Track-class]{Tracks}}
 #' object.
-#' @seealso
+#' @seealso #
 #' @examples #
 #' @export
 exDataTracks <- function(currenttracks){

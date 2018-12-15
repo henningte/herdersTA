@@ -7,19 +7,19 @@
 #' @import doParallel
 NULL
 
-#' Reorganises \code{\link[trajectories]{Tracks}} objects.
+#' Reorganises \code{\link[trajectories:Track-class]{Tracks}} objects.
 #'
-#' \code{reorganizeTracks} reorganises a \code{\link[trajectories]{Tracks}}
-#' object with several \code{\link[trajectories]{Track}} objects
+#' \code{reorganizeTracks} reorganises a \code{\link[trajectories:Track-class]{Tracks}}
+#' object with several \code{\link[trajectories:Track-class]{Track}} objects
 #' covering roughly the same time period by assigning data points to
 #' the same overall time interval and including gaps as new data
-#' points within each \code{\link[trajectories]{Track}} object.
+#' points within each \code{\link[trajectories:Track-class]{Track}} object.
 #'
 #' If there are more than one data point per interval and
-#' \code{\link[trajectories]{Track}} object, only the first data
+#' \code{\link[trajectories]{Track-class}} object, only the first data
 #' point within this interval is retained.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object.
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @param interval A numerical value representing the length of the
 #' time interval to assign all data values to [s]. Default is
 #' \code{interval = 60*30}, i.e. 30 minutes.
@@ -31,9 +31,9 @@ NULL
 #' use in parallel computing.
 #' @param clcall A function that is passed to
 #' \code{\link[parallel]{clusterCall}}.
-#' @return A \code{\link[trajectories]{Tracks}} object containing
-#' the reorganised \code{\link[trajectories]{Track}} objects of the
-#' input A \code{\link[trajectories]{Tracks}} object.
+#' @return A \code{\link[trajectories:Track-class]{Tracks}} object containing
+#' the reorganised \code{\link[trajectories:Track-class]{Track}} objects of the
+#' input A \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @seealso \code{\link{mergeTracksCollection}}, \code{\link{mergeTracks}}.
 #' @examples #
 #' @export

@@ -9,16 +9,16 @@ NULL
 #' \code{extractRasterTracks} extracts values from raster based time series
 #' (\code{RasterBrick} or \code{RasterStack} object, see:
 #' \code{\link[raster]{Raster-class}}) that correspond the the respective
-#' position and time of the \code{\link[trajectories]{Track}} objects of a
-#' \code{\link[trajectories]{Tracks}} object.
+#' position and time of the \code{\link[trajectories:Track-class]{Track}} objects of a
+#' \code{\link[trajectories:Track-class]{Tracks}} object.
 #'
 #' The \code{Track} object have to have data values for the same time
 #' intervals and have to be of the same length. Time values have to be
 #' stored in a column \code{time} in the \code{data} slot for each
-#' \code{\link[trajectories]{Track}} object.
+#' \code{\link[trajectories:Track-class]{Track}} object.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object with
-#' \code{\link[trajectories]{Track}} objects (\code{currenttrack}) as
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object with
+#' \code{\link[trajectories:Track-class]{Track}} objects (\code{currenttrack}) as
 #' described in the details section.
 #' @param raster raster based time series (\code{RasterBrick} or
 #' \code{RasterStack} object, see: \code{\link[raster]{Raster-class}}).
@@ -38,9 +38,12 @@ NULL
 #' \code{\link{extractRasterTracks}}.
 #' @examples #
 #' @export
-extractRasterTracks <- function(currenttracks, raster, timedate, resolution, cores = 1, clcall = NULL){
+extractRasterTracks <- function(currenttracks, raster, timedate, resolution, aggregation, cores = 1, clcall = NULL){
 
-  # extract the time information for currenttracks
+  # extract a sample Track object (representative since all Track objects are assumed to have the same time intervals)
+  currenttrack <- currenttracks@tracks[[1]]
+
+  # extract the time information for currenttrack
   switch(resolution,
          days = {
            # aggregate to daily resoltuion
@@ -60,11 +63,31 @@ extractRasterTracks <- function(currenttracks, raster, timedate, resolution, cor
          }
   )
 
-  # get a list assigning the data values of eachTrack object to a time interval according to resolution
+  # aggregate the location information
+  if(aggregation == "allvisits"){
+    currenttracks <- Tracks(lapply(seq_along(currenttracks@tracks), function(x){
+
+      aggregatedvisits <- extractCoordinatesVisitsTrack(currenttrack = currenttracks@tracks[[x]],
+                                                        aggregated = FALSE)
+
+      aggregatedcurrenttrack <- currenttracks@tracks[[x]]
+      aggregatedcurrenttrack@data$lon <- aggregatedvisits$lon
+      aggregatedcurrenttrack@data$lat <- aggregatedvisits$lat
+      aggregatedcurrenttrack@data$HEIGHT <- aggregatedvisits$alt
+      aggregatedcurrenttrack@sp@coords <- cbind(aggregatedvisits$lon, aggregatedvisits$lat)
+      colnames(aggregatedcurrenttrack@sp@coords) <- colnames(currenttrack@sp@coords)
+
+      return(aggregatedcurrenttrack)
+
+    }))
+
+  }
+
+  # define a list collecting the data value indices of crrenttrack for each aggregated time value
   if(resolution != "movingwindowtendays"){
 
     # get an index assigning each value of currenttrack to a time interval according to resolution and extract the time information from currenttrack
-    indexcurrenttracktime <- assignTimeInterval(currenttrack = currenttracks@tracks[[1]], resolution = resolution)
+    indexcurrenttracktime <- assignTimeInterval(currenttrack, resolution)
 
     indexaggregatedtrackvalues <- lapply(unique(indexcurrenttracktime), function(x){
       seq_along(currenttracktime)[indexcurrenttracktime == x]
@@ -74,12 +97,13 @@ extractRasterTracks <- function(currenttracks, raster, timedate, resolution, cor
   }else{
 
     # get an index assigning each value of currenttrack to a time interval according to resolution and extract the time information from currenttrack
-    indexcurrenttracktime <- assignTimeInterval(currenttrack = currenttracks@tracks[[1]], resolution = "days")
+    indexcurrenttracktime <- assignTimeInterval(currenttrack = currenttrack, resolution = resolution)
 
     indexaggregatedtrackvalues <- lapply(unique(indexcurrenttracktime), function(x){
       seq_along(currenttracktime)[indexcurrenttracktime == x]
     })
     names(indexaggregatedtrackvalues) <- unique(currenttracktime)
+
   }
 
   # define an index assigning raster layers to elements of indexrasterlayertrackvalues
@@ -103,49 +127,67 @@ extractRasterTracks <- function(currenttracks, raster, timedate, resolution, cor
   # extract the values
   extractedvalues <- parLapply(cl, seq_along(indexaggregatedtrackvalues), function(x){
 
-    print(x)
-
     # define an index for the current data values of currenttrack
-    index <- indexaggregatedtrackvalues[[x]]
+    ifelse(resolution != "movingwindowtendays", index <- indexaggregatedtrackvalues[[x]], index <- do.call(c, indexaggregatedtrackvalues[x:(x+9)]))
 
     # extract the respective data values of currenttrack and convert it to a SpatialPointsDataFrame and project it
     currenttracksubset <- do.call(rbind, lapply(seq_along(currenttracks@tracks), function(y){
 
-      TrackToSpatialPointsDataFrame(Track(track = STIDF(sp = currenttracks@tracks[[y]]@sp[index], time = as.POSIXct(currenttracks@tracks[[y]]$time[index]), data = currenttracks@tracks[[y]]@data[index,], endTime = currenttracks@tracks[[y]]$time[index])))
+      # collect row indices with the same position
+      index2 <- which(currenttracks@tracks[[y]]@data$gap[index] == FALSE)
+      if(length(index2) > 0){
+
+        indexvalueslocations <- tapply(seq_len(nrow(currenttracks@tracks[[y]]@data[index,]))[index2], paste0(currenttracks@tracks[[y]]$lon[index][index2], "_", currenttracks@tracks[[y]]$lat[index][index2]), function(z)z)
+
+        # get the first index for each location
+        indexcurrenttracksubset <- sapply(indexvalueslocations, function(z) index[z[1]])
+
+        # extract the respective data values of currenttrack and convert it to a SpatialPointsDataFrame and project it
+        currenttracksubset <- currenttracks@tracks[[y]]@sp[indexcurrenttracksubset]
+
+        trackid <- data.frame(trackid = rep(y, nrow(currenttracksubset@coords)), gap = rep(FALSE, nrow(currenttracksubset@coords)))
+
+        coordinates(trackid) <- coordinates(currenttracksubset)
+
+        trackid
+
+      }else{
+
+        currenttracksubset <- currenttracks@tracks[[y]]@sp[1]
+
+        trackid <- data.frame(trackid = rep(y, nrow(currenttracksubset@coords)), gap = rep(TRUE, nrow(currenttracksubset@coords)))
+
+        dummycoordinates <- coordinates(currenttracksubset)
+        dummycoordinates[1:2] <- c(0, 0)
+
+        coordinates(trackid) <- dummycoordinates
+
+        trackid
+
+      }
+
 
     }))
 
     # extract the respective values
-    extract(raster[[indexrasterlayertrackvalues[x]]], currenttracksubset)
+    extractedvalues <- extract(raster[[indexrasterlayertrackvalues[x]]], currenttracksubset)
+
+    # get information on gaps
+    gaps <- tapply(currenttracksubset$gap, currenttracksubset$trackid, function(x)x[1])
+
+    # average the extracted values
+    averagedextractedvalues <- tapply(extractedvalues, currenttracksubset$trackid, function(y){if(length(y) == 1 && is.na(y)){NA}else{na.omit(mean(y))}})
+
+    averagedextractedvalues[which(gaps == TRUE)] <- NA
+
+    averagedextractedvalues
 
   })
 
   # stop cluster
   stopCluster(cl)
 
-  # reformat the output into a data.frame with a column for each input Track object
-  indexcurrenttracks <- lapply(seq_along(indexaggregatedtrackvalues), function(x){
-
-    # define an index for the current data values of currenttrack
-    index <- indexaggregatedtrackvalues[[x]]
-
-    do.call(c, lapply(seq_along(currenttracks@tracks), function(y){
-
-      rep(y, length(index))
-
-    }))
-
-  })
-
-  extractedvalues <- do.call(cbind, lapply(seq_along(currenttracks@tracks), function(x){
-
-    do.call("c", lapply(seq_along(extractedvalues), function(y){
-
-      extractedvalues[[y]][which(indexcurrenttracks[[y]] == x)]
-
-    }))
-
-  }))
+  extractedvalues <- do.call(rbind, extractedvalues)
   extractedvalues <- as.data.frame(extractedvalues, stringsAsFactors = FALSE)
   names(extractedvalues) <- row.names(currenttracks@tracksData)
 
@@ -189,3 +231,7 @@ assignTimeInterval <- function(currenttrack, resolution){
   return(indexcurrenttracktime)
 
 }
+
+###
+
+

@@ -7,7 +7,7 @@
 getNightConnectionsTrack(currenttrack, tstart = 16, tend = 20)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tstart}{A numeric value indicating the start of the time interval
 [h, values between 0 and 24]. The default is \code{tstart = 16}.}
@@ -17,12 +17,12 @@ getNightConnectionsTrack(currenttrack, tstart = 16, tend = 20)
 }
 \value{
 The downsampled values of the slot \code{conections} of the
-\code{\link[trajectories]{Track}} object (containing only data points
+\code{\link[trajectories:Track-class]{Track}} object (containing only data points
 within the specified time interval).
 }
 \description{
 \code{getNightConnectionsTrack} subsets the values of the slot
-\code{connections} of a \code{\link[trajectories]{Track}} object by
+\code{connections} of a \code{\link[trajectories:Track-class]{Track}} object by
 extracting values that were
 recorded within a certain time interval of a day (for example in order to
 extract values that were recorded at night).

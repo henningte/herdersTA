@@ -7,9 +7,9 @@ NULL
 #' Classifies GPS track parts as evaluatable.
 #'
 #' \code{removeDataTracks} determine for all
-#' \code{\link[trajectories]{Track}} objects of a given
-#' \code{\link[trajectories]{Tracks}} object if data values of the
-#' \code{\link[trajectories]{Track}} objects for specific time
+#' \code{\link[trajectories:Track-class]{Track}} objects of a given
+#' \code{\link[trajectories:Track-class]{Tracks}} object if data values of the
+#' \code{\link[trajectories:Track-class]{Track}} objects for specific time
 #' intervals should be classified as usable (i.e. they should
 #' not be removed in following analyses) or not, based on a
 #' user specified threshold value of the proportion of missing
@@ -18,8 +18,8 @@ NULL
 #' values according to time intervals.
 
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object with
-#' \code{\link[trajectories]{Track}} objects (\code{currenttrack}) with a
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object with
+#' \code{\link[trajectories:Track-class]{Track}} objects (\code{currenttrack}) with a
 #' \code{boolean} column \code{gap} in \code{currenttrack@data} and a
 #' \code{POSIXct} column \code{time} in \code{currenttrack@data}. Data
 #' values have to be regularly spaced (may be achieved for example with
@@ -48,9 +48,9 @@ NULL
 #' use in parallel computing.
 #' @param clcall A function that is passed to
 #' \code{\link[parallel]{clusterCall}}.
-#' @return A \code{\link[trajectories]{Tracks}} object identical with
+#' @return A \code{\link[trajectories:Track-class]{Tracks}} object identical with
 #' \code{currenttracks}, except for a new column \code{currenttrack@data$remove}
-#' in each \code{\link[trajectories]{Track}} (\code{currenttrack}) object
+#' in each \code{\link[trajectories:Track-class]{Track}} (\code{currenttrack}) object
 #' indicating if a data value should be included in following analyses (
 #' \code{currenttrack@data$remove == FALSE}) or not (
 #' \code{currenttrack@data$remove == TRUE}), based on the specifications of the user,

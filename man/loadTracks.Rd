@@ -11,7 +11,7 @@ loadTracks(folder)
 containing data on GPS tracks.}
 }
 \value{
-A \code{\link[trajectories]{Tracks}} object holding the data of the
+A \code{\link[trajectories:Track-class]{Tracks}} object holding the data of the
 GPS tracks.
 }
 \description{

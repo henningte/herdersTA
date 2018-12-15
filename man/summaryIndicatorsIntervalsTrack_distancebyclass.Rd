@@ -9,7 +9,7 @@ summaryIndicatorsIntervalsTrack_distancebyclass(currenttrack,
   normalise = FALSE, classvariable)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has been processed as described in the description.}
 
 \item{normalise}{A logical value indicating if the computed summary
@@ -23,19 +23,19 @@ and each fixed ten-day interval, summary values will be computed.}
 }
 \value{
 A \code{data.frame} object with a row for each fixed ten-day interval
-, a column \code{ftdi} indicating the first day of the respective fixed ten-day 
+, a column \code{ftdi} indicating the first day of the respective fixed ten-day
 interval and a column for each level in \code{classvariable} with the distance
 value for the respective fixed ten-day interval and class level.
 }
 \description{
-\code{summaryIndicatorsIntervalsTrack_distance} computes the distance
+\code{summaryIndicatorsIntervalsTrack_distancebyclass} computes the distance
 a household covered during a fixed ten-day interval and for each class
 defined by an additional variable (e.g. distance covered within certain
 landcover classes). Distances are
 computed for each value within a fixed ten-day interval and additionally
-for the distance between the last value of the previous interval and the 
-first value of the target interval. The function requires a 
-\code{\link[trajectories]{Track}} object as returned by 
+for the distance between the last value of the previous interval and the
+first value of the target interval. The function requires a
+\code{\link[trajectories:Track-class]{Track}} object as returned by
 \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
 distances between campsites are computed.
 }

@@ -8,15 +8,15 @@ findOutliersTrack(currenttrack, tstart = min(index(currenttrack@time)),
   tend = max(index(currenttrack@time)), threshold = 180)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tstart}{A \code{POSIXct} object indicating the date and time of the start
 of the target period. Default is the first value of the
-\code{\link[trajectories]{Track}} object.}
+\code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tend}{A \code{POSIXct} object indicating the date and time of the end of
 the target period. Default is the last value of the
-\code{\link[trajectories]{Track}} object.}
+\code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{threshold}{An integer value indicating the threshold for the speed between
 two data points [m/s] above which this (connection) is considered as a
@@ -24,12 +24,12 @@ measurement error. Default is \code{threshold = 180}.}
 }
 \value{
 A \code{data.frame} object in the form of the connections slot of a
-\code{\link[trajectories]{Track}} object containing connections with speed
+\code{\link[trajectories:Track-class]{Track}} object containing connections with speed
 values above \code{threshold}.
 }
 \description{
 \code{findOutliersTrack} identifies outliers in
-\code{\link[trajectories]{Track}} objects based on a threshold speed value
+\code{\link[trajectories:Track-class]{Track}} objects based on a threshold speed value
 between succeeding measurements that is considered as outlier within the
 respective scope.
 }

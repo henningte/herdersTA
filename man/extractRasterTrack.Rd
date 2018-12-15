@@ -8,7 +8,7 @@ extractRasterTrack(currenttrack, raster, timedate, resolution,
   aggregation = "allvisits")
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has a column \code{time} containing the time information of the data
 values.}
 
@@ -27,7 +27,7 @@ aggregation of data values of \code{currenttrack} values of  \code{raster}
 should be extracted:
 \describe{
   \item{\code{"raw"}}{Values of  \code{raster} will be extracted for the
-  data values of the original \code{\link[trajectories]{Track}} object.
+  data values of the original \code{\link[trajectories:Track-class]{Track}} object.
   This may take a long time depending on the value of \code{resolution}
   and the amount of values of \code{currentrack}.}
   \item{\code{"allvisits"}}{Values of  \code{raster} will be extracted values
@@ -44,7 +44,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \code{extractRasterTrack} extracts values from raster based time series
 (\code{RasterBrick} or \code{RasterStack} object, see:
 \code{\link[raster]{Raster-class}}) that correspond the the respective
-position and time of a \code{\link[trajectories]{Track}} object.
+position and time of a \code{\link[trajectories:Track-class]{Track}} object.
 }
 \examples{
 #

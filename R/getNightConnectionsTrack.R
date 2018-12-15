@@ -5,18 +5,18 @@ NULL
 #' Extracts sub-daily connection values of GPS tracks.
 #'
 #' \code{getNightConnectionsTrack} subsets the values of the slot
-#' \code{connections} of a \code{\link[trajectories]{Track}} object by
+#' \code{connections} of a \code{\link[trajectories:Track-class]{Track}} object by
 #' extracting values that were
 #' recorded within a certain time interval of a day (for example in order to
 #' extract values that were recorded at night).
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object.
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param tstart A numeric value indicating the start of the time interval
 #' [h, values between 0 and 24]. The default is \code{tstart = 16}.
 #' @param tend A numeric value indicating the end of the time interval
 #' [h, values between 0 and 24]. The default is \code{tstart = 20}.
 #' @return The downsampled values of the slot \code{conections} of the
-#' \code{\link[trajectories]{Track}} object (containing only data points
+#' \code{\link[trajectories:Track-class]{Track}} object (containing only data points
 #' within the specified time interval).
 #' @seealso \code{\link{downByDrop}}, \code{\link{downByDropTrs}},
 #' \code{\link{getNightTrs}}, \code{\link{daynightFixesTrack}}.

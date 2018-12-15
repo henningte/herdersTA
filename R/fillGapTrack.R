@@ -3,16 +3,16 @@
 #' @import raster
 NULL
 
-#' Imputes gaps in a \code{\link[trajectories]{Track}} object.
+#' Imputes gaps in a \code{\link[trajectories:Track-class]{Track}} object.
 #'
 #' \code{fillGapTrack} imputes missing values in a
-#' \code{\link[trajectories]{Track}} object. Gaps are filled
+#' \code{\link[trajectories:Track-class]{Track}} object. Gaps are filled
 #' if their duration is $\le$ a user specified duration threshold
 #' and if the distance between the spatial position of the last data
 #' value before the gap and the spatial position of the first data
 #' value after the gap is $\le$ a user specified distance threshold.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object with a
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object with a
 #' boolean column \code{gap} in \code{currenttrack@data}. Data values
 #' have to be regularly spaced (may be achieved for example with
 #' \code{\link{reorganizeTracks}}).
@@ -25,7 +25,7 @@ NULL
 #' @param timeinterval A numerical value reperesenting the duration
 #' of a time interval represented by one data value of
 #' \code{currenttrack} [s].
-#' @return The input \code{\link[trajectories]{Track}} object with filled
+#' @return The input \code{\link[trajectories:Track-class]{Track}} object with filled
 #' gaps.
 #' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
 #' \code{\link{redefineIndices}},

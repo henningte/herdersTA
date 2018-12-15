@@ -14,7 +14,7 @@ quadrats to create.}
 \item{crs}{A character string describing a projection and datum
 in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
 
-\item{currenttracks}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Track}} object.}
 }
 \value{
 A \code{\link[sp]{SpatialGridDataFrame}} with quadrat cells
@@ -22,7 +22,7 @@ and the number of points within them.
 }
 \description{
 \code{pointsPerQuad} determines the number of points per
-cell (of a given size) in a \code{\link[trajectories]{Track}}
+cell (of a given size) in a \code{\link[trajectories:Track-class]{Track}}
 object.
 }
 \details{

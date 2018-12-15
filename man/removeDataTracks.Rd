@@ -8,8 +8,8 @@ removeDataTracks(currenttracks, timeinterval = "month", threshold = 40,
   cores = 1, clcall = NULL)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object with
-\code{\link[trajectories]{Track}} objects (\code{currenttrack}) with a
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
+\code{\link[trajectories:Track-class]{Track}} objects (\code{currenttrack}) with a
 \code{boolean} column \code{gap} in \code{currenttrack@data} and a
 \code{POSIXct} column \code{time} in \code{currenttrack@data}. Data
 values have to be regularly spaced (may be achieved for example with
@@ -44,9 +44,9 @@ use in parallel computing.}
 \code{\link[parallel]{clusterCall}}.}
 }
 \value{
-A \code{\link[trajectories]{Tracks}} object identical with
+A \code{\link[trajectories:Track-class]{Tracks}} object identical with
 \code{currenttracks}, except for a new column \code{currenttrack@data$remove}
-in each \code{\link[trajectories]{Track}} (\code{currenttrack}) object
+in each \code{\link[trajectories:Track-class]{Track}} (\code{currenttrack}) object
 indicating if a data value should be included in following analyses (
 \code{currenttrack@data$remove == FALSE}) or not (
 \code{currenttrack@data$remove == TRUE}), based on the specifications of the user,
@@ -58,9 +58,9 @@ missing values within a time interval specified by
 }
 \description{
 \code{removeDataTracks} determine for all
-\code{\link[trajectories]{Track}} objects of a given
-\code{\link[trajectories]{Tracks}} object if data values of the
-\code{\link[trajectories]{Track}} objects for specific time
+\code{\link[trajectories:Track-class]{Track}} objects of a given
+\code{\link[trajectories:Track-class]{Tracks}} object if data values of the
+\code{\link[trajectories:Track-class]{Track}} objects for specific time
 intervals should be classified as usable (i.e. they should
 not be removed in following analyses) or not, based on a
 user specified threshold value of the proportion of missing

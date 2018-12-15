@@ -7,7 +7,7 @@
 extractRasterTrackSingleLayer(currenttrack, raster, buffer = 0)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has a column \code{day} containing the time information of the data
 values.}
 
@@ -28,7 +28,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \description{
 \code{extractRasterTrackSingleLayer} extracts values from \code{RasterLayer}
 (see: \code{\link[raster]{Raster-class}}) that corresponds to the the respective
-position of a \code{\link[trajectories]{Track}} object with
+position of a \code{\link[trajectories:Track-class]{Track}} object with
 daily resolution.
 }
 \examples{

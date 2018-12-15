@@ -11,7 +11,7 @@ NULL
 #'
 #' @param folder A character value representing the path to a folder with .csv files
 #' containing data on GPS tracks.
-#' @return A \code{\link[trajectories]{Tracks}} object holding the data of the
+#' @return A \code{\link[trajectories:Track-class]{Tracks}} object holding the data of the
 #' GPS tracks.
 #' @seealso \code{\link{removeEmptyFiles}}, \code{\link{readTrack}}.
 #' @examples #

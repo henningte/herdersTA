@@ -2,12 +2,12 @@
 % Please edit documentation in R/classifyNightTrack.R
 \name{classifyNightTrack}
 \alias{classifyNightTrack}
-\title{Classifies Data Values of a \code{\link[trajectories]{Tracks}} object as Night or Day Values.}
+\title{Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.}
 \usage{
 classifyNightTrack(currenttrack, night)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.
 \code{currenttracks} must have a variable \code{time} indicating
 the time of all data values.}
 
@@ -20,17 +20,20 @@ the time of all data values.}
 }}
 }
 \value{
-A \code{\link[trajectories]{Track}} object identical to \code{currenttrack}
+A \code{\link[trajectories:Track-class]{Track}} object identical to \code{currenttrack}
 with an attribute \code{night} representing a logical vector with a value for
 each data value in \code{currenttrack} that is \code{TRUE} if a data value was
 recorded during night and \code{FALSE} if it was recorded during day.
 }
 \description{
 \code{classifyNightTrack} creates labels for the data values
-of a \code{\link[trajectories]{Track}} object marking
+of a \code{\link[trajectories:Track-class]{Track}} object marking
 a data value as recorded during night or during day. The decision
 boundaries are specified by the user.
 }
 \examples{
+#
+}
+\seealso{
 #
 }

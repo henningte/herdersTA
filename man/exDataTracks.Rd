@@ -2,26 +2,29 @@
 % Please edit documentation in R/exDataTracks.R
 \name{exDataTracks}
 \alias{exDataTracks}
-\title{Extracts data from a \code{\link[trajectories]{Tracks}} object.}
+\title{Extracts data from a \code{\link[trajectories:Track-class]{Tracks}} object.}
 \usage{
 exDataTracks(currenttracks)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 }
 \value{
 A \code{data.frame} objects representing the merged slots
-\code{data} and \code{time} of the \code{\link[trajectories]{Track}}
-objects of the specified \code{\link[trajectories]{Tracks}}
+\code{data} and \code{time} of the \code{\link[trajectories:Track-class]{Track}}
+objects of the specified \code{\link[trajectories:Track-class]{Tracks}}
 object.
 }
 \description{
 \code{exDataTracks} extracts data in the \code{data} slot and
-\code{time} slot of all \code{\link[trajectories]{Track}} objects
-of specified \code{\link[trajectories]{Tracks}} object and merges
+\code{time} slot of all \code{\link[trajectories:Track-class]{Track}} objects
+of specified \code{\link[trajectories:Track-class]{Tracks}} object and merges
 the values into a \code{data.frame} for each
-\code{\link[trajectories]{Track}} object
+\code{\link[trajectories:Track-class]{Track}} object
 }
 \examples{
+#
+}
+\seealso{
 #
 }

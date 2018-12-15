@@ -4,15 +4,15 @@ NULL
 
 #' Cleans and regularises GPS tracks.
 #'
-#' \code{downByDropTrs} subsets the values of all \code{\link[trajectories]{Track}}
-#' objects of a given \code{\link[trajectories]{Tracks}} object to a regular time
+#' \code{downByDropTrs} subsets the values of all \code{\link[trajectories:Track-class]{Track}}
+#' objects of a given \code{\link[trajectories:Track-class]{Tracks}} object to a regular time
 #' interval by using the function \code{\link{downByDrop}}.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object.
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @param timeInterval An integer value indicating a time interval [s] as
-#' target duration between data points of the \code{\link[trajectories]{Track}}
+#' target duration between data points of the \code{\link[trajectories:Track-class]{Track}}
 #' object. Default is \code{timeInterval = 1770} (i.e. 29.5 minutes).
-#' @return The downsampled \code{\link[trajectories]{Tracks}} object.
+#' @return The downsampled \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @seealso \code{\link{downByDrop}}, \code{\link{getNightTrack}},
 #' \code{\link{getNightTrs}}, \code{\link{daynightFixesTrack}},
 #' \code{\link{daynightFixesTracks}},

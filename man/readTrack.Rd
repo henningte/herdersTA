@@ -11,7 +11,7 @@ readTrack(fname)
 containing the GPS data to read.}
 }
 \value{
-A \code{\link[trajectories]{Track}} object holding the data of the
+A \code{\link[trajectories:Track-class]{Track}} object holding the data of the
 GPS track.
 }
 \description{

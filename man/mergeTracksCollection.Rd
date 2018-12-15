@@ -2,7 +2,7 @@
 % Please edit documentation in R/mergeTracksCollection.R
 \name{mergeTracksCollection}
 \alias{mergeTracksCollection}
-\title{Merges \code{\link[trajectories]{Track}} objects of a \code{\link[trajectories]{Tracks}} objects.}
+\title{Merges \code{\link[trajectories:Track-class]{Track}} objects of a \code{\link[trajectories:Track-class]{Tracks}} objects.}
 \usage{
 mergeTracksCollection(trackscollection, cores = 1, clcall = NULL)
 }
@@ -14,20 +14,20 @@ use in parallel computing.}
 \code{\link[parallel]{clusterCall}}.}
 
 \item{currenttrackscollection}{A
-\code{\link[trajectories]{TracksCollection}} object.}
+\code{\link[trajectories:Track-class]{TracksCollection}} object.}
 }
 \value{
-A \code{\link[trajectories]{Tracks}} object with
-a \code{\link[trajectories]{Track}} object for each former
-\code{\link[trajectories]{Tracks}} object containing
-the merged  \code{\link[trajectories]{Track}} objects of the
-input  \code{\link[trajectories]{Tracks}} object.
+A \code{\link[trajectories:Track-class]{Tracks}} object with
+a \code{\link[trajectories:Track-class]{Track}} object for each former
+\code{\link[trajectories:Track-class]{Tracks}} object containing
+the merged  \code{\link[trajectories:Track-class]{Track}} objects of the
+input  \code{\link[trajectories:Track-class]{Tracks}} object.
 }
 \description{
-\code{mergeTracksCollection} merges the \code{\link[trajectories]{Track}}
-objects for each \code{\link[trajectories]{Tracks}} object of a
-\code{\link[trajectories]{TracksCollection}} into a
-singular \code{\link[trajectories]{Track}} object.
+\code{mergeTracksCollection} merges the \code{\link[trajectories:Track-class]{Track}}
+objects for each \code{\link[trajectories:Track-class]{Tracks}} object of a
+\code{\link[trajectories:Track-class]{TracksCollection}} into a
+singular \code{\link[trajectories:Track-class]{Track}} object.
 }
 \examples{
 #

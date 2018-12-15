@@ -7,18 +7,18 @@
 downByDropTrs(currenttracks, timeInterval = 1770)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 
 \item{timeInterval}{An integer value indicating a time interval [s] as
-target duration between data points of the \code{\link[trajectories]{Track}}
+target duration between data points of the \code{\link[trajectories:Track-class]{Track}}
 object. Default is \code{timeInterval = 1770} (i.e. 29.5 minutes).}
 }
 \value{
-The downsampled \code{\link[trajectories]{Tracks}} object.
+The downsampled \code{\link[trajectories:Track-class]{Tracks}} object.
 }
 \description{
-\code{downByDropTrs} subsets the values of all \code{\link[trajectories]{Track}}
-objects of a given \code{\link[trajectories]{Tracks}} object to a regular time
+\code{downByDropTrs} subsets the values of all \code{\link[trajectories:Track-class]{Track}}
+objects of a given \code{\link[trajectories:Track-class]{Tracks}} object to a regular time
 interval by using the function \code{\link{downByDrop}}.
 }
 \examples{

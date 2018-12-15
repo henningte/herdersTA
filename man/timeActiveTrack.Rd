@@ -7,7 +7,7 @@
 timeActiveTrack(currenttrack, tstart, tend)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tstart}{A \code{POSIXct} object indicating the date and time of the start
 of the target period.}
@@ -28,8 +28,8 @@ A numerical value:
 }
 \description{
 \code{timeActiveTrack} computes the time [s] during which position data was
-collected in a given \code{\link[trajectories]{Track}} object (for an
-individual \code{\link[trajectories]{Track}} object) within a given time period.
+collected in a given \code{\link[trajectories:Track-class]{Track}} object (for an
+individual \code{\link[trajectories:Track-class]{Track}} object) within a given time period.
 }
 \examples{
 #

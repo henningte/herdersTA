@@ -5,7 +5,7 @@ NULL
 #' Computes summary indicators for GPS tracks.
 #'
 #' \code{summaryIndicatorsIntervalsTrackGeneric} computes various summary indicators
-#' for a \code{\link[trajectories]{Track}} object that has been processed
+#' for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
 #' with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} and
 #' \code{\link{aggregateDailyLocationsTrack}}. Summary
 #' indicators are computed for a temporal resolution of fixed ten-day intervals
@@ -14,9 +14,9 @@ NULL
 #' \code{summaryIndicatorsIntervalsTrack}, \code{summaryIndicatorsIntervalsTrackGeneric}
 #' does not compute special summary indicators in a non-generic way, but
 #' simply applies a user-defined function to a selection of variables of a
-#' \code{\link[trajectories]{Track}} object.
+#' \code{\link[trajectories:Track-class]{Track}} object.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object that
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object that
 #' has been processed as described in the description.
 #' @param normalise A logical value indicating if the computed summary
 #' indicators should be normalized relative to the duration of data values
@@ -27,8 +27,8 @@ NULL
 #' @param what A numeric vector with indices of the variables in
 #' \code{currenttrack@data} to summarise.
 #' @return A \code{data.frame} object with with each row representing a time
-#' interval as specified by \code{track@data$id_timeinterval} containing the
-#' following variables:
+#' interval as specified by the slot \code{data$id_timeinterval} of \code{currenttrack}
+#' containing the following variables:
 #' \describe{
 #'   \item{\code{trackid}}{A character vector with the id (name) of
 #'   \code{currenttrack}.}
@@ -43,7 +43,7 @@ NULL
 #'   total altitudinal distance covered during a time interval [m] (i.e. the
 #'   altitudinal difference between the first point in the time interval and the
 #'   last point).}
-#'   \item{\code{number_campsites}} A numeric value representing the (normalized)
+#'   \item{\code{number_campsites}}{A numeric value representing the (normalized)
 #'   total number of unique campsites (i.e. neglecting repeated visits or counting
 #'   locations respectively) during a time interval.}
 #' }

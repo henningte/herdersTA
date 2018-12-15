@@ -8,8 +8,8 @@ nogapDurationTracks(currenttracks, timeinterval = 30 * 60, cores = 1,
   clcall = NULL)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object with
-\code{\link[trajectories]{Track}} objects with a
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
+\code{\link[trajectories:Track-class]{Track}} objects with a
 \code{boolean} column \code{gap} in \code{currenttrack@data} and an
 \code{integer} column \code{timeinterval_id} in \code{currenttrack@data}. Data
 values have to be regularly spaced (may be achieved for example with
@@ -25,18 +25,18 @@ use in parallel computing.}
 \code{\link[parallel]{clusterCall}}.}
 }
 \value{
-A \code{\link[trajectories]{Tracks}} object identical to
+A \code{\link[trajectories:Track-class]{Tracks}} object identical to
 \code{currenttracks}, except for a new column
 \code{currenttrack@data$duration_nogap}
 representing the temporal duration of not missing values within the
 corresponding time interval specified by
 \code{currenttrack@data$id_timeinterval} for
-each \code{\link[trajectories]{Track}} object (\code{currenttrack}).
+each \code{\link[trajectories:Track-class]{Track}} object (\code{currenttrack}).
 }
 \description{
 \code{nogapDurationTracks} compute the temporal duration of not missing
-values for time intervals of all \code{\link[trajectories]{Track}} objects
-in a \code{\link[trajectories]{Tracks}} object
+values for time intervals of all \code{\link[trajectories:Track-class]{Track}} objects
+in a \code{\link[trajectories:Track-class]{Tracks}} object
 as returned by \code{removeDataTracks}, based on the classification of
 missing values as gaps by \code{reorganizeTracks} and on the
 classification of time intervals to consider during analyses by

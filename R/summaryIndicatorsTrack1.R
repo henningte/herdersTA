@@ -5,12 +5,12 @@ NULL
 #' Computes summary indicators for GPS tracks.
 #'
 #' \code{summaryIndicatorsTrack1} computes various summary indicators
-#' for a \code{\link[trajectories]{Track}} object that has been processed
+#' for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
 #' with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} or
 #' \code{\link{clusterOrder}}, \code{\link{removeDataTrack}} and
 #' \code{\link{nogapDurationTrack}}.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object that
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object that
 #' has been processed as described in the description.
 #' @param normalise A logical value indicating if the computed summary
 #' indicators should be normalized relative to the duration of data values
@@ -24,11 +24,11 @@ NULL
 #' should be computed:
 #' \describe{
 #'   \item{\code{"raw"}}{Summary indicators will be computed on the (imputed)
-#'   values of the original \code{\link[trajectories]{Track}} object.}
+#'   values of the original \code{\link[trajectories:Track-class]{Track}} object.}
 #'   \item{\code{"allvisits"}}{Summary indicators will be computed on values
 #'   aggregated for each visit, whereby it is distinguished between long-term
 #'   visits (campsites) and short-term visits.}
-#'   \item{\code{"campsites}}{Like \code{"allvisits}, but all short-term visits
+#'   \item{\code{"campsites"}}{Like \code{"allvisits"}, but all short-term visits
 #'   will be neglected during computations, i.e. only long-term visits will be
 #'   considered.}
 #' }
@@ -50,7 +50,7 @@ NULL
 #'   \item{\code{nocampsites_time}}{A numeric value representing the (normlaized)
 #'   total time spend not in campsites during a time interval [s] (corresponds (?)
 #'   to the travel time).}
-#'   \item{\code{number_campsites}} A numeric value representing the (normalized)
+#'   \item{\code{number_campsites}}{A numeric value representing the (normalized)
 #'   total number of unique campsites (i.e. neglecting repeated visits or counting
 #'   locations respectively) during a time interval.}
 #'   \item{\code{number_repeatedvisits_campsite}}{A numeric value representing the

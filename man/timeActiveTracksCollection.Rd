@@ -7,7 +7,7 @@
 timeActiveTracksCollection(trcollection, tstart, tend)
 }
 \arguments{
-\item{trcollection}{A \code{\link[trajectories]{TracksCollection}} object.}
+\item{trcollection}{A \code{\link[trajectories:Track-class]{TracksCollection}} object.}
 
 \item{tstart}{A \code{POSIXct} object indicating the date and time of the start
 of the target period.}
@@ -17,14 +17,14 @@ the target period.}
 }
 \value{
 A numerical value representing the proportional coverage of the
-intersection between each \code{\link[trajectories]{Tracks}} object and the
+intersection between each \code{\link[trajectories:Track-class]{Tracks}} object and the
 specified time period relative to the total duration of the specified time
 period.
 }
 \description{
 \code{timeActiveTrackCollection} computes the time [s] during which position data
-was collected in all \code{\link[trajectories]{Tracks}} objects of a specified
-\code{\link[trajectories]{TracksCollection}} object within a given time period.
+was collected in all \code{\link[trajectories:Track-class]{Tracks}} objects of a specified
+\code{\link[trajectories:Track-class]{TracksCollection}} object within a given time period.
 }
 \examples{
 #

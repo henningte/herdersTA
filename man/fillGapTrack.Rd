@@ -2,12 +2,12 @@
 % Please edit documentation in R/fillGapTrack.R
 \name{fillGapTrack}
 \alias{fillGapTrack}
-\title{Imputes gaps in a \code{\link[trajectories]{Track}} object.}
+\title{Imputes gaps in a \code{\link[trajectories:Track-class]{Track}} object.}
 \usage{
 fillGapTrack(currenttrack, maxduration, maxdistance, timeinterval)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object with a
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object with a
 boolean column \code{gap} in \code{currenttrack@data}. Data values
 have to be regularly spaced (may be achieved for example with
 \code{\link{reorganizeTracks}}).}
@@ -25,12 +25,12 @@ of a time interval represented by one data value of
 \code{currenttrack} [s].}
 }
 \value{
-The input \code{\link[trajectories]{Track}} object with filled
+The input \code{\link[trajectories:Track-class]{Track}} object with filled
 gaps.
 }
 \description{
 \code{fillGapTrack} imputes missing values in a
-\code{\link[trajectories]{Track}} object. Gaps are filled
+\code{\link[trajectories:Track-class]{Track}} object. Gaps are filled
 if their duration is $\le$ a user specified duration threshold
 and if the distance between the spatial position of the last data
 value before the gap and the spatial position of the first data

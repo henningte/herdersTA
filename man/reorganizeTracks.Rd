@@ -2,13 +2,13 @@
 % Please edit documentation in R/reorganizeTracks.R
 \name{reorganizeTracks}
 \alias{reorganizeTracks}
-\title{Reorganises \code{\link[trajectories]{Tracks}} objects.}
+\title{Reorganises \code{\link[trajectories:Track-class]{Tracks}} objects.}
 \usage{
 reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT",
   crs = "+proj=longlat +ellps=WGS84", cores = 1, clcall = NULL)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 
 \item{interval}{A numerical value representing the length of the
 time interval to assign all data values to [s]. Default is
@@ -27,20 +27,20 @@ use in parallel computing.}
 \code{\link[parallel]{clusterCall}}.}
 }
 \value{
-A \code{\link[trajectories]{Tracks}} object containing
-the reorganised \code{\link[trajectories]{Track}} objects of the
-input A \code{\link[trajectories]{Tracks}} object.
+A \code{\link[trajectories:Track-class]{Tracks}} object containing
+the reorganised \code{\link[trajectories:Track-class]{Track}} objects of the
+input A \code{\link[trajectories:Track-class]{Tracks}} object.
 }
 \description{
-\code{reorganizeTracks} reorganises a \code{\link[trajectories]{Tracks}}
-object with several \code{\link[trajectories]{Track}} objects
+\code{reorganizeTracks} reorganises a \code{\link[trajectories:Track-class]{Tracks}}
+object with several \code{\link[trajectories:Track-class]{Track}} objects
 covering roughly the same time period by assigning data points to
 the same overall time interval and including gaps as new data
-points within each \code{\link[trajectories]{Track}} object.
+points within each \code{\link[trajectories:Track-class]{Track}} object.
 }
 \details{
 If there are more than one data point per interval and
-\code{\link[trajectories]{Track}} object, only the first data
+\code{\link[trajectories]{Track-class}} object, only the first data
 point within this interval is retained.
 }
 \examples{

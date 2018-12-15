@@ -8,8 +8,8 @@ NULL
 #' Imputes gaps in a \code{\link[trajectories]{Tracks}} object.
 #'
 #' \code{fillGapTracksNight} imputes missing values in all
-#' \code{\link[trajectories]{Track}} objects of a
-#' \code{\link[trajectories]{Tracks}} object. Gaps are filled
+#' \code{\link[trajectories:Track-class]{Track}} objects of a
+#' \code{\link[trajectories:Track-class]{Tracks}} object. Gaps are filled
 #' if their duration is $\le$ a user specified duration threshold
 #' and if the distance between the spatial position of the last data
 #' value before the gap and the spatial position of the first data
@@ -28,8 +28,8 @@ NULL
 #' \code{4*24*60*60 + (24 - nightduration)*60*60}, whereby \code{nightduration}
 #' is the duration of the time interval specified as night in hours.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object with
-#' \code{\link[trajectories]{Track}} objects with a
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object with
+#' \code{\link[trajectories:Track-class]{Track}} objects with a
 #' boolean column \code{gap} in \code{track@data}. Data values
 #' have to be regularly spaced (may be achieved for example with
 #' \code{\link{reorganizeTracks}}).
@@ -80,7 +80,7 @@ fillGapTracksNight <- function(currenttracks,
 
   newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
 
-    newtracks1 <- fillGapTrack(currenttrack = x,
+    newtracks1 <- fillGapTrackNight(currenttrack = x,
                                maxduration = maxduration,
                                maxdistance = maxdistance,
                                timeinterval = timeinterval,

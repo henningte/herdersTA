@@ -5,10 +5,10 @@ NULL
 #' Analyses the temporal coverage of GPS tracks.
 #'
 #' \code{timeActiveTrack} computes the time [s] during which position data was
-#' collected in a given \code{\link[trajectories]{Track}} object (for an
-#' individual \code{\link[trajectories]{Track}} object) within a given time period.
+#' collected in a given \code{\link[trajectories:Track-class]{Track}} object (for an
+#' individual \code{\link[trajectories:Track-class]{Track}} object) within a given time period.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object.
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param tstart A \code{POSIXct} object indicating the date and time of the start
 #' of the target period.
 #' @param tend A \code{POSIXct} object indicating the date and time of the end of

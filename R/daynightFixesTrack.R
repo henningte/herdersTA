@@ -6,11 +6,11 @@ NULL
 #' Classifies sub-daily values of GPS tracks.
 #'
 #' \code{daynightFixesTrack} classifies the values of a
-#' \code{\link[trajectories]{Track}} object in two classes on a sub-daily basis
+#' \code{\link[trajectories:Track-class]{Track}} object in two classes on a sub-daily basis
 #' by defining threshold hour values (for example in order to classify values as
 #' recorded during daytime and nighttime).
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object.
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param tstart A numeric value indicating the start of the time interval
 #' [h, values between 0 and 24]. \code{tstart} has to be smaller than
 #' \code{tend}.
@@ -18,7 +18,7 @@ NULL
 #' [h, values between 0 and 24]. \code{tend} has to be larger than
 #' \code{tstart}.
 #' @return a \code{\link[sp]{SpatialPointsDataFrame}} containing all data
-#' of the slot \code{data} of the input \code{\link[trajectories]{Track}}
+#' of the slot \code{data} of the input \code{\link[trajectories:Track-class]{Track}}
 #' object and a column \code{night} indicating if a data point is within
 #' the specified time interval (\code{night = 1}) or not
 #' (\code{night = 0}).

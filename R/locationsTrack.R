@@ -10,7 +10,7 @@ NULL
 #' Identifies and classifies visits in GPS tracks.
 #'
 #' \code{locationsTrack} identifies clusters (locations) of
-#' points in GPS tracks (\code{\link[trajectories]{Track}}
+#' points in GPS tracks (\code{\link[trajectories:Track-class]{Track}}
 #' object) based on their spatial proximity using
 #' \code{\link{extractClustersBuffer}} and identifies individual
 #' visits of the same cluster (location) along the track.
@@ -26,12 +26,12 @@ NULL
 #' visit.
 #'
 #' The function can be used in order to assign to each data
-#' value of the input \code{\link[trajectories]{Track}}
+#' value of the input \code{\link[trajectories:Track-class]{Track}}
 #' object an id of the cluster it is assigned to (
 #' \code{summary = FALSE}) or to summarise the information
 #' for each visit of a location (\code{summary = TRUE}).
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object.
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param radius A numerical value representing the radius of the
 #' buffers computed around each point [m] which are used for
 #' clustering values to locations. Default is \code{radius = 800} [m].
@@ -63,8 +63,8 @@ NULL
 #' @return
 #' \describe{
 #'   \item{If (\code{summary = FALSE})}{A
-#'   \code{\link[trajectories]{Track}} object that is identical
-#'   to the input \code{\link[trajectories]{Track}} object, but
+#'   \code{\link[trajectories:Track-class]{Track}} object that is identical
+#'   to the input \code{\link[trajectories:Track-class]{Track}} object, but
 #'   has four additional columns in the \code{data} slot:
 #'   \describe{
 #'     \item {\code{location}}{An integer value for each identified
@@ -86,7 +86,7 @@ NULL
 #'   }
 #'   \item{If (\code{summary = TRUE})}{A \code{data.frame}
 #'   object summarising the locations and visits of the input
-#'   \code{\link[trajectories]{Track}} object with the following variables:
+#'   \code{\link[trajectories:Track-class]{Track}} object with the following variables:
 #'   \describe{
 #'     \item{location}{An integer value for each identified
 #'     spatial point cluster (location) increasing with the time starting
@@ -244,7 +244,16 @@ locationsTrack <- function(currenttrack,
       }
     }
 
-    data.frame(indexaggregatedvisits = y, blockstart = trackindicesvisits[blockindicesrange[1], 2], blockend = trackindicesvisits[blockindicesrange[2], 3], previousblock = previousblock, nextblock = nextblock)
+    # extract the respective location from y
+    blocklocation <- sapply(strsplit(as.character(y), split = "_"), function(x) x[1])
+
+    # extract the number of repeated visit from y
+    blocknumbertvisitlocation <- sapply(strsplit(as.character(y), split = "_"), function(x) x[2])
+
+    # extract if the visit is a campsite or short-term visit
+    blockcampsite <- trackindicesvisits[blockindicesrange[1], 6]
+
+    data.frame(indexaggregatedvisits = y, blocklocation = blocklocation, blocknumbertvisitlocation = blocknumbertvisitlocation, blockcampsite = blockcampsite, blockstart = trackindicesvisits[blockindicesrange[1], 2], blockend = trackindicesvisits[blockindicesrange[2], 3], previousblock = previousblock, nextblock = nextblock)
 
   }))
   nextvisits[,-1] <- apply(nextvisits[,-1], 2, function(x) as.numeric(as.character(x)))
@@ -257,7 +266,7 @@ locationsTrack <- function(currenttrack,
   nextvisitlocation <- sapply(strsplit(as.character(nextvisits[,1]), split = "_"), function(x) x[1])
   nextvisitvisit <- sapply(strsplit(as.character(nextvisits[,1]), split = "_"), function(x) x[2])
   nextvisits$repeatedvisitsreliable <- c(TRUE, sapply(seq_len(nrow(nextvisits))[-1], function(x){
-    if(nextvisitlocation[x] == nextvisitlocation[x-1]){
+    if(nextvisits$blocklocation[x] == nextvisits$blocklocation[x-1]){
       FALSE
     }else{
       TRUE
@@ -275,10 +284,10 @@ locationsTrack <- function(currenttrack,
     }})
 
   # collect the row indices of nextvisit for the same location
-  indexnextvisitslocation <- tapply(seq_len(nrow(nextvisits)), nextvisitlocation, function(x) x)
+  indexnextvisitslocation <- tapply(seq_len(nrow(nextvisits)), nextvisits$blocklocation, function(x) x)
 
   # collect nextvisits$repeatedvisitsreliable of nextvisit for the same location
-  repeatedvisitsreliable <- tapply(as.numeric(nextvisits$repeatedvisitsreliable), nextvisitlocation, function(x) x)
+  repeatedvisitsreliable <- tapply(as.numeric(nextvisits$repeatedvisitsreliable), nextvisits$blocklocation, function(x) x)
 
   # compute for each location the number of repeated visits for each visit
   repeatedvisits <- lapply(seq_along(repeatedvisitsreliable), function(x){
@@ -288,7 +297,7 @@ locationsTrack <- function(currenttrack,
   })
 
   indexnextvisitslocation <- data.frame(indexnextvisitslocation = unlist(indexnextvisitslocation),
-                                        repeatedvisits = unlist(repeatedvisits))
+                                        repeatedvisits = unlist(repeatedvisits), stringsAsFactors = FALSE)
   indexnextvisitslocation <- indexnextvisitslocation[order(indexnextvisitslocation$indexnextvisitslocation),]
 
   # insert the values into trackindicesvisits
@@ -309,7 +318,7 @@ locationsTrack <- function(currenttrack,
   }
 
   # update nextvisitvisit
-  nextvisitvisit <- as.character(indexnextvisitslocation$repeatedvisits)
+  nextvisits$blocknumbertvisitlocation <- as.character(indexnextvisitslocation$repeatedvisits)
 
   ###
 
@@ -340,7 +349,6 @@ locationsTrack <- function(currenttrack,
   currenttrack$location <- tracklocationsvisits[,1]
   currenttrack$campsite <- tracklocationsvisits[,2]
   currenttrack$visitscampsite <- tracklocationsvisits[,3]
-  currenttrack$visitscampsite[currenttrack$location %in% nextvisitlocation[nextvisits$repeatedvisitsreliable == FALSE] & currenttrack$visitscampsite %in% nextvisitvisit[nextvisits$repeatedvisitsreliable == FALSE]] <- NA
   currenttrack$indexaggregatedvisits <- tracklocationsvisits[,4]
 
   # add information to currenttrack on departures and arrivals

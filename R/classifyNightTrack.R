@@ -2,14 +2,14 @@
 #' @import trajectories
 NULL
 
-#' Classifies Data Values of a \code{\link[trajectories]{Tracks}} object as Night or Day Values.
+#' Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.
 #'
 #' \code{classifyNightTrack} creates labels for the data values
-#' of a \code{\link[trajectories]{Track}} object marking
+#' of a \code{\link[trajectories:Track-class]{Track}} object marking
 #' a data value as recorded during night or during day. The decision
 #' boundaries are specified by the user.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object.
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' \code{currenttracks} must have a variable \code{time} indicating
 #' the time of all data values.
 #' @param night An integer vector with two elements:
@@ -19,11 +19,11 @@ NULL
 #'   \item The first element specifies the start hour of the night, e.g. \code{4}
 #'   for 4 o'clock.
 #' }
-#' @return A \code{\link[trajectories]{Track}} object identical to \code{currenttrack}
+#' @return A \code{\link[trajectories:Track-class]{Track}} object identical to \code{currenttrack}
 #' with an attribute \code{night} representing a logical vector with a value for
 #' each data value in \code{currenttrack} that is \code{TRUE} if a data value was
 #' recorded during night and \code{FALSE} if it was recorded during day.
-#' @seealso
+#' @seealso #
 #' @examples #
 #' @export
 classifyNightTrack <- function(currenttrack, night){

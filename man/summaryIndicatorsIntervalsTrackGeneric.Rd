@@ -8,7 +8,7 @@ summaryIndicatorsIntervalsTrackGeneric(currenttrack, normalise = TRUE,
   fun = mean, what)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has been processed as described in the description.}
 
 \item{normalise}{A logical value indicating if the computed summary
@@ -22,9 +22,32 @@ a numeric value that is used in order to temporally aggregate the values.}
 \item{what}{A numeric vector with indices of the variables in
 \code{currenttrack@data} to summarise.}
 }
+\value{
+A \code{data.frame} object with with each row representing a time
+interval as specified by the slot \code{data$id_timeinterval} of \code{currenttrack}
+containing the following variables:
+\describe{
+  \item{\code{trackid}}{A character vector with the id (name) of
+  \code{currenttrack}.}
+  \item{\code{ftdi}}{A character vector with the first day of the respective
+  fixed ten-day interval.}
+  \item{\code{distance_tot}}{A numeric value representing the (normalized)
+  total distance covered during a time interval [m].}
+  \item{\code{altitude_tot}}{A numeric value representing the (normalized)
+  total altitudinal distance covered (i.e. each metre covered in a vertical
+  distance) during a time interval [m].}
+  \item{\code{altitude_distance}}{A numeric value representing the (normalized)
+  total altitudinal distance covered during a time interval [m] (i.e. the
+  altitudinal difference between the first point in the time interval and the
+  last point).}
+  \item{\code{number_campsites}}{A numeric value representing the (normalized)
+  total number of unique campsites (i.e. neglecting repeated visits or counting
+  locations respectively) during a time interval.}
+}
+}
 \description{
 \code{summaryIndicatorsIntervalsTrackGeneric} computes various summary indicators
-for a \code{\link[trajectories]{Track}} object that has been processed
+for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
 with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} and
 \code{\link{aggregateDailyLocationsTrack}}. Summary
 indicators are computed for a temporal resolution of fixed ten-day intervals
@@ -33,7 +56,7 @@ a ten-day interval and the first value of the ten-day interval. In contrast to
 \code{summaryIndicatorsIntervalsTrack}, \code{summaryIndicatorsIntervalsTrackGeneric}
 does not compute special summary indicators in a non-generic way, but
 simply applies a user-defined function to a selection of variables of a
-\code{\link[trajectories]{Track}} object.
+\code{\link[trajectories:Track-class]{Track}} object.
 }
 \examples{
 #

@@ -9,7 +9,7 @@ NULL
 #'
 #' @param fname A character value representing the file name of the .csv file
 #' containing the GPS data to read.
-#' @return A \code{\link[trajectories]{Track}} object holding the data of the
+#' @return A \code{\link[trajectories:Track-class]{Track}} object holding the data of the
 #' GPS track.
 #' @seealso \code{\link{removeEmptyFiles}}.
 #' @examples #

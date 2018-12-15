@@ -7,7 +7,7 @@
 extractClusters(currenttracks, targetQsize = 800, threshold = 20)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 
 \item{targetQsize}{Numerical value representing the target size of the
 quadrats to create.}

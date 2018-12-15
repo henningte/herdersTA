@@ -8,7 +8,7 @@ countGaps(currenttrack, tstart = min(index(currenttrack@time)),
   tend = max(index(currenttrack@time)), threshold = 18000, tolerance = 2)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tstart}{A \code{POSIXct} object indicating the date and time of the start
 of the target period. Default is the first value of the
@@ -20,7 +20,7 @@ the target period. Default is the last value of the
 
 \item{threshold}{An integer value indicating the threshold for the time between
 two data points [s] above which this is considered as a gap in the
-\code{\link[trajectories]{Track}} object. Default is \code{threshold = 18000},
+\code{\link[trajectories:Track-class]{Track}} object. Default is \code{threshold = 18000},
 i.e. 5 hours. If \code{threshold = NULL}, the threshold value is calculated from
 the data as \code{mean(duration) + tolerance * sd(duration)}.}
 
@@ -30,11 +30,11 @@ calculated from the data if \code{threshold = NULL}. Default is
 }
 \value{
 A numeric value representing the number of gaps within the
-\code{\link[trajectories]{Track}} object.
+\code{\link[trajectories:Track-class]{Track}} object.
 }
 \description{
-\code{countGaps} counts gaps in a given \code{\link[trajectories]{Track}} object
-(for an individual \code{\link[trajectories]{Track}} object) within a given time
+\code{countGaps} counts gaps in a given \code{\link[trajectories:Track-class]{Track}} object
+(for an individual \code{\link[trajectories:Track-class]{Track}} object) within a given time
 period, using the function \code{\link{findGaps}}.
 }
 \examples{

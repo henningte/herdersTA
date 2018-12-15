@@ -7,7 +7,7 @@
 removeDataTrack(currenttrack, timeinterval = "month", threshold = 40)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object with a
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object with a
 \code{boolean} column \code{gap} in \code{currenttrack@data} and a
 \code{POSIXct} column \code{time} in \code{currenttrack@data}. Data
 values have to be regularly spaced (may be achieved for example with
@@ -36,7 +36,7 @@ of data values within a timeinterval that is allowed to represent gaps
 values for the corresponding month [%]. Default is \code{threshold = 40}.}
 }
 \value{
-A \code{\link[trajectories]{Track}} object identical with
+A \code{\link[trajectories:Track-class]{Track}} object identical with
 \code{currenttrack}, except for a new column \code{currenttrack@data$remove}
 indicating if a data value should be included in following analyses (
 \code{currenttrack@data$remove == FALSE}) or not (
@@ -49,7 +49,7 @@ missing values within a time interval specified by
 }
 \description{
 \code{removeDataTrack} determine if data values of a
-\code{\link[trajectories]{Track}} object for specific time
+\code{\link[trajectories:Track-class]{Track}} object for specific time
 intervals should be classified as usable (i.e. they should
 not be removed in following analyses) or not, based on a
 user specified threshold value of the proportion of missing

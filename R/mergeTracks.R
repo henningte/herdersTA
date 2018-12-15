@@ -3,16 +3,16 @@
 #'@import lubridate
 NULL
 
-#' Merges \code{\link[trajectories]{Track}} objects of a \code{\link[trajectories]{Tracks}} object.
+#' Merges \code{\link[trajectories:Track-class]{Track}} objects of a \code{\link[trajectories:Track-class]{Tracks}} object.
 #'
-#' \code{mergeTracks} merges the \code{\link[trajectories]{Track}}
-#' objects of a \code{\link[trajectories]{Tracks}} objects into a
-#' singular \code{\link[trajectories]{Track}} object.
+#' \code{mergeTracks} merges the \code{\link[trajectories:Track-class]{Track}}
+#' objects of a \code{\link[trajectories:Track-class]{Tracks}} objects into a
+#' singular \code{\link[trajectories:Track-class]{Track}} object.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object.
-#' @return A  \code{\link[trajectories]{Track}} object containing
-#' the merged  \code{\link[trajectories]{Track}} objects of the
-#' input  \code{\link[trajectories]{Tracks}} object.
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
+#' @return A  \code{\link[trajectories:Track-class]{Track}} object containing
+#' the merged  \code{\link[trajectories:Track-class]{Track}} objects of the
+#' input  \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @seealso \code{\link{mergeTracksCollection}},
 #' \code{\link{reorganizeTracks}}.
 #' @examples #

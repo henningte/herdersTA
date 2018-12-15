@@ -5,13 +5,13 @@ NULL
 #' Identifies data value groups within a \code{data.frame} column.
 #'
 #' \code{identifyBlocksVariable} identifies blocks of rows in the
-#' \code{data} slot of a \code{\link[trajectories]{Track}} object
+#' \code{data} slot of a \code{\link[trajectories:Track-class]{Track}} object
 #' or \code{data.frame} object
 #' based on a grouping variable and a value for this variable. A
 #' block is defined as a set of directly subsequent rows with the
 #' same value for the specified variable.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object (or
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object (or
 #' \code{data.frame} object) with a boolean column \code{gap} in
 #' \code{currenttrack@data}. Data values have to be regularly spaced (may
 #' be achieved for example with \code{\link{reorganizeTracks}}).

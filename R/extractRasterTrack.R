@@ -8,9 +8,9 @@ NULL
 #' \code{extractRasterTrack} extracts values from raster based time series
 #' (\code{RasterBrick} or \code{RasterStack} object, see:
 #' \code{\link[raster]{Raster-class}}) that correspond the the respective
-#' position and time of a \code{\link[trajectories]{Track}} object.
+#' position and time of a \code{\link[trajectories:Track-class]{Track}} object.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object that
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object that
 #' has a column \code{time} containing the time information of the data
 #' values.
 #' @param raster raster based time series (\code{RasterBrick} or
@@ -25,7 +25,7 @@ NULL
 #' should be extracted:
 #' \describe{
 #'   \item{\code{"raw"}}{Values of  \code{raster} will be extracted for the
-#'   data values of the original \code{\link[trajectories]{Track}} object.
+#'   data values of the original \code{\link[trajectories:Track-class]{Track}} object.
 #'   This may take a long time depending on the value of \code{resolution}
 #'   and the amount of values of \code{currentrack}.}
 #'   \item{\code{"allvisits"}}{Values of  \code{raster} will be extracted values
@@ -115,10 +115,10 @@ extractRasterTrack <- function(currenttrack,
     indexcurrenttracksubset <- sapply(indexvalueslocations, function(x) index[x[1]])
 
     # extract the respective data values of currenttrack and convert it to a SpatialPointsDataFrame and project it
-    currenttracksubset <- TrackToSpatialPointsDataFrame(Track(track = STIDF(sp = currenttrack@sp[indexcurrenttracksubset], time = as.POSIXct(currenttrack$time[indexcurrenttracksubset]), data = currenttrack@data[indexcurrenttracksubset,], endTime = currenttrack$time[indexcurrenttracksubset])), crs = attributes(currenttrack@sp@proj4string)[[1]])
+    currenttracksubset <- currenttrack@sp[indexcurrenttracksubset]
 
     # extract the respective values
-    extract(raster[[indexrasterlayertrackvalues[x]]], currenttracksubset)
+    mean(unclass(extract(raster[[indexrasterlayertrackvalues[x]]], currenttracksubset)))
 
   }))
 

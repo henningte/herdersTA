@@ -27,7 +27,7 @@ A  \code{\link[ggplot2]{ggplotobj}} object.
 }
 \description{
 \code{plotLocationsTrackSummary} plots the result of \code{\link{locaitonsTrack}}
-(with parameter  \code{summary = TRUE}) for a \code{\link[trajectories]{Track}}
+(with parameter  \code{summary = TRUE}) for a \code{\link[trajectories:Track-class]{Track}}
 object. This means that idividual campsites are plotted as dots linked with a
 line. Labels indicate the step (i.e. the sequence of visits), the location id,
 the arrival time and the altitude of the location. The fill of the label box indicates

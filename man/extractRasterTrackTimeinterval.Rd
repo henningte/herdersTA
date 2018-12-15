@@ -7,7 +7,7 @@
 extractRasterTrackTimeinterval(currenttrack, raster, buffer = 0)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has a column \code{day} containing the time information of the data
 values.}
 
@@ -36,7 +36,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \code{extractRasterTrackTimeinterval} extracts values from a \code{RasterBrick}
 or \code{RasterStack} object (see: \code{\link[raster]{Raster-class}}) with a
 temporal resolution greater than one day that corresponds to the respective
-position of values of a \code{\link[trajectories]{Track}} object with
+position of values of a \code{\link[trajectories:Track-class]{Track}} object with
 daily resolution.
 }
 \examples{

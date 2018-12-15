@@ -7,7 +7,7 @@
 extractRasterTrack1(currenttrack, raster, buffer = 0)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has a column \code{day} containing the time information of the data
 values.}
 
@@ -32,7 +32,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \code{extractRasterTrack1} extracts values from raster based time series
 (\code{RasterBrick} or \code{RasterStack} object, see:
 \code{\link[raster]{Raster-class}}) that correspond the the respective
-position and time of a \code{\link[trajectories]{Track}} object with
+position and time of a \code{\link[trajectories:Track-class]{Track}} object with
 daily resolution.
 }
 \examples{

@@ -4,16 +4,16 @@ NULL
 
 #' Extracts sub-daily values of GPS tracks.
 #'
-#' \code{getNightTrack} subsets the values of a \code{\link[trajectories]{Track}}
+#' \code{getNightTrack} subsets the values of a \code{\link[trajectories:Track-class]{Track}}
 #' object by extracting values that were recorded within a certain time interval
 #' of a day (for example in order to extract values that were recorded at night).
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object.
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param tstart A numeric value indicating the start of the time interval
 #' [h, values between 0 and 24]. The default is \code{tstart = 16}.
 #' @param tend A numeric value indicating the end of the time interval
 #' [h, values between 0 and 24]. The default is \code{tstart = 20}.
-#' @return The downsampled \code{\link[trajectories]{Track}} object
+#' @return The downsampled \code{\link[trajectories:Track-class]{Track}} object
 #' (containing only data points within the specified time interval).
 #' @seealso \code{\link{downByDrop}}, \code{\link{downByDropTrs}},
 #' \code{\link{getNightTrs}}, \code{\link{daynightFixesTrack}},

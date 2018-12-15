@@ -11,19 +11,19 @@ NULL
 #' Identifies and classifies visits in GPS tracks.
 #'
 #' \code{locationsTracks} identifies clusters (locations) of
-#' points in GPS tracks (for all \code{\link[trajectories]{Track}}
+#' points in GPS tracks (for all \code{\link[trajectories:Track-class]{Track}}
 #' objects (\code{currenttrack}) in a
-#' \code{\link[trajectories]{Tracks}} object) using
-#' \code{\linkn{locationsTrack}}.
+#' \code{\link[trajectories:Track-class]{Tracks}} object) using
+#' \code{\link{locationsTrack}}.
 #'
 #' The function can be used in order to assign to each data
-#' value of the \code{\link[trajectories]{Track}}
-#' objects of the input \code{\link[trajectories]{Tracks}}
+#' value of the \code{\link[trajectories:Track-class]{Track}}
+#' objects of the input \code{\link[trajectories:Track-class]{Tracks}}
 #' object an id of the cluster it is assigned to (
 #' \code{summary = FALSE}) or to summarise the information
 #' for each visit of a location (\code{summary = TRUE}).
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object.
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @param radius A numerical value representing the radius of the
 #' buffers computed around each point [m] which are used for
 #' clustering values to locations. Default is \code{radius = 800} [m].
@@ -43,6 +43,13 @@ NULL
 #' locations and visits should be summarised (\code{summary = TRUE})
 #' or not (\code{summary = FALSE}). See the details section for further
 #' information.
+#' @param night An integer vector with two elements:
+#' \enumerate{
+#'   \item The first element specifies the start hour of the night, e.g. \code{0}
+#'   for 0 o'clock.
+#'   \item The first element specifies the start hour of the night, e.g. \code{4}
+#'   for 4 o'clock.
+#' }
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
@@ -50,9 +57,9 @@ NULL
 #' @return
 #' \describe{
 #'   \item{If (\code{summary = FALSE})}{A
-#'   \code{\link[trajectories]{Tracks}} object with
-#'   \code{\link[trajectories]{Track}} objects that are identical
-#'   to the input \code{\link[trajectories]{Track}} objects, but
+#'   \code{\link[trajectories:Track-class]{Tracks}} object with
+#'   \code{\link[trajectories:Track-class]{Track}} objects that are identical
+#'   to the input \code{\link[trajectories:Track-class]{Track}} objects, but
 #'   have four additional columns in their \code{data} slot:
 #'   \describe{
 #'     \item {\code{location}}{An integer value for each identified
@@ -74,7 +81,7 @@ NULL
 #'   }
 #'   \item{If (\code{summary = TRUE})}{A list of \code{data.frame}
 #'   objects summarising the locations and visits of the input
-#'   \code{\link[trajectories]{Track}} objects with the following variables:
+#'   \code{\link[trajectories:Track-class]{Track}} objects with the following variables:
 #'   \describe{
 #'     \item{location}{An integer value for each identified
 #'     spatial point cluster (location) increasing with the time starting
@@ -118,6 +125,7 @@ locationsTracks <- function(currenttracks,
                             timeinterval = 30*60,
                             crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                             summary = TRUE,
+                            night = c(16, 20),
                             cores = 1,
                             clcall = NULL){
 
@@ -141,7 +149,7 @@ locationsTracks <- function(currenttracks,
                                         "countAllReapeatedLongTermVisits",
                                         "locationsTrack", "crs",
                                         "TrackToSpatialPointsDataFrame",
-                                        "classifyNightTrack"), envir=environment())
+                                        "classifyNightTrack", "night"), envir=environment())
 
   # extract the names of currenttracks@tracks
   currenttracksnames <- names(currenttracks@tracks)
@@ -155,7 +163,8 @@ locationsTracks <- function(currenttracks,
                    tmaxinterstices = tmaxinterstices,
                    timeinterval = timeinterval,
                    crs = crs,
-                   summary = summary)
+                   summary = summary,
+                   night = night)
 
   }
 

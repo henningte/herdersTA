@@ -6,14 +6,14 @@ NULL
 #' Counts the number of points in the cells of a spatial grid.
 #'
 #' \code{pointsPerQuad} determines the number of points per
-#' cell (of a given size) in a \code{\link[trajectories]{Track}}
+#' cell (of a given size) in a \code{\link[trajectories:Track-class]{Track}}
 #' object.
 #'
 #' This function is used by function \code{\link{extractClusters}} to
 #' count the number of points within cells before determining clusters
 #' of points.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Track}} object.
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param targetQsize Numerical value representing the target size of the
 #' quadrats to create.
 #' @param crs A character string describing a projection and datum

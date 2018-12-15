@@ -7,7 +7,7 @@
 extractSpatialPolygonsDataFrameTrack(currenttrack, sppdf, variable)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has a column \code{time} containing the time information of the data
 values.}
 
@@ -24,7 +24,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 }
 \description{
 \code{extractSpatialPolygonsDataFrameTrack} extracts for each data
-value of a \code{\link[trajectories]{Track}} object a value
+value of a \code{\link[trajectories:Track-class]{Track}} object a value
 of a \code{\link[sp]{SpatialPolygonsDataFrame}} object of a specified
 variable.
 }

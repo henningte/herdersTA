@@ -7,26 +7,26 @@
 downByDrop(currenttrack, timeInterval = 1770)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{timeInterval}{An integer value indicating a time interval [s] as
-target duration between data points of the \code{\link[trajectories]{Track}}
+target duration between data points of the \code{\link[trajectories:Track-class]{Track}}
 object. Default is \code{timeInterval = 1770} (i.e. 29.5 minutes).}
 }
 \value{
-The downsampled \code{\link[trajectories]{Track}} object.
+The downsampled \code{\link[trajectories:Track-class]{Track}} object.
 }
 \description{
-\code{downByDrop} subsets the values of a \code{\link[trajectories]{Track}}
+\code{downByDrop} subsets the values of a \code{\link[trajectories:Track-class]{Track}}
 object to a regular time interval by cleaning the measured values. The first
-value of the \code{\link[trajectories]{Track}} object represents the starting
+value of the \code{\link[trajectories:Track-class]{Track}} object represents the starting
 point of the time point specification according to the target time interval.
 The last entry of a sequence of positioning measurements of the GPS tracker
 (in "spy" mode) is retained assuming that the assessed position data is the
 most accurate within the corresponding sequence. Points of the
-\code{\link[trajectories]{Track}} object are only returned if there are at
+\code{\link[trajectories:Track-class]{Track}} object are only returned if there are at
 least two data values with a time interval as long as the specified time
-interval in the \code{\link[trajectories]{Track}} object.
+interval in the \code{\link[trajectories:Track-class]{Track}} object.
 }
 \examples{
 #

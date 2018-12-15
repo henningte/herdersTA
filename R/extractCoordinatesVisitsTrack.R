@@ -5,7 +5,7 @@ NULL
 #' Extracts centroid coordinates of visits from GPS tracks.
 #'
 #' \code{centroidCoordinatesVisitsTrack} extract the mean coordinates for
-#' visits at locations in a \code{\link[trajectories]{Track}} object as
+#' visits at locations in a \code{\link[trajectories:Track-class]{Track}} object as
 #' returned by \code{\link{locationsTrack}}.
 #'
 #' Centroid coordinates can be computed for all visits at each location
@@ -16,7 +16,7 @@ NULL
 #' the visits was smaller than \code{tmaxinterstices} as parametrised in
 #' the previous \code{link{locationsTrack}} call.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object as
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object as
 #' returned by \code{link{locationsTrack}}
 #' @param aggregated A logical value indicating if centroid coordinates
 #' should be computed for all visits at each location

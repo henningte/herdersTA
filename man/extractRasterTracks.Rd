@@ -8,8 +8,8 @@ extractRasterTracks(currenttracks, raster, timedate, resolution, aggregation,
   cores = 1, clcall = NULL)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object with
-\code{\link[trajectories]{Track}} objects (\code{currenttrack}) as
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
+\code{\link[trajectories:Track-class]{Track}} objects (\code{currenttrack}) as
 described in the details section.}
 
 \item{raster}{raster based time series (\code{RasterBrick} or
@@ -37,14 +37,14 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \code{extractRasterTracks} extracts values from raster based time series
 (\code{RasterBrick} or \code{RasterStack} object, see:
 \code{\link[raster]{Raster-class}}) that correspond the the respective
-position and time of the \code{\link[trajectories]{Track}} objects of a
-\code{\link[trajectories]{Tracks}} object.
+position and time of the \code{\link[trajectories:Track-class]{Track}} objects of a
+\code{\link[trajectories:Track-class]{Tracks}} object.
 }
 \details{
 The \code{Track} object have to have data values for the same time
 intervals and have to be of the same length. Time values have to be
 stored in a column \code{time} in the \code{data} slot for each
-\code{\link[trajectories]{Track}} object.
+\code{\link[trajectories:Track-class]{Track}} object.
 }
 \examples{
 #

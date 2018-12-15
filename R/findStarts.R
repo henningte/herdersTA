@@ -16,7 +16,7 @@ NULL
 #' @param clusters A \code{\link[sp]{SpatialGridDataFrame}} object containing
 #' point clusters, as created with \code{\link{extractClusters}}.
 #' @param trs_spdf A \code{\link[sp]{SpatialPointsDataFrame}} of the
-#' household movement (as converted from a \code {\link[trajectories]{Tracks}}
+#' household movement (as converted from a \code {\link[trajectories:Track-class]{Tracks}}
 #' object).
 #' @return A \code{POSIXct} vector of containing the starts (first points)
 #' of the additional visits.

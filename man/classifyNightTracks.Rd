@@ -2,12 +2,12 @@
 % Please edit documentation in R/classifyNightTracks.R
 \name{classifyNightTracks}
 \alias{classifyNightTracks}
-\title{Classifies Data Values of a \code{\link[trajectories]{Tracks}} object as Night or Day Values.}
+\title{Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.}
 \usage{
 classifyNightTracks(currenttracks, night)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object
 with \code{\link[trajectories]{Track}} objects with the same time
 vectors (i.e. data values for the same time interval) (as returned
 by \code{\link{reorganizeTracks}}). \code{currenttracks} must have
@@ -22,20 +22,23 @@ a variable \code{time} indicating the time of all data values.}
 }}
 }
 \value{
-A \code{\link[trajectories]{Tracks}} object identical to \code{currenttracks}
+A \code{\link[trajectories:Track-class]{Tracks}} object identical to \code{currenttracks}
 with an attribute \code{night} representing a logical vector with a value for
-each data value in a \code{\link[trajectories]{Track}} object in
+each data value in a \code{\link[trajectories:Track-class]{Track}} object in
 \code{currenttracks} that is \code{TRUE} if a data value was recorded during night
 and \code{FALSE} if it was recorded during day.
 }
 \description{
 \code{classifyNightTracks} creates labels for the data values
-of a \code{\link[trajectories]{Tracks}} object with
-\code{\link[trajectories]{Track}} objects with the same time
+of a \code{\link[trajectories:Track-class]{Tracks}} object with
+\code{\link[trajectories:Track-class]{Track}} objects with the same time
 vectors (i.e. data values for the same time interval) marking
 a data value as recorded during night or during day. The decision
 boundaries are specified by the user.
 }
 \examples{
+#
+}
+\seealso{
 #
 }

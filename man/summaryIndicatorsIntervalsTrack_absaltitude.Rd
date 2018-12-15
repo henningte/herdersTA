@@ -7,7 +7,7 @@
 summaryIndicatorsIntervalsTrack_absaltitude(currenttrack, normalise = FALSE)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has been processed as described in the description.}
 
 \item{normalise}{A logical value indicating if the computed summary
@@ -16,19 +16,19 @@ indicators should be normalized relative to the duration of data values
 ten-day interval (\code{normalize = TRUE}) or not (\code{normalize = FALSE}).}
 }
 \value{
-A numeric vector with the (normalised) total altitudinal height 
-differences covered within each fixed ten-day interval \code{currenttrack} 
+A numeric vector with the (normalised) total altitudinal height
+differences covered within each fixed ten-day interval \code{currenttrack}
 covers.
 }
 \description{
-\code{summaryIndicatorsIntervalsTrack_absaltitude} computes the sum of 
+\code{summaryIndicatorsIntervalsTrack_absaltitude} computes the sum of
 the absolute height differences (i.e. all covered height meters)
 a household covered during a fixed ten-day interval. Absolute height
 distances are
 computed for each value within a fixed ten-day interval and additionally
- between the last value of the previous interval and the 
-first value of the target interval. The function requires a 
-\code{\link[trajectories]{Track}} object as returned by 
+ between the last value of the previous interval and the
+first value of the target interval. The function requires a
+\code{\link[trajectories:Track-class]{Track}} object as returned by
 \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
 altitudeinal differences between campsites are computed.
 }

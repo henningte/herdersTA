@@ -7,7 +7,7 @@
 clusterOrder(currenttracks, cellsize = 800, threshold = 20)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories]{Tracks}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 
 \item{threshold}{An integer value specifying the minimum number of
 points within a grid cell needed in order to consider these points

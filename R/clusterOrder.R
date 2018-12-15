@@ -14,7 +14,7 @@ NULL
 #' detect the campsites. \code{clusterOrder} also uses the functions
 #' \code{link{searchNextVisit}} and \code{\link{findStarts}}.
 #'
-#' @param currenttracks A \code{\link[trajectories]{Tracks}} object.
+#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @param targetQsize Numerical value representing the target size of the
 #' quadrats to create.
 #' @param threshold An integer value specifying the minimum number of

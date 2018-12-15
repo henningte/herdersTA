@@ -8,7 +8,7 @@ extractCoordinatesVisitsTrack(currenttrack, aggregated = FALSE,
   crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object as
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object as
 returned by \code{link{locationsTrack}}}
 
 \item{aggregated}{A logical value indicating if centroid coordinates
@@ -30,7 +30,7 @@ object has the same number of rows as \code{currenttrack}.
 }
 \description{
 \code{centroidCoordinatesVisitsTrack} extract the mean coordinates for
-visits at locations in a \code{\link[trajectories]{Track}} object as
+visits at locations in a \code{\link[trajectories:Track-class]{Track}} object as
 returned by \code{\link{locationsTrack}}.
 }
 \details{

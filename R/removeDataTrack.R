@@ -5,7 +5,7 @@ NULL
 #' Classifies GPS track parts as evaluatable.
 #'
 #' \code{removeDataTrack} determine if data values of a
-#' \code{\link[trajectories]{Track}} object for specific time
+#' \code{\link[trajectories:Track-class]{Track}} object for specific time
 #' intervals should be classified as usable (i.e. they should
 #' not be removed in following analyses) or not, based on a
 #' user specified threshold value of the proportion of missing
@@ -14,7 +14,7 @@ NULL
 #' values according to time intervals.
 
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object with a
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object with a
 #' \code{boolean} column \code{gap} in \code{currenttrack@data} and a
 #' \code{POSIXct} column \code{time} in \code{currenttrack@data}. Data
 #' values have to be regularly spaced (may be achieved for example with
@@ -39,7 +39,7 @@ NULL
 #' of data values within a timeinterval that is allowed to represent gaps
 #' (\code{currenttrack@data$gap == TRUE}) in order to \emph{not} discard all data
 #' values for the corresponding month [%]. Default is \code{threshold = 40}.
-#' @return A \code{\link[trajectories]{Track}} object identical with
+#' @return A \code{\link[trajectories:Track-class]{Track}} object identical with
 #' \code{currenttrack}, except for a new column \code{currenttrack@data$remove}
 #' indicating if a data value should be included in following analyses (
 #' \code{currenttrack@data$remove == FALSE}) or not (

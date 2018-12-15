@@ -8,7 +8,7 @@ summaryIndicatorsTrack1(currenttrack, normalise = TRUE, timeinterval = 30 *
   60, aggregation = "allvisits")
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has been processed as described in the description.}
 
 \item{normalise}{A logical value indicating if the computed summary
@@ -25,18 +25,45 @@ temporal aggregation of data values/visits at a location summary indicators
 should be computed:
 \describe{
   \item{\code{"raw"}}{Summary indicators will be computed on the (imputed)
-  values of the original \code{\link[trajectories]{Track}} object.}
+  values of the original \code{\link[trajectories:Track-class]{Track}} object.}
   \item{\code{"allvisits"}}{Summary indicators will be computed on values
   aggregated for each visit, whereby it is distinguished between long-term
   visits (campsites) and short-term visits.}
-  \item{\code{"campsites}}{Like \code{"allvisits}, but all short-term visits
+  \item{\code{"campsites"}}{Like \code{"allvisits"}, but all short-term visits
   will be neglected during computations, i.e. only long-term visits will be
   considered.}
 }}
 }
+\value{
+A \code{data.frame} object with with each row representing a time
+interval as specified by \code{track@data$id_timeinterval} containing the
+following variables:
+\describe{
+  \item{\code{distance_tot}}{A numeric value representing the (normalized)
+  total distance covered during a time interval [m].}
+  \item{\code{altitude_tot}}{A numeric value representing the (normalized)
+  total altitudinal distance covered (i.e. each metre covered in a vertical
+  distance) during a time interval [m].}
+  \item{\code{altitude_distance}}{A numeric value representing the (normalized)
+  total altitudinal distance covered during a time interval [m] (i.e. the
+  altitudinal difference between the first point in the time interval and the
+  last point).}
+  \item{\code{campsites_time}}{A numeric value representing the (normlaized)
+  total time spend within campsites during a time interval [s].}
+  \item{\code{nocampsites_time}}{A numeric value representing the (normlaized)
+  total time spend not in campsites during a time interval [s] (corresponds (?)
+  to the travel time).}
+  \item{\code{number_campsites}}{A numeric value representing the (normalized)
+  total number of unique campsites (i.e. neglecting repeated visits or counting
+  locations respectively) during a time interval.}
+  \item{\code{number_repeatedvisits_campsite}}{A numeric value representing the
+  (normalised) total number of repeated visits for all unique campsites during a
+  time interval.}
+}
+}
 \description{
 \code{summaryIndicatorsTrack1} computes various summary indicators
-for a \code{\link[trajectories]{Track}} object that has been processed
+for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
 with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} or
 \code{\link{clusterOrder}}, \code{\link{removeDataTrack}} and
 \code{\link{nogapDurationTrack}}.

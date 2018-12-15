@@ -5,21 +5,21 @@ NULL
 #' Cleans and regularises GPS tracks.
 #'
 #' \code{downByDropTrackscollection} subsets the values of all
-#' \code{\link[trajectories]{Track}} objects of all
-#' \code{\link[trajectories]{Tracks}} objects of a given
-#' \code{\link[trajectories]{TracksCollection}} object to a regular time
+#' \code{\link[trajectories:Track-class]{Track}} objects of all
+#' \code{\link[trajectories:Track-class]{Tracks}} objects of a given
+#' \code{\link[trajectories:Track-class]{TracksCollection}} object to a regular time
 #' interval by using the function \code{\link{downByDrop}}.
 #'
 #' @param currenttrackscollection A
-#' \code{\link[trajectories]{TracksCollection}} object.
+#' \code{\link[trajectories:Track-class]{TracksCollection}} object.
 #' @param timeInterval An integer value indicating a time interval [s] as
-#' target duration between data points of the \code{\link[trajectories]{Track}}
+#' target duration between data points of the \code{\link[trajectories:Track-class]{Track}}
 #' object. Default is \code{timeInterval = 1770} (i.e. 29.5 minutes).
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
 #' \code{\link[parallel]{clusterCall}}.
-#' @return The downsampled \code{\link[trajectories]{TracksCollection}}
+#' @return The downsampled \code{\link[trajectories:Track-class]{TracksCollection}}
 #' object.
 #' @seealso \code{\link{downByDrop}}, \code{\link{getNightTrack}},
 #' \code{\link{getNightTrs}}, \code{\link{daynightFixesTrack}},

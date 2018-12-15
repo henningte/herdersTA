@@ -7,7 +7,7 @@
 summaryIndicatorsIntervalsTrack_timesmoved(currenttrack, normalise = FALSE)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object that
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
 has been processed as described in the description.}
 
 \item{normalise}{A logical value indicating if the computed summary
@@ -16,8 +16,8 @@ indicators should be normalized relative to the duration of data values
 ten-day interval (\code{normalize = TRUE}) or not (\code{normalize = FALSE}).}
 }
 \value{
-A numeric vector with the (normalised) total altitudinal height 
-differences covered within each fixed ten-day interval \code{currenttrack} 
+A numeric vector with the (normalised) total altitudinal height
+differences covered within each fixed ten-day interval \code{currenttrack}
 covers.
 }
 \description{
@@ -27,8 +27,8 @@ ten-day interval, the maximum number of arrivals OR departures OR
 distinct campsite visits (i.e. at different locations) is considered
 as the number of moves. This is done because exact arrival or departure
 times can only be given if there is no gap (that is too long) before
-a data value at a new location. The function requires a 
-\code{\link[trajectories]{Track}} object as returned by 
+a data value at a new location. The function requires a
+\code{\link[trajectories:Track-class]{Track}} object as returned by
 \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
 altitudeinal differences between campsites are computed.
 }

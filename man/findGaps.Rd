@@ -8,19 +8,19 @@ findGaps(currenttrack, tstart = min(index(currenttrack@time)),
   tend = max(index(currenttrack@time)), threshold = 18000, tolerance = 2)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tstart}{A \code{POSIXct} object indicating the date and time of the start
 of the target period. Default is the first value of the
-\code{\link[trajectories]{Track}} object.}
+\code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tend}{A \code{POSIXct} object indicating the date and time of the end of
 the target period. Default is the last value of the
-\code{\link[trajectories]{Track}} object.}
+\code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{threshold}{An integer value indicating the threshold for the time between
 two data points [s] above which this is considered as a gap in the
-\code{\link[trajectories]{Track}} object. Default is \code{threshold = 18000},
+\code{\link[trajectories:Track-class]{Track}} object. Default is \code{threshold = 18000},
 i.e. 5 hours. If \code{threshold = NULL}, the threshold value is calculated from
 the data as \code{mean(duration) + tolerance * sd(duration)}.}
 
@@ -30,12 +30,12 @@ calculated from the data if \code{threshold = NULL}. Default is
 }
 \value{
 A \code{data.frame} object in the form of the connections slot of a
-\code{\link[trajectories]{Track}} object containing gaps between data points
+\code{\link[trajectories:Track-class]{Track}} object containing gaps between data points
 as entries.
 }
 \description{
-\code{findGaps} finds gaps in a given \code{\link[trajectories]{Track}} object
-(for an individual \code{\link[trajectories]{Track}} object) within a given time
+\code{findGaps} finds gaps in a given \code{\link[trajectories:Track-class]{Track}} object
+(for an individual \code{\link[trajectories:Track-class]{Track}} object) within a given time
 period, based on the duration between succeeding measurements and a threshold
 value.
 }

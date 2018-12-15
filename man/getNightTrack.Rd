@@ -7,7 +7,7 @@
 getNightTrack(currenttrack, tstart = 16, tend = 20)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{tstart}{A numeric value indicating the start of the time interval
 [h, values between 0 and 24]. The default is \code{tstart = 16}.}
@@ -16,11 +16,11 @@ getNightTrack(currenttrack, tstart = 16, tend = 20)
 [h, values between 0 and 24]. The default is \code{tstart = 20}.}
 }
 \value{
-The downsampled \code{\link[trajectories]{Track}} object
+The downsampled \code{\link[trajectories:Track-class]{Track}} object
 (containing only data points within the specified time interval).
 }
 \description{
-\code{getNightTrack} subsets the values of a \code{\link[trajectories]{Track}}
+\code{getNightTrack} subsets the values of a \code{\link[trajectories:Track-class]{Track}}
 object by extracting values that were recorded within a certain time interval
 of a day (for example in order to extract values that were recorded at night).
 }

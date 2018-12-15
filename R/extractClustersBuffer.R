@@ -23,7 +23,7 @@ NULL
 #' reflect a daily resolution with respect to different locations.
 #'
 #' @param trsSP A \code{\link[sp]{SpatialPointsDataFrame}} object
-#' representing a \code{\link[trajectories]{Track}} object, i.e.
+#' representing a \code{\link[trajectories:Track-class]{Track}} object, i.e.
 #' the result of the function
 #' \code{\link{TrackToSpatialPointsDataFrame}}. \code{trsSP} must
 #' have a logical variable \code{gap} as created by

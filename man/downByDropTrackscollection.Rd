@@ -9,10 +9,10 @@ downByDropTrackscollection(currenttrackscollection, timeInterval = 1770,
 }
 \arguments{
 \item{currenttrackscollection}{A
-\code{\link[trajectories]{TracksCollection}} object.}
+\code{\link[trajectories:Track-class]{TracksCollection}} object.}
 
 \item{timeInterval}{An integer value indicating a time interval [s] as
-target duration between data points of the \code{\link[trajectories]{Track}}
+target duration between data points of the \code{\link[trajectories:Track-class]{Track}}
 object. Default is \code{timeInterval = 1770} (i.e. 29.5 minutes).}
 
 \item{cores}{An integer value representing the number of cores to
@@ -22,14 +22,14 @@ use in parallel computing.}
 \code{\link[parallel]{clusterCall}}.}
 }
 \value{
-The downsampled \code{\link[trajectories]{TracksCollection}}
+The downsampled \code{\link[trajectories:Track-class]{TracksCollection}}
 object.
 }
 \description{
 \code{downByDropTrackscollection} subsets the values of all
-\code{\link[trajectories]{Track}} objects of all
-\code{\link[trajectories]{Tracks}} objects of a given
-\code{\link[trajectories]{TracksCollection}} object to a regular time
+\code{\link[trajectories:Track-class]{Track}} objects of all
+\code{\link[trajectories:Track-class]{Tracks}} objects of a given
+\code{\link[trajectories:Track-class]{TracksCollection}} object to a regular time
 interval by using the function \code{\link{downByDrop}}.
 }
 \examples{

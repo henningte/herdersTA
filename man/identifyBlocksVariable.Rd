@@ -7,7 +7,7 @@
 identifyBlocksVariable(currenttrack, variable, value)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories]{Track}} object (or
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object (or
 \code{data.frame} object) with a boolean column \code{gap} in
 \code{currenttrack@data}. Data values have to be regularly spaced (may
 be achieved for example with \code{\link{reorganizeTracks}}).}
@@ -27,7 +27,7 @@ where the block begins and the second column indicates the row of
 }
 \description{
 \code{identifyBlocksVariable} identifies blocks of rows in the
-\code{data} slot of a \code{\link[trajectories]{Track}} object
+\code{data} slot of a \code{\link[trajectories:Track-class]{Track}} object
 or \code{data.frame} object
 based on a grouping variable and a value for this variable. A
 block is defined as a set of directly subsequent rows with the
