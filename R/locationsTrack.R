@@ -264,8 +264,67 @@ locationsTrack <- function(currenttrack,
     }
   }))
 
+  ###
+
+  # collect the block indices of trackindicesvisits of campsites for each location
+  indexlocationvistcampsites <- tapply(seq_len(nrow(trackindicesvisits)), trackindicesvisits[,8], function(x){
+    if(trackindicesvisits[x[1],6] == 1){
+      x
+    }else{
+      NULL
+    }})
+
+  # collect the row indices of nextvisit for the same location
+  indexnextvisitslocation <- tapply(seq_len(nrow(nextvisits)), nextvisitlocation, function(x) x)
+
+  # collect nextvisits$repeatedvisitsreliable of nextvisit for the same location
+  repeatedvisitsreliable <- tapply(as.numeric(nextvisits$repeatedvisitsreliable), nextvisitlocation, function(x) x)
+
+  # compute for each location the number of repeated visits for each visit
+  repeatedvisits <- lapply(seq_along(repeatedvisitsreliable), function(x){
+    repeatedvisits <- cumsum(repeatedvisitsreliable[[x]])
+    repeatedvisits[repeatedvisitsreliable[[x]] == 0] <- "NA"
+    repeatedvisits
+  })
+
+  indexnextvisitslocation <- data.frame(indexnextvisitslocation = unlist(indexnextvisitslocation),
+                                        repeatedvisits = unlist(repeatedvisits))
+  indexnextvisitslocation <- indexnextvisitslocation[order(indexnextvisitslocation$indexnextvisitslocation),]
+
+  # insert the values into trackindicesvisits
+  for(i in seq_along(indexlocationvistcampsites)){
+
+    if(!is.null(indexlocationvistcampsites[[i]])){
+
+      # get the row index of nextvisits matching i
+      indexnextvisitslocation1 <- which(nextvisits$indexaggregatedvisits == names(indexlocationvistcampsites)[i])
+
+      if(length(indexnextvisitslocation1) > 0){
+        trackindicesvisits[indexlocationvistcampsites[[i]],7] <- indexnextvisitslocation$repeatedvisits[indexnextvisitslocation1]
+      }
+
+
+    }
+
+  }
+
+  # update nextvisitvisit
+  nextvisitvisit <- as.character(indexnextvisitslocation$repeatedvisits)
+
+  ###
+
   # detect all visits within an aggregated visit (i.e. forming the interstice between two visits that form an aggregated visit)
-  visitstodelete <- which(sapply(seq_along(nextvisits$blockend)[-1], function(x) nextvisits$blockend[x] < nextvisits$blockend[x-1])) + 1
+  visitstodelete <- which(sapply(seq_along(nextvisits$blockend)[-1], function(x) nextvisits$blockend[x] < nextvisits$blockend[x-1]) == TRUE) + 1
+  for(i in seq_along(visitstodelete)){
+    index <- which(as.numeric(trackindicesvisits[,2]) >= nextvisits$blockstart[visitstodelete[i]] & as.numeric(trackindicesvisits[,3]) <= nextvisits$blockend[visitstodelete[i]])
+    index2 <- which(as.numeric(trackindicesvisits[,2]) >= nextvisits$blockstart[visitstodelete[i]-1] & as.numeric(trackindicesvisits[,3]) <= nextvisits$blockend[visitstodelete[i]-1])
+    trackindicesvisitsindexblock <- trackindicesvisits[index,c(2, 3)]
+    trackindicesvisits[index,] <- do.call(rbind, lapply(seq_along(index), function(x){
+      trackindicesvisits[index2,][1,]
+    }))
+    trackindicesvisits[index,c(2, 3)] <- trackindicesvisitsindexblock
+  }
+
   if(length(visitstodelete) > 0){
     nextvisits <- nextvisits[-visitstodelete,]
   }
