@@ -4,14 +4,14 @@
 #' @import sp
 NULL
 
-#' Converts a \code{\link[trajectories]{Track}} object to a \code{\link[sp]{SpatialPointsDataFrame}}.
+#' Converts a \code{\link[trajectories:Track-class]{Track}} object to a \code{\link[sp]{SpatialPointsDataFrame}}.
 #'
 #' \code{TrackToSpatialPointsDataFrame} converts a
-#' \code{\link[trajectories]{Track}} object to a
+#' \code{\link[trajectories:Track-class]{Track}} object to a
 #' \code{\link[sp]{SpatialPointsDataFrame}} and projects it to
 #' a user specified coordinate reference system if specified.
 #'
-#' @param currenttrack A \code{\link[trajectories]{Track}} object.
+#' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param toproject A logical value indicating if the Track object
 #' should be projected to a coordinate reference system as defined
 #' by \code{crs} (\code{project = TRUE}) or not
@@ -20,8 +20,8 @@ NULL
 #' in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).
 #' @return A \code{\link[sp]{SpatialPointsDataFrame}} object
 #' containing the information of the slot \code{sp} and \code{data}
-#' of the corresponding \code{\link[trajectories]{Track}} object.
-#' @seealso
+#' of the corresponding \code{\link[trajectories:Track-class]{Track}} object.
+#' @seealso #
 #' @examples #
 #' @export
 TrackToSpatialPointsDataFrame <- function(currenttrack, toproject = TRUE, crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
