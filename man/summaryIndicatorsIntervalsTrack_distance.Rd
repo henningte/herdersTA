@@ -27,7 +27,13 @@ for the distance between the last value of the previous interval and the
 first value of the target interval. The function requires a
 \code{\link[trajectories:Track-class]{Track}} object as returned by
 \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
-distances between campsites are computed.
+distances between campsites are computed. If there is a gap with a fixed
+tenday interval, it will be searched if there are values prior and after
+the gap within this interval. If this is the case, the distance between
+the values prior and after the gap will be summed because in this
+case, it is sure that the distance has been covered within the
+fixed ten-day interval. If this is not the case, the distance value of the
+gap-value transition will be set to 0 which means that the will be ignored.
 }
 \examples{
 #
