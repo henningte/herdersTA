@@ -7,8 +7,8 @@ NULL
 #' \code{summaryIndicatorsIntervalsTrack_distance} computes the distance
 #' a household covered during a fixed ten-day interval. Distances are
 #' computed for each value within a fixed ten-day interval and additionally
-#' for the distance between the last value of the previous interval and the
-#' first value of the target interval. The function requires a
+#' for the distance between the first value of the following interval and the
+#' last value of the target interval. The function requires a
 #' \code{\link[trajectories:Track-class]{Track}} object as returned by
 #' \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
 #' distances between campsites are computed. If there is a gap with a fixed
@@ -39,18 +39,6 @@ summaryIndicatorsIntervalsTrack_distance <- function(currenttrack,
     stop("currenttrack must be of class Track\n")
   }
 
-  # create a new currenttrack containing only values marking arrivals and departures
-  index <- which(currenttrack$arrived == TRUE | currenttrack$left == TRUE)
-  currenttrack <- Track(track = STIDF(
-    sp = SpatialPoints(coords =
-                         data.frame(lon = aggregatedcurrenttracksdata$longitude,
-                                    lat = aggregatedcurrenttracksdata$latitude)[index,],
-                       proj4string = CRS(proj4string(currenttrack@sp))),
-    time = currenttrack$day[index,],
-    endTime = currenttrack$day[index,],
-    data = currenttrack@data[index,])
-  )
-
   # assign each day in currenttrack$day to a ftdi
   ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
@@ -59,7 +47,7 @@ summaryIndicatorsIntervalsTrack_distance <- function(currenttrack,
   # exract the connections slot of currenttrack
   connections <- currenttrack@connections
 
-  # add informatio on gaps to connections
+  # add information on gaps to connections
   connections$gap <- ifelse(currenttrack$location[-1] == 0, TRUE, FALSE)
 
   # flag connection values as not reliable that connect a gap value with a nogap value
@@ -72,7 +60,7 @@ summaryIndicatorsIntervalsTrack_distance <- function(currenttrack,
     as.data.frame(cbind(names(ftdi[!duplicated(ftdi)]), tapply(seq_along(ftdi), ftdi, function(x){
 
       # extract the respective values of connections$distance
-      currentconnections <- as.data.frame(connections[c(x[1]-1, x),])
+      currentconnections <- as.data.frame(connections[c(x, x[length(x)]+1),])
 
       # identify block of gaps in connection
       currentgapblocks <- identifyBlocksVariable(currenttrack = currentconnections, variable = "gap", value = TRUE)
@@ -95,8 +83,8 @@ summaryIndicatorsIntervalsTrack_distance <- function(currenttrack,
 
       }
 
-      # set non-reliable distance values to 0
-      currentconnections[currentconnections$notreliable == TRUE, 1] <- 0
+      # set non-reliable altitude distance values to 0
+      currentconnections$altitude[currentconnections$notreliable == TRUE] <- 0
 
       # sum the values
       apply(matrix(currentconnections$distance, ncol = 1), 2, function(y){
@@ -105,7 +93,7 @@ summaryIndicatorsIntervalsTrack_distance <- function(currenttrack,
 
     })), stringsAsFactors = FALSE)
   names(summarisedvalues) <- c("ftdi", "distance")
-  summarisedvalues$distance <- as.numeric(as.character(summarisedvalues$distance))
+  summarisedvalues$altitude <- as.numeric(as.character(summarisedvalues$distance))
 
   # normalise
   if(normalise == TRUE){
