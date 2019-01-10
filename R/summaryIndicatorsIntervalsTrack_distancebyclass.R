@@ -10,8 +10,8 @@ NULL
 #' defined by an additional variable (e.g. distance covered within certain
 #' landcover classes). Distances are
 #' computed for each value within a fixed ten-day interval and additionally
-#' for the distance between the last value of the previous interval and the
-#' first value of the target interval. The function requires a
+#' for the distance between the first value of the following interval and the
+#' last value of the target interval. The function requires a
 #' \code{\link[trajectories:Track-class]{Track}} object as returned by
 #' \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
 #' distances between campsites are computed.
@@ -59,7 +59,7 @@ summaryIndicatorsIntervalsTrack_distancebyclass <- function(currenttrack,
       # get the class indices
       index <- c(x[1]-1, x)
       index <- index[index != 0]
-      classindices <- tapply(index, currenttrack@data[c(x[1]-1, x),names(currenttrack@data) == classvariable], function(y){
+      classindices <- tapply(index, currenttrack@data[c(x, x[length(x)]+1),names(currenttrack@data) == classvariable], function(y){
         y
       }, simplify = FALSE)
 
