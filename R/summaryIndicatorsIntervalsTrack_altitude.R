@@ -9,8 +9,8 @@ NULL
 #' a household covered during a fixed ten-day interval. Height
 #' distances are
 #' computed for each value within a fixed ten-day interval and additionally
-#'  between the last value of the previous interval and the
-#' first value of the target interval. The function requires a
+#'  between the first value of the following interval and the
+#' last value of the target interval. The function requires a
 #' \code{\link[trajectories:Track-class]{Track}} object as returned by
 #' \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
 #' altitudeinal differences between campsites are computed.
@@ -60,7 +60,7 @@ summaryIndicatorsIntervalsTrack_altitude <- function(currenttrack,
     as.data.frame(cbind(names(ftdi[!duplicated(ftdi)]), tapply(seq_along(ftdi), ftdi, function(x){
 
       # extract the respective values of connections$distance
-      currentconnections <- as.data.frame(connections[c(x[1]-1, x),])
+      currentconnections <- as.data.frame(connections[c(x, x[length(x)]+1),])
 
       # identify block of gaps in connection
       currentgapblocks <- identifyBlocksVariable(currenttrack = currentconnections, variable = "gap", value = TRUE)
