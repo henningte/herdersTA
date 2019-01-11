@@ -9,7 +9,7 @@ NULL
 #' object by extracting values that were recorded within a certain time interval
 #' of a day (for example in order to extract values that were recorded at night).
 #'
-#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
+#' @param currentrs A \code{\link[trajectories:Track-class]{Tracks}} object.
 #' @param tstart A numeric value indicating the start of the time interval
 #' [h, values between 0 and 24]. The default is \code{tstart = 16}.
 #' @param tend A numeric value indicating the end of the time interval
@@ -25,7 +25,7 @@ NULL
 getNightTrs <- function(currenttrs, tstart = 16, tend = 20){
 
   # apply getNightTrack to all Track objects of the Tracks object
-  tracklist <- lapply(currenttracks@tracks,
+  tracklist <- lapply(currenttrs@tracks,
                       getNightTrack,
                       tstart=tstart,
                       tend =tend)
