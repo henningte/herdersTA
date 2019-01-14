@@ -65,7 +65,8 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
     indexlocation <- which(trsSP$location[night] == x)
 
     # median of the longitude, latitude, altitude
-    c(x, apply(matrix(trsSP@coords[indexlocation,], ncol = 2), 2, median), median(na.omit(as.numeric(trsSP$HEIGHT[indexlocation]))))
+    c(x, apply(matrix(trsSP@coords[night,][indexlocation,], ncol = 2), 2, median), median(na.omit(as.numeric(trsSP$HEIGHT[night][indexlocation]))))
+
   })), stringsAsFactors = FALSE)
   colnames(locationscentroidpositions) <- c("location", "longitude", "latitude", "altitude")
 
@@ -106,7 +107,7 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
     }
     targetlocation <- names(valuesperlocation)[which.max(valuesperlocation)]
 
-    # extract the number of visit
+    # extract the number of visits
     numberofvisit <- trsSP@data$visitscampsite[night][x][trsSP@data$location[night][x] == targetlocation][1]
 
     # correct all values if there is no campsite

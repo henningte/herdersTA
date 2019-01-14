@@ -8,9 +8,8 @@ NULL
 #' for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
 #' with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} and
 #' \code{\link{aggregateDailyLocationsTrack}}. Summary
-#' indicators are computed for a temporal resolution of fixed ten-day intervals
-#' and additional for the transition between the first vale before
-#' a ten-day interval and the first value of the ten-day interval. In contrast to
+#' indicators are computed for a temporal resolution of fixed ten-day intervals. In
+#' contrast to
 #' \code{summaryIndicatorsIntervalsTrack}, \code{summaryIndicatorsIntervalsTrackGeneric}
 #' does not compute special summary indicators in a non-generic way, but
 #' simply applies a user-defined function to a selection of variables of a
@@ -20,7 +19,8 @@ NULL
 #' has been processed as described in the description.
 #' @param normalise A logical value indicating if the computed summary
 #' indicators should be normalized relative to the duration of data values
-#' (as specified by \code{currenttrack@data$nogapduration}) for each fixed
+#' (as specified by the variable \code{data$nogapduration} of \code{currenttrack})
+#' for each fixed
 #' ten-day interval (\code{normalize = TRUE}) or not (\code{normalize = FALSE}).
 #' @param fun A function that takes a numeric vector as input and returns
 #' a numeric value that is used in order to temporally aggregate the values.
