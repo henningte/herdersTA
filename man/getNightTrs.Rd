@@ -13,7 +13,7 @@ getNightTrs(currenttrs, tstart = 16, tend = 20)
 \item{tend}{A numeric value indicating the end of the time interval
 [h, values between 0 and 24]. The default is \code{tstart = 20}.}
 
-\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
+\item{currentrs}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 }
 \value{
 The downsampled \code{\link[trajectories:Track-class]{Tracks}} object

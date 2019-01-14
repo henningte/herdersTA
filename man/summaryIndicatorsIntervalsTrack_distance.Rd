@@ -23,8 +23,8 @@ each fixed ten-day interval \code{currenttrack} covers.
 \code{summaryIndicatorsIntervalsTrack_distance} computes the distance
 a household covered during a fixed ten-day interval. Distances are
 computed for each value within a fixed ten-day interval and additionally
-for the distance between the last value of the previous interval and the
-first value of the target interval. The function requires a
+for the distance between the first value of the following interval and the
+last value of the target interval. The function requires a
 \code{\link[trajectories:Track-class]{Track}} object as returned by
 \code{\link{aggregateDailyLocationsTrack}}. Hence, only linear
 distances between campsites are computed. If there is a gap with a fixed
