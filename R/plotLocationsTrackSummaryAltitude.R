@@ -6,9 +6,9 @@
 #'@import ggrepel
 NULL
 
-#' Plots Altitude Profiles of Summarised Tracks as Returned by \code{\link{locaitonsTrack}}.
+#' Plots Altitude Profiles of Summarised Tracks as Returned by \code{\link{locationsTrack}}.
 #'
-#' \code{plotLocationsTrackSummaryAltitude} plots the result of \code{\link{locaitonsTrack}}
+#' \code{plotLocationsTrackSummaryAltitude} plots the result of \code{\link{locationsTrack}}
 #' (with parameter  \code{summary = TRUE}) for a \code{\link[trajectories:Track-class]{Track}}
 #' object. This means that idividual campsites are plotted as dots linked with a
 #' line. Labels indicate the step (i.e. the sequence of visits), the location id,
