@@ -7,10 +7,10 @@ NULL
 #'
 #' \code{fillGapTrack} imputes missing values in a
 #' \code{\link[trajectories:Track-class]{Track}} object. Gaps are filled
-#' if their duration is $\le$ a user specified duration threshold
+#' if their duration is \eqn{\le} a user specified duration threshold
 #' and if the distance between the spatial position of the last data
 #' value before the gap and the spatial position of the first data
-#' value after the gap is $\le$ a user specified distance threshold.
+#' value after the gap is \eqn{\le} a user specified distance threshold.
 #'
 #' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object with a
 #' boolean column \code{gap} in \code{currenttrack@data}. Data values

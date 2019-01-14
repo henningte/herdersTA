@@ -39,10 +39,10 @@ gaps.
 \code{fillGapTracks} imputes missing values in all
 \code{\link[trajectories:Track-class]{Track}} objects of a
 \code{\link[trajectories:Track-class]{Tracks}} object. Gaps are filled
-if their duration is $\le$ a user specified duration threshold
+if their duration is \eqn{\le} a user specified duration threshold
 and if the distance between the spatial position of the last data
 value before the gap and the spatial position of the first data
-value after the gap is $\le$ a user specified distance threshold.
+value after the gap is \eqn{\le} a user specified distance threshold.
 }
 \examples{
 #

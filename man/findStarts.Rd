@@ -11,7 +11,7 @@ findStarts(clusters, trs_spdf)
 point clusters, as created with \code{\link{extractClusters}}.}
 
 \item{trs_spdf}{A \code{\link[sp]{SpatialPointsDataFrame}} of the
-household movement (as converted from a \code {\link[trajectories:Track-class]{Tracks}}
+household movement (as converted from a \code{\link[trajectories:Track-class]{Tracks}}
 object).}
 }
 \value{
