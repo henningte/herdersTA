@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotLocationsTrackSummaryAltitude.R
 \name{plotLocationsTrackSummaryAltitude}
 \alias{plotLocationsTrackSummaryAltitude}
-\title{Plots Altitude Profiles of Summarised Tracks as Returned by \code{\link{locaitonsTrack}}.}
+\title{Plots Altitude Profiles of Summarised Tracks as Returned by \code{\link{locationsTrack}}.}
 \usage{
 plotLocationsTrackSummaryAltitude(x, seasons = data.frame(start = c(3, 5, 9,
   11), end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1",
@@ -27,7 +27,7 @@ and three columns:
 A  \code{\link[ggplot2]{ggplotobj}} object.
 }
 \description{
-\code{plotLocationsTrackSummaryAltitude} plots the result of \code{\link{locaitonsTrack}}
+\code{plotLocationsTrackSummaryAltitude} plots the result of \code{\link{locationsTrack}}
 (with parameter  \code{summary = TRUE}) for a \code{\link[trajectories:Track-class]{Track}}
 object. This means that idividual campsites are plotted as dots linked with a
 line. Labels indicate the step (i.e. the sequence of visits), the location id,
