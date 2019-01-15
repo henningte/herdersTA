@@ -1,9 +1,7 @@
 #'@importFrom Rdpack reprompt
-#'@import spacetime
-#'@import lubridate
 #'@import ggplot2
 #'@importFrom cowplot theme_cowplot
-#'@import ggrepel
+#'@importFrom ggrepel geom_label_repel
 NULL
 
 #' Plots Altitude Profiles of Summarised Tracks as Returned by \code{\link{locationsTrack}}.
@@ -73,12 +71,23 @@ plotLocationsTrackSummaryAltitude <- function(x, seasons = data.frame(start = c(
   # retain only segments for gaps >= 24h + 20h (for at least one night, there were no values)
   plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(difftime(plotdfsegmentsgaps$xend, plotdfsegmentsgaps$xstart, units = "sec") >= 44*60*60, TRUE, FALSE)),]
 
+  # define the scale_fill_manual_values
+  if(length(unique(plotdfpoints$campsite)) == 2){
+    scale_fill_manual_values <- c("white", "black")
+  }else{
+    if(unique(plotdfpoints$campsite) == TRUE){
+      scale_fill_manual_values <- "black"
+    }else{
+      scale_fill_manual_values <- "white"
+    }
+  }
+
   # plot
   ggplot(data = plotdfpoints, aes(x = time, y = alt)) +
     geom_path() +
     geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
     geom_point(aes(fill = plotdfpoints$campsite), shape = 21, size = 3) +
-    scale_fill_manual(values = c("white", "black")) +
+    scale_fill_manual(values = scale_fill_manual_values) +
     theme(legend.position = "none") +
     # arrow
     # geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend), arrow = arrow(length = unit(0.03, "npc"))) +
