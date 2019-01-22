@@ -19,7 +19,7 @@ NULL
 #'   visit (irrespective whether this is sure or not), (5) dep.: The end time of the
 #'   visit (irrespective whether this is sure or not). Label boxes are filled according
 #'   to an argument \code{"seasons}.}
-#'   \item{\code{"lonlat_anonymuous"}}{Like \code{"lonlat"}, but no labels will be
+#'   \item{\code{"lonlatanonymuous"}}{Like \code{"lonlat"}, but no labels will be
 #'   added to the axes.}
 #'   \item{\code{"altitude"}}{Plots the start time and end time of each visit on
 #'   the x axis and the altitude of each visit on the y axis. Each visit is plotted
@@ -58,15 +58,15 @@ NULL
 #' \code{\link{extractClustersBuffer}}.
 #' @examples #
 #' @export
-plot.trackvisits <- function(x, what = "lonlat_anonymuous", seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1", "lightgray")), timethreshold = 0
+plot.trackvisits <- function(x, what = "lonlatanonymuous", seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1", "lightgray")), timethreshold = 0
 ){
 
   # checks
   if(!(inherits(x, "trackvisits"))){
     stop("x must be of class trackvisits\n")
   }
-  if(!(what %in% c("lonlat", "lonlat_anonymuous", "altitude"))){
-    stop("what must be one of 'lonlat', 'lonlat_anonymuous', 'altitude'\n")
+  if(!(what %in% c("lonlat", "lonlatanonymuous", "altitude"))){
+    stop("what must be one of 'lonlat', 'lonlatanonymuous', 'altitude'\n")
   }
 
   # get the season that crosses the end/begin of a year
@@ -112,10 +112,14 @@ plot.trackvisits <- function(x, what = "lonlat_anonymuous", seasons = data.frame
   plotdfsegmentsgaps <- data.frame(xstart = x$longitude[-nrow(x)],
                                    xend = x$longitude[-1],
                                    ystart = x$latitude[-nrow(x)],
-                                   yend = x$latitude[-1])
+                                   yend = x$latitude[-1],
+                                   xstarttime = x$endtime[-nrow(x)],
+                                   xendtime = x$starttime[-1],
+                                   ystartaltitude = x$altitude[-nrow(x)],
+                                   yendaltitude = x$altitude[-1])
 
   # retain only segments for gaps >= 24h + 20h (for at least one night, there were no values)
-  plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(difftime(as.POSIXct(x$endtime[-nrow(x)]), as.POSIXct(x$starttime[-1]), units = "sec") >= timethreshold, TRUE, FALSE)),]
+  plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(abs(difftime(as.POSIXct(x$endtime[-nrow(x)]), as.POSIXct(x$starttime[-1]), units = "sec")) >= timethreshold, TRUE, FALSE)),]
 
   # define the scale_fill_manual_values
   if(length(unique(plotdfpoints$campsite)) == 2){
@@ -143,8 +147,8 @@ plot.trackvisits <- function(x, what = "lonlat_anonymuous", seasons = data.frame
              scale_x_continuous(limits = c(min(x$longitude) - abs(diff(range(x$longitude)))*0.15, max(x$longitude) + abs(diff(range(x$longitude)))*0.15)) +
              scale_y_continuous(limits = c(min(x$latitude) - abs(diff(range(x$latitude)))*0.15, max(x$latitude) + abs(diff(range(x$latitude)))*0.15))
 
-         }
-         lonlat_anonymuous = {
+         },
+         lonlatanonymuous = {
 
            ggplot() +
              geom_point(data = plotdfpoints, aes(x = x, y = y, fill = plotdfpoints$campsite), shape = 21, size = 3) +
@@ -160,10 +164,10 @@ plot.trackvisits <- function(x, what = "lonlat_anonymuous", seasons = data.frame
          },
          altitude = {
 
-           ggplot(data = plotdfpoints, aes(x = time, y = alt)) +
-             geom_path() +
-             geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
-             geom_point(aes(fill = plotdfpoints$campsite), shape = 21, size = 3) +
+           ggplot() +
+             geom_path(data = plotdfpoints, aes(x = time, y = alt)) +
+             geom_segment(data = plotdfsegmentsgaps, aes(x = xstarttime, xend = xendtime, y = ystartaltitude, yend = yendaltitude), colour = "white", linetype = 2) +
+             geom_point(data = plotdfpoints, aes(x = time, y = alt, fill = plotdfpoints$campsite), shape = 21, size = 3) +
              scale_fill_manual(values = scale_fill_manual_values) +
              theme(legend.position = "none") +
              geom_label_repel(data = plotdfpoints[seq(1, nrow(plotdfpoints)-1, by = 2),], aes(x = time, y = alt, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival]))
