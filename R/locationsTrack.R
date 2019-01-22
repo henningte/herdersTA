@@ -9,7 +9,7 @@ NULL
 
 #' Identifies and classifies visits in GPS tracks.
 #'
-#' \code{locationsTrack} identifies clusters (locations) of
+#' \code{locationsTrack_old} identifies clusters (locations) of
 #' points in GPS tracks (\code{\link[trajectories:Track-class]{Track}}
 #' object) based on their spatial proximity using
 #' \code{\link{extractClustersBuffer}} and identifies individual
@@ -123,7 +123,7 @@ NULL
 #' \code{\link{extractClustersBuffer}}.
 #' @examples #
 #' @export
-locationsTrack <- function(currenttrack,
+locationsTrack_old <- function(currenttrack,
                            radius = 200,
                            tmin = 345600,
                            tmaxinterstices = 345600,
