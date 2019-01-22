@@ -4,7 +4,7 @@
 \alias{plot.trackvisits}
 \title{Plots Visits from a Track with Locations}
 \usage{
-plot.trackvisits(x, what = "lonlat_anonymuous", seasons = data.frame(start =
+plot.trackvisits(x, what = "lonlatanonymuous", seasons = data.frame(start =
   c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red",
   "burlywood1", "lightgray")), timethreshold = 0)
 }
@@ -47,7 +47,7 @@ A  \code{\link[ggplot2]{ggplotobj}} object
   visit (irrespective whether this is sure or not), (5) dep.: The end time of the
   visit (irrespective whether this is sure or not). Label boxes are filled according
   to an argument \code{"seasons}.}
-  \item{\code{"lonlat_anonymuous"}}{Like \code{"lonlat"}, but no labels will be
+  \item{\code{"lonlatanonymuous"}}{Like \code{"lonlat"}, but no labels will be
   added to the axes.}
   \item{\code{"altitude"}}{Plots the start time and end time of each visit on
   the x axis and the altitude of each visit on the y axis. Each visit is plotted
