@@ -148,16 +148,18 @@ locationsTrack <- function(currenttrack,
   if(!summary){
 
     # get data to insert into currenttrack
-    addtocurrenttrackdata <- currenttrackvisits[,c("location", "group", "campsite", "norepeatedcampsitevisits")]
+    addtocurrenttrackdata <- currenttrackvisits[,c("group", "campsite", "norepeatedcampsitevisits")]
 
-    # redefine location in currenttrack (update to merged visits)
+    # redefine group and location in currenttrack (update to merged visits)
+    currenttrack$group <- 0
     currenttrack$location <- 0
     sapply(seq_len(nrow(currenttrackvisits)), function(x){
+      currenttrack$group[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- currenttrackvisits$group[x]
       currenttrack$location[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- currenttrackvisits$location[x]
     })
 
     # merge currenttrack@data and addtocurrenttrack
-    currenttrack@data <- plyr::join(x = currenttrack@data, y = addtocurrenttrackdata, by = "location")
+    currenttrack@data <- plyr::join(x = currenttrack@data, y = addtocurrenttrackdata, by = "group", type = "left")
 
     # return currenttrack
     return(currenttrack)
