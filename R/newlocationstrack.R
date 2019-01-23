@@ -76,8 +76,10 @@ NULL
 #'   to the input \code{\link[trajectories:Track-class]{Track}} object, but
 #'   has five additional columns in the \code{data} slot:
 #'   \describe{
-#'     \item {\code{location}}{An integer value for each identified
+#'     \item {\code{location}}{A numeric integer value for each identified
 #'     spatial point cluster (location) increasing with the time starting.}
+#'     \item {\code{visit}}{A numeric integer value for each identified
+#'     visit increasing with the time starting.}
 #'     \item{\code{campsite}}{A logical value indicating if a visits of a
 #'     location is classified as long-term visit (campsite) (\code{TRUE})
 #'     or as short-term visit (\code{FALSE}).}
@@ -141,15 +143,15 @@ locationsTrack <- function(currenttrack,
 
   # group and merge visits at adjacent days (day gaps due to the consideration of only nightvalues)
   currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, tmaxinterstice = 24*60*60, tmaxintersticenotvalid = NULL)
-  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60)
+  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, keepgroup = FALSE)
 
   # group and merge visits with gaps < tmaxinterstices
   currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, tmaxinterstice = tmaxinterstices, tmaxintersticenotvalid = NULL)
-  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60)
+  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, keepgroup = FALSE)
 
   # group and merge visits in special time intervals
   currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, tmaxinterstice = tmaxinterstices, tmaxintersticenotvalid = tmaxintersticenotvalid)
-  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60)
+  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, keepgroup = TRUE)
 
   if(!summary){
 
@@ -167,6 +169,7 @@ locationsTrack <- function(currenttrack,
 
       # insert the values
       addtocurrenttrackdata$location[currentrowindices] <<- rep(currenttrackvisits$location[x], length(currentrowindices))
+      addtocurrenttrackdata$visit[currentrowindices] <<- rep(currenttrackvisits$group[x], length(currentrowindices))
       addtocurrenttrackdata$campsite[currentrowindices] <<- rep(currenttrackvisits$campsite[x], length(currentrowindices))
       addtocurrenttrackdata$norepeatedcampsitevisits[currentrowindices] <<- rep(currenttrackvisits$norepeatedcampsitevisits[x], length(currentrowindices))
       addtocurrenttrackdata$start[currentrowindices[1]] <<- TRUE
