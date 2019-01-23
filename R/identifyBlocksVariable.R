@@ -1,5 +1,6 @@
 #' @importFrom Rdpack reprompt
 #' @import trajectories
+#' @importFrom data.table data.table rbindlist
 NULL
 
 #' Identifies data value groups within a \code{data.frame} column.
@@ -31,52 +32,20 @@ NULL
 #' @export
 identifyBlocksVariable <- function(currenttrack, variable, value){
 
-  # get indices of entries equal to the specified value
-  if(inherits(currenttrack, "data.frame")){
-    whichvalue <- which(currenttrack[variable] == value)
-  }else{
-    whichvalue <- which(currenttrack@data[variable] == value)
+  # extract the data.frame if necessary
+  if(!inherits(currenttrack, "data.frame")){
+    currenttrack <- currenttrack@data
   }
 
-  # identify blocks of the value within currenttrack
-  if(length(whichvalue) == 0){
-    blocksvalue1 <- NULL
-  }else{
-    if(length(whichvalue) > 1){
+  # get  a grouping vector for the variable
+  groups <- data.table::rleidv(currenttrack, variable)
 
-      # get the difference between whichvalue
-      blocksvalue <- whichvalue[-1] - whichvalue[-length(whichvalue)]
+  # get an index variable for the value of variable
+  indexvariablevalue <- which(ifelse(currenttrack[variable] == value, TRUE, FALSE))
 
-      # get the indices of gaps
-      blocksvalueindices <- which(blocksvalue > 1)
-
-      if(length(blocksvalueindices) == 0){
-        blocksvalueindices <- length(whichvalue)
-        blocksvalue1 <- matrix(c(whichvalue[1], whichvalue[blocksvalueindices[1]]), nrow = 1)
-      }else{
-        # get the indices of the first block
-        firstblock <- c(whichvalue[1], whichvalue[blocksvalueindices[1]])
-
-        # get the indices of the remaining blocks
-        intermediateblocks <- t(sapply(seq_along(blocksvalueindices), function(x){
-          if(x != length(blocksvalueindices)){
-            c(whichvalue[blocksvalueindices[x]+1],whichvalue[blocksvalueindices[x+1]])
-          }else{
-            c(whichvalue[blocksvalueindices[x]+1],whichvalue[length(whichvalue)])
-          }
-        }))
-
-        # merge firstblock and intermediateblocks
-        blocksvalue1 <- rbind(firstblock, intermediateblocks)
-      }
-
-    }else{
-      blocksvalue1 <- matrix(c(whichvalue, whichvalue), nrow = 1)
-    }
-
-  }
-
-  # return result
-  return(blocksvalue1)
+  # extract the respective block starts and ends
+  data.table::rbindlist(tapply(seq_len(nrow(currenttrack))[indexvariablevalue], groups[indexvariablevalue], function(x){
+    data.table(start = x[1], end = x[length(x)])
+  }, simplify = FALSE))
 
 }
