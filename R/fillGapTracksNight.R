@@ -62,6 +62,9 @@ fillGapTracksNight <- function(currenttracks,
                           cores = 1,
                           clcall = NULL){
 
+  # extract the names
+  currenttracksnames <- names(currenttracks@tracks)
+
   # set up cluster
   cl <- makeCluster(cores, outfile="", type = "PSOCK")
   registerDoParallel(cl)
@@ -78,6 +81,9 @@ fillGapTracksNight <- function(currenttracks,
                                     night = night)
 
   })
+
+  # restore the names
+  names(newcurrenttracks@tracks) <- currenttracksnames
 
   # stop cluster
   stopCluster(cl)

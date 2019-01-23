@@ -40,6 +40,9 @@ reorganizeTracks <- function(currenttracks,
                              cores = 1,
                              clcall = NULL){
 
+  # extract the names
+  currenttracksnames <- names(currenttracks@tracks)
+
   # define a vector with time points equally spaced according to interval
   tstart <- lubridate::floor_date(min(currenttracks@tracksData$tmin), unit = "hours")
   tend <- lubridate::ceiling_date(max(currenttracks@tracksData$tmax), unit = "hours")
@@ -102,6 +105,9 @@ reorganizeTracks <- function(currenttracks,
     Track(STIDF(sp = SpatialPoints(coords = xdata[,c("longitude", "latitude")], proj4string = CRS(proj4string(x))), time = xdata$time, data = xdata[,!names(xdata) %in% c("time", "longitude", "latitude")], endTime = xdata$time))
 
   })
+
+  # restore the names
+  names(newcurrenttracks@tracks) <- currenttracksnames
 
   # stop cluster
   stopCluster(cl)
