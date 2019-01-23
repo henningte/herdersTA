@@ -70,8 +70,10 @@ information.}
   to the input \code{\link[trajectories:Track-class]{Track}} object, but
   has five additional columns in the \code{data} slot:
   \describe{
-    \item {\code{location}}{An integer value for each identified
+    \item {\code{location}}{A numeric integer value for each identified
     spatial point cluster (location) increasing with the time starting.}
+    \item {\code{visit}}{A numeric integer value for each identified
+    visit increasing with the time starting.}
     \item{\code{campsite}}{A logical value indicating if a visits of a
     location is classified as long-term visit (campsite) (\code{TRUE})
     or as short-term visit (\code{FALSE}).}

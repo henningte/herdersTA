@@ -4,11 +4,25 @@
 \alias{trackvisitsMergeGroups}
 \title{Merges Grouped Visits from Track Objects}
 \usage{
-trackvisitsMergeGroups(currenttrackvisits, tmin, timeinterval = 30 * 60)
+trackvisitsMergeGroups(currenttrackvisits, tmin, timeinterval = 30 * 60,
+  keepgroup = FALSE)
 }
 \arguments{
 \item{currenttrackvisits}{An object of class \code{\link{trackvisits}} for
 which groups have been defined.}
+
+\item{tmin}{The minimum residence time at a specific location [s]
+which is used to classify visits as campsites (if the residence
+time at a specific location is larger than \code{tmin}) in
+contrast to short-term visits of locations. The default is
+\code{tmin = 345600}, i.e. 4 days.}
+
+\item{timeinterval}{The number of seconds one data value (row) in
+\code{currenttrack} covers.}
+
+\item{keepgroup}{A logical value indicating if the input group values should
+be retained for each group (\code{keepgroup = TRUE}) or group should be reset
+to \code{NA} (\code{keepgroup = FALSE}).}
 }
 \value{
 An object of class \code{\link{trackvisits}} in which all
@@ -16,7 +30,8 @@ visits belonging to the same group are merged into one visit. The variables
 of \code{currenttrackvisits} are changed as:
 \describe{
   \item{\code{location}}{not changed (location of the first visit of the group).}
-  \item{\code{group}}{reset to \code{NA}.}
+  \item{\code{group}}{if \code{keepgroup = TRUE}, the respective input group value,
+  if \code{keepgroup = FALSE} reset to \code{NA}.}
   \item{\code{start}}{value of \code{start} of the first visit of the group.}
   \item{\code{end}}{value of \code{end} of the last visit of the group.}
   \item{\code{starttime}}{value of \code{starttime} of the first visit of the group.}
