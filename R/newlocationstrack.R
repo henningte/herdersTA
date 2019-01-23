@@ -150,12 +150,16 @@ locationsTrack <- function(currenttrack,
     # get data to insert into currenttrack
     addtocurrenttrackdata <- currenttrackvisits[,c("group", "campsite", "norepeatedcampsitevisits")]
 
-    # redefine group and location in currenttrack (update to merged visits)
+    # redefine group and location in currenttrack (update to merged visits), initialise start and end values of visits
     currenttrack$group <- 0
     currenttrack$location <- 0
+    currenttrack$start <- FALSE
+    currenttrack$end <- FALSE
     sapply(seq_len(nrow(currenttrackvisits)), function(x){
       currenttrack$group[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- currenttrackvisits$group[x]
       currenttrack$location[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- currenttrackvisits$location[x]
+      currenttrack$start[currenttrackvisits$start[x]] <<- TRUE
+      currenttrack$end[currenttrackvisits$end[x]] <<- TRUE
     })
 
     # merge currenttrack@data and addtocurrenttrack
