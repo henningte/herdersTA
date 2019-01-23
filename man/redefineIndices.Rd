@@ -4,18 +4,10 @@
 \alias{redefineIndices}
 \title{Redefines indices based on a time vector.}
 \usage{
-redefineIndices(df, indices, time, notchange = NULL)
+redefineIndices(x, notchange = NULL)
 }
 \arguments{
-\item{df}{A \code{data.frame} object with a column representing
-indices and a column representing time information as \code{POSIXct}
-values.}
-
-\item{indices}{A character value giving the name of the column of
-\code{df} which contains the time values.}
-
-\item{time}{indices A character value giving the name of the column of
-\code{df} which contains the index values.}
+\item{x}{A numeric vector with integers as group indices.}
 
 \item{notchange}{An integer vector specifying which original index values
 should not be changed. Default is \code{notchange = NULL}, i.e. all indices
@@ -25,16 +17,13 @@ will be changed.}
 A \code{data.frame} object with the redefined index values.
 }
 \description{
-\code{redefineIndices} redefines a column with index values (integer)
-according to a column with time information in a  \code{data.frame}
-object, i.e. new indices will be assigned to each set of rows with
-the same index in relation to their order in time.
+\code{redefineIndices} redefines the values of a numeric vector
+containing indices (integers) as group indices so that groups
+recieve values in the order their first value occurs.
 }
 \examples{
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
-\code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-\code{\link{locationsTrack}}.
+#.
 }

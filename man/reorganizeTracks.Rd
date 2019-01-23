@@ -10,16 +10,6 @@ reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT",
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 
-\item{interval}{A numerical value representing the length of the
-time interval to assign all data values to [s]. Default is
-\code{interval = 60*30}, i.e. 30 minutes.}
-
-\item{tz}{A character value indicating the time zone the temporal
-information orresponds to. Default is \code{tz = "GMT"}.}
-
-\item{crs}{A character string describing a projection and datum
-in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
-
 \item{cores}{An integer value representing the number of cores to
 use in parallel computing.}
 
@@ -35,8 +25,10 @@ input A \code{\link[trajectories:Track-class]{Tracks}} object.
 \code{reorganizeTracks} reorganises a \code{\link[trajectories:Track-class]{Tracks}}
 object with several \code{\link[trajectories:Track-class]{Track}} objects
 covering roughly the same time period by assigning data points to
-the same overall time interval and including gaps as new data
-points within each \code{\link[trajectories:Track-class]{Track}} object.
+the same overall time vector with half-hourly spaced data and including gaps as
+new data points within each \code{\link[trajectories:Track-class]{Track}} object.
+Gaps are filled with dummy values from the next value prior the gap or if there is
+an ending gap, with the next value prior the ending gap.
 }
 \details{
 If there are more than one data point per interval and

@@ -4,14 +4,11 @@
 \alias{extractClustersBuffer}
 \title{Identifies clusters of points of GPS tracks.}
 \usage{
-extractClustersBuffer(trsSP, radius = 200)
+extractClustersBuffer(currenttrack, radius = 200)
 }
 \arguments{
-\item{trsSP}{A \code{\link[sp]{SpatialPointsDataFrame}} object
-representing a \code{\link[trajectories:Track-class]{Track}} object, i.e.
-the result of the function
-\code{\link{TrackToSpatialPointsDataFrame}}. \code{trsSP} must
-have a logical variable \code{gap} as created by
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}.
+\code{currenttrack} must have a logical variable \code{gap} as created by
 \code{\link{reorganizeTracks}} and an attribute \code{night} as
 created by \code{\link{classifyNightTrack}}.}
 
@@ -21,9 +18,9 @@ clustering values to locations. Default is \code{radius = 200} [m].}
 }
 \value{
 An integer vector with the same length as the number of points in
-\code{trsSP} indicating to which cluster each point is assigned. Cluster
+\code{currenttrack} indicating to which cluster each point is assigned. Cluster
 indices are not ordered, however points of \code{trsSP} representing gaps
-(as indicated by \code{trsSP@data$gap}) get the cluster index \code{0}.
+(as indicated by \code{currenttrack$gap}) get the cluster index \code{0}.
 }
 \description{
 \code{extractClustersBuffer} identifies clusters of points in GPS

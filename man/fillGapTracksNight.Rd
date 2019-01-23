@@ -4,8 +4,8 @@
 \alias{fillGapTracksNight}
 \title{Imputes gaps in a \code{\link[trajectories]{Tracks}} object.}
 \usage{
-fillGapTracksNight(currenttracks, maxduration, maxdistance, timeinterval,
-  night = c(16, 20), cores = 1, clcall = NULL)
+fillGapTracksNight(currenttracks, maxduration, maxdistance, night = c(16, 20),
+  cores = 1, clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
@@ -21,9 +21,6 @@ allowed duration of a gap that is filled [s].}
 allowed distance between the spatial position of the last data
 value before a gap and the spatial position of the first data
 value after a gap that is filled [m].}
-
-\item{timeinterval}{A numerical value reperesenting the duration
-of a time interval represented by one data value of \code{track} [s].}
 
 \item{night}{An integer vector with two elements:
 \enumerate{
@@ -70,7 +67,5 @@ is the duration of the time interval specified as night in hours.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
-\code{\link{redefineIndices}},
-\code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
+\code{\link{reorganizeTracks}}.
 }

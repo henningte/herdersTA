@@ -6,7 +6,7 @@ Description: herdersTA provides functions in order to process and summarise GPS 
   trajectories of individuals. 
 Depends: 
   R (>= 3.2.0),
-  trajectories,
+  trajectories (>= 0.2-1),
   sp,
   rgdal,
   rgeos,
@@ -20,7 +20,9 @@ Depends:
   cowplot,
   ggrepel,
   jsonlite,
-  raster (>= 2.7-11)
+  raster (>= 2.7-11),
+  tidyr,
+  plyr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

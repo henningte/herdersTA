@@ -1,10 +1,6 @@
 #' @importFrom Rdpack reprompt
-#' @import spacetime
-#' @import lubridate
 #' @import trajectories
-#' @import rgdal
-#' @import sp
-#' @import rgeos
+#' @importFrom sp SpatialPoints coordinates
 NULL
 
 #' Identifies clusters of points of GPS tracks.
@@ -22,36 +18,33 @@ NULL
 #' night is not a gap to the respective location. Therefore, results
 #' reflect a daily resolution with respect to different locations.
 #'
-#' @param trsSP A \code{\link[sp]{SpatialPointsDataFrame}} object
-#' representing a \code{\link[trajectories:Track-class]{Track}} object, i.e.
-#' the result of the function
-#' \code{\link{TrackToSpatialPointsDataFrame}}. \code{trsSP} must
-#' have a logical variable \code{gap} as created by
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}.
+#' \code{currenttrack} must have a logical variable \code{gap} as created by
 #' \code{\link{reorganizeTracks}} and an attribute \code{night} as
 #' created by \code{\link{classifyNightTrack}}.
 #' @param radius A numerical value representing the radius of the
 #' buffers computed around each point [m] which are used for
 #' clustering values to locations. Default is \code{radius = 200} [m].
 #' @return An integer vector with the same length as the number of points in
-#' \code{trsSP} indicating to which cluster each point is assigned. Cluster
+#' \code{currenttrack} indicating to which cluster each point is assigned. Cluster
 #' indices are not ordered, however points of \code{trsSP} representing gaps
-#' (as indicated by \code{trsSP@data$gap}) get the cluster index \code{0}.
+#' (as indicated by \code{currenttrack$gap}) get the cluster index \code{0}.
 #' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
 #' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
 #' \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-extractClustersBuffer <- function(trsSP, radius = 200){
+extractClustersBuffer <- function(currenttrack, radius = 200){
 
   # use density based clustering in order to identify locations
-  locations_night <- dbscan(x = trsSP@coords[attributes(trsSP)$night == TRUE,], eps = radius, minPts = 5)
+  locations_night <- dbscan(x = coordinates(currenttrack@sp)[attributes(currenttrack)$night == TRUE,], eps = radius, minPts = 5)
 
   # insert the location ids into a vector for all data values
-  locations_night_all <- rep(0, nrow(trsSP@data))
-  locations_night_all[attributes(trsSP)$night == TRUE] <- locations_night$cluster
+  locations_night_all <- rep(0, nrow(currenttrack@data))
+  locations_night_all[attributes(currenttrack)$night == TRUE] <- locations_night$cluster
 
   # set the location id of gaps to 0
-  locations_night_all[trsSP$gap == TRUE] <- 0
+  locations_night_all[currenttrack$gap == TRUE] <- 0
 
   # return the locations_night_all ids
   return(locations_night_all)

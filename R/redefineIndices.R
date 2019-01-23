@@ -3,61 +3,46 @@ NULL
 
 #' Redefines indices based on a time vector.
 #'
-#' \code{redefineIndices} redefines a column with index values (integer)
-#' according to a column with time information in a  \code{data.frame}
-#' object, i.e. new indices will be assigned to each set of rows with
-#' the same index in relation to their order in time.
+#' \code{redefineIndices} redefines the values of a numeric vector
+#' containing indices (integers) as group indices so that groups
+#' recieve values in the order their first value occurs.
 #'
-#' @param df A \code{data.frame} object with a column representing
-#' indices and a column representing time information as \code{POSIXct}
-#' values.
-#' @param indices A character value giving the name of the column of
-#' \code{df} which contains the time values.
-#' @param time indices A character value giving the name of the column of
-#' \code{df} which contains the index values.
+#' @param x A numeric vector with integers as group indices.
 #' @param notchange An integer vector specifying which original index values
 #' should not be changed. Default is \code{notchange = NULL}, i.e. all indices
 #' will be changed.
 #' @return A \code{data.frame} object with the redefined index values.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
-#' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-#' \code{\link{locationsTrack}}.
+#' @seealso #.
 #' @examples #
 #' @export
-redefineIndices <- function(df, indices, time, notchange = NULL
+redefineIndices <- function(x, notchange = NULL
 ){
 
-  # get order of time information
-  order_time <- order(df[time])
-
-  # define vectors to store information on already processes values in
-  done <- NULL
-
-  # define start value for new indices
-  iter <- 1
-  while(iter %in% notchange){
-    iter <- iter+1
+  # checks
+  if(!(is.numeric(x) || all(x%%1==0))){
+    stop("x must be a numeric vector with integers\n")
   }
 
-  # redefine indices of locations (according to arrival time)
-  index_new <- rep(0, nrow(df))
-  for(i in c(1:nrow(df))){
-    if(i %in% done || df[indices][i,] %in% notchange){
-      next()
-    }else{
-      done <- c(done, which(df[indices] == df[indices][i,]))
-      index_new[which(df[indices] == df[indices][i,])] <- iter
-      iter <- iter + 1
-      while(iter %in% notchange){
-        iter <- iter + 1
-      }
-    }
-  }
+  # get first element for each gorup in x
+  xgroups <- data.frame(old = x[!duplicated(x)])
 
-  # redefine df[indices]
-  df[indices] <- index_new
+  # define new groupings (times 2 to ensure that no notchange is covered)
+  newgroups <- seq_len(nrow(xgroups)*2)
 
-  # return result
-  return(df)
+  # discard all values in notchange
+  newgroups <- newgroups[!(newgroups %in% notchange)]
+
+  # get an index of xgroups$old in notchange
+  xgroups$notchange <- ifelse(xgroups$old %in% notchange, TRUE, FALSE)
+
+  # insert the new group values
+  xgroups$new <- rep(NA, nrow(xgroups))
+  xgroups$new[!xgroups$notchange] <- newgroups[seq_along(which(!xgroups$notchange))]
+  xgroups$new[xgroups$notchange] <- xgroups$old[xgroups$notchange]
+
+  # replace the original values
+  sapply(x, function(y){
+    xgroups$new[xgroups$old == y]
+  })
 
 }

@@ -1,6 +1,7 @@
 #' @importFrom Rdpack reprompt
 #' @import trajectories
 #' @import sp
+#' @importFrom plyr join
 NULL
 
 #' Identifies and classifies visits in GPS tracks.
@@ -40,9 +41,6 @@ NULL
 #' at the same location in case of which the duration of these visits
 #' will be added in order to classify both visits together as long-term
 #' visit (campsite) or short-term visit, based on \code{tmin}.
-#' @param timeinterval A numerical value reperesenting the duration
-#' of a time interval represented by one data value of
-#' \code{currenttrack} [s].
 #' @param night An integer vector with two elements:
 #' \enumerate{
 #'   \item The first element specifies the start hour of the night, e.g. \code{0}
@@ -63,8 +61,6 @@ NULL
 #' It is evaluated for each visit if its endtime (\code{trackvisits$endtime})
 #' is within any of the time periods or the starttime (\code{trackvisits$starttime})
 #' of the next visit at the same location.
-#' @param crs A character string describing a projection and datum
-#' in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).
 #' @param summary Logical value indicating if the information on the
 #' locations and visits should be summarised (\code{summary = TRUE})
 #' or not (\code{summary = FALSE}). See the details section for further
@@ -107,78 +103,61 @@ locationsTrack <- function(currenttrack,
                            radius = 200,
                            tmin = 345600,
                            tmaxinterstices = 345600,
-                           timeinterval = 30*60,
                            night = c(16, 20),
                            tmaxintersticenotvalid = data.frame(start = as.POSIXct("2016-01-01 00:00:00"), end = as.POSIXct("2016-05-01 00:00:00")),
-                           crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
                            summary = TRUE){
 
-  # convert track to SpatialPointsDataFrame and transform to UTM
-  trsSP <- TrackToSpatialPointsDataFrame(currenttrack, crs, toproject = TRUE)
+  # extract the time interval of adjacent values in currenttrack
+  timeinterval <- as.numeric(difftime(time1 = as.POSIXct(currenttrack@time)[2], time2 = as.POSIXct(currenttrack@time)[1], units = "secs"))
 
   # append the information on whether a data value was ecorded during night or day
-  currenttrack <- classifyNightTrack(currenttrack = currenttrack, night = night)
-  attributes(trsSP)$night <- attributes(currenttrack)$night
+  currenttrack <- classifyNightTrack(currenttrack, night)
 
   # cluster the data points
-  trsSP$location <- extractClustersBuffer(trsSP = trsSP, radius = radius)
+  currenttrack$location <- extractClustersBuffer(currenttrack = currenttrack, radius = radius)
 
   # return NULL if a data set contains only one location (no Track object can be constructed from one point)
-  if(length(unique(trsSP$location)) == 1){
+  if(length(unique(currenttrack$location)) == 1){
     warning("Only one location identified!")
     return(NULL)
   }
 
   # redefine indices of locations (according to arrival time)
-  trsSP@data <- redefineIndices(df = trsSP@data, indices = "location", time = "time", notchange = 0)
+  currenttrack$location <- redefineIndices(x = currenttrack$location, notchange = 0)
 
   # adjust variable formats and names
-  names(trsSP)[names(trsSP) == "lon"] <- "longitude"
-  names(trsSP)[names(trsSP) == "lat"] <- "latitude"
-  names(trsSP)[names(trsSP) == "HEIGHT"] <- "altitude"
-  trsSP$altitude <- as.numeric(trsSP$altitude)
+  names(currenttrack@data)[names(currenttrack@data) == "HEIGHT"] <- "altitude"
+  currenttrack$altitude <- as.numeric(currenttrack$altitude)
 
   # extract visits
-  currenttrackvisits <- trackvisitsFromTrack(currenttrack = trsSP@data, tmin = tmin, timeinterval = 30*60)
+  currenttrackvisits <- trackvisitsFromTrack(currenttrack = currenttrack, tmin = tmin)
 
   # group and merge visits at adjacent days (day gaps due to the consideration of only nightvalues)
-  currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, tmaxinterstice = 24*60*60, tmaxintersticenotvalid = NULL)
-  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, keepgroup = FALSE)
+  currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = timeinterval, tmaxinterstice = 24*60*60, tmaxintersticenotvalid = NULL)
+  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = timeinterval, keepgroup = FALSE)
 
   # group and merge visits with gaps < tmaxinterstices
-  currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, tmaxinterstice = tmaxinterstices, tmaxintersticenotvalid = NULL)
-  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, keepgroup = FALSE)
+  currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = timeinterval, tmaxinterstice = tmaxinterstices, tmaxintersticenotvalid = NULL)
+  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = timeinterval, keepgroup = FALSE)
 
   # group and merge visits in special time intervals
-  currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, tmaxinterstice = tmaxinterstices, tmaxintersticenotvalid = tmaxintersticenotvalid)
-  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = 30*60, keepgroup = TRUE)
+  currenttrackvisits <- trackvisitsGetGroups(trackvisits = currenttrackvisits, tmin = tmin, timeinterval = timeinterval, tmaxinterstice = tmaxinterstices, tmaxintersticenotvalid = tmaxintersticenotvalid)
+  currenttrackvisits <- trackvisitsMergeGroups(currenttrackvisits = currenttrackvisits, tmin = tmin, timeinterval = timeinterval, keepgroup = TRUE)
 
+  # return the results
   if(!summary){
 
-    # insert the result into currenttrack
-    addtocurrenttrackdata <- data.frame(location = rep(0, nrow(trsSP@data)),
-                                        campsite = NA,
-                                        norepeatedcampsitevisits = NA,
-                                        start = FALSE,
-                                        end = FALSE)
+    # get data to insert into currenttrack
+    addtocurrenttrackdata <- currenttrackvisits[,c("location", "group", "campsite", "norepeatedcampsitevisits")]
 
+    # redefine location in currenttrack (update to merged visits)
+    currenttrack$location <- 0
     sapply(seq_len(nrow(currenttrackvisits)), function(x){
-
-      # get the row indices
-      currentrowindices <- currenttrackvisits$start[x]:currenttrackvisits$end[x]
-
-      # insert the values
-      addtocurrenttrackdata$location[currentrowindices] <<- rep(currenttrackvisits$location[x], length(currentrowindices))
-      addtocurrenttrackdata$visit[currentrowindices] <<- rep(currenttrackvisits$group[x], length(currentrowindices))
-      addtocurrenttrackdata$campsite[currentrowindices] <<- rep(currenttrackvisits$campsite[x], length(currentrowindices))
-      addtocurrenttrackdata$norepeatedcampsitevisits[currentrowindices] <<- rep(currenttrackvisits$norepeatedcampsitevisits[x], length(currentrowindices))
-      addtocurrenttrackdata$start[currentrowindices[1]] <<- TRUE
-      addtocurrenttrackdata$end[currentrowindices[length(currentrowindices)]] <<- TRUE
-
+      currenttrack$location[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- currenttrackvisits$location[x]
     })
 
-    # add the values to currenttrack@data
-    currenttrack@data <- cbind(currenttrack@data, addtocurrenttrackdata)
+    # merge currenttrack@data and addtocurrenttrack
+    currenttrack@data <- plyr::join(x = currenttrack@data, y = addtocurrenttrackdata, by = "location")
 
     # return currenttrack
     return(currenttrack)

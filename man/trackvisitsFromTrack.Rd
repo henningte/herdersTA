@@ -4,24 +4,21 @@
 \alias{trackvisitsFromTrack}
 \title{Extracts Visits from Track Objects}
 \usage{
-trackvisitsFromTrack(currenttrack, tmin = 345600, timeinterval = 30 * 60)
+trackvisitsFromTrack(currenttrack, tmin = 345600)
 }
 \arguments{
-\item{currenttrack}{A \code{data.frame} object with a variable \code{time}
-that represents the time as \code{POSIXct} vector and
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location} that is an id for locations. Gap values
 must have the value \code{0} for \code{location}. \code{currenttrack}
 must contain data values for equally spaced time intervals, i.e. each value
-must correspond to a time interval of the same length.}
+must correspond to a time interval of the same length. Additionally,
+\code{currenttrack} must contain a numeric varaibel \code{altitude}.}
 
 \item{tmin}{The minimum residence time at a specific location [s]
 which is used to classify visits as campsites (if the residence
 time at a specific location is larger than \code{tmin}) in
 contrast to short-term visits of locations. The default is
 \code{tmin = 345600}, i.e. 4 days.}
-
-\item{timeinterval}{The number of seconds one data value (row) in
-\code{currenttrack} covers.}
 }
 \value{
 An object of class \code{\link{trackvisits}}.

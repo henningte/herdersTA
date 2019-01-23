@@ -4,8 +4,7 @@
 \alias{fillGapTrackNight}
 \title{Imputes gaps in a \code{\link[trajectories]{Track-class}} object.}
 \usage{
-fillGapTrackNight(currenttrack, maxduration, maxdistance, timeinterval,
-  night = c(16, 20))
+fillGapTrackNight(currenttrack, maxduration, maxdistance, night = c(16, 20))
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object with a
@@ -23,10 +22,6 @@ allowed distance between the spatial position of the last data
 value before a gap and the spatial position of the first data
 value after a gap that is filled [m].}
 
-\item{timeinterval}{A numerical value reperesenting the duration
-of a time interval represented by one data value of
-\code{currenttrack} [s].}
-
 \item{night}{An integer vector with two elements:
 \enumerate{
   \item The first element specifies the start hour of the night, e.g. \code{0}
@@ -36,8 +31,10 @@ of a time interval represented by one data value of
 }}
 }
 \value{
-The input \code{\link[trajectories:Track-class]{Track}} object with filled
-gaps.
+The input \code{\link[trajectories:Track-class]{Track}} object with
+the variable \code{gap} set to \code{FALSE} for filled gap values. Additionally,
+the output has a new variable \code{filled} indicating if a gap was filled
+(\code{filled = TRUE}) or not (\code{filled = FALSE})
 }
 \description{
 \code{fillGapTrackNight} imputes missing values in a
@@ -48,7 +45,7 @@ value before the gap and the spatial position of the first data
 value after the gap is \eqn{\le} a user specified distance threshold.
 In contrast to \code{\link{fillGapTrack}}, \code{fillGapTrackNight}
 considers only values in a specified time interval of the day (e.g.
-during night).
+during night) as nearest points prior/after a gap.
 }
 \details{
 It has to be paid
@@ -65,7 +62,5 @@ is the duration of the time interval specified as night in hours.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
-\code{\link{redefineIndices}},
-\code{\link{fillGapTracksNight}}, \code{\link{fillGapTrack}}.
+\code{\link{reorganizeTracks}}).
 }

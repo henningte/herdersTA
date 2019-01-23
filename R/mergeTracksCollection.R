@@ -36,6 +36,7 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
     }
     clusterCall(cl, function(){library("lubridate")})
     clusterCall(cl, function(){library("spacetime")})
+    clusterCall(cl, function(){library("data.table")})
     clusterExport(cl = cl, varlist = list("exDataTracks", "mergeTracks", "trackscollection"), envir=environment())
 
     # merge the Track objects of each Tracks object

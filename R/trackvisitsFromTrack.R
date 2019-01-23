@@ -1,6 +1,7 @@
 #' @importFrom Rdpack reprompt
 #' @importFrom data.table rbindlist
 #' @importFrom lubridate is.POSIXct
+#' @importFrom sp coordinates
 NULL
 
 #' Extracts Visits from Track Objects
@@ -9,42 +10,40 @@ NULL
 #' \code{\link{trackvisits}} from an object of class
 #' \code{\link[trajectories:Track-class]{Track}}.
 #'
-#' @param currenttrack A \code{data.frame} object with a variable \code{time}
-#' that represents the time as \code{POSIXct} vector and
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location} that is an id for locations. Gap values
 #' must have the value \code{0} for \code{location}. \code{currenttrack}
 #' must contain data values for equally spaced time intervals, i.e. each value
-#' must correspond to a time interval of the same length.
+#' must correspond to a time interval of the same length. Additionally,
+#' \code{currenttrack} must contain a numeric varaibel \code{altitude}.
 #' @param tmin The minimum residence time at a specific location [s]
 #' which is used to classify visits as campsites (if the residence
 #' time at a specific location is larger than \code{tmin}) in
 #' contrast to short-term visits of locations. The default is
 #' \code{tmin = 345600}, i.e. 4 days.
-#' @param timeinterval The number of seconds one data value (row) in
-#' \code{currenttrack} covers.
 #' @return An object of class \code{\link{trackvisits}}.
 #'
 #' @seealso \code{\link{trackvisits}}.
 #' @examples #
 #' @export
-trackvisitsFromTrack <- function(currenttrack, tmin = 345600, timeinterval = 30*60){
+trackvisitsFromTrack <- function(currenttrack, tmin = 345600){
 
   # checks
-  if(!inherits(currenttrack, "data.frame")){
-    stop("currenttrack must be of class data.frame\n")
+  if(!inherits(currenttrack, "Track")){
+    stop("currenttrack must be of class Track\n")
   }
-  if(!("location" %in% colnames(currenttrack))){
+  if(!("location" %in% colnames(currenttrack@data))){
     stop("currenttrack must contain a variable 'location'\n")
-  }
-  if(!("time" %in% colnames(currenttrack))){
-    stop("currenttrack must contain a variable 'time'\n")
   }
   if(!(is.numeric(tmin) || tmin > 0)){
     stop("tmin must be a numeric value > 0\n")
   }
-  if(!(is.numeric(timeinterval) || timeinterval > 0)){
-    stop("timeinterval must be a numeric value > 0\n")
-  }
+
+  # extract the time interval of adjacent values in currenttrack
+  timeinterval <- as.numeric(difftime(time1 = as.POSIXct(currenttrack@time)[2], time2 = as.POSIXct(currenttrack@time)[1], units = "secs"))
+
+  # extract the coordinates of currenttrack
+  xcoords <- sp::coordinates(currenttrack@sp)
 
   # extract visits for each location
   visits <- data.table::rbindlist(lapply(unique(currenttrack$location), function(x){
@@ -59,15 +58,15 @@ trackvisitsFromTrack <- function(currenttrack, tmin = 345600, timeinterval = 30*
   visits <- visits[order(visits$start),]
 
   # extract the respective start and end times
-  visits$starttime <- currenttrack$time[visits$start]
-  visits$endtime <- currenttrack$time[visits$end]
+  visits$starttime <- as.POSIXct(currenttrack@time)[visits$start]
+  visits$endtime <- as.POSIXct(currenttrack@time)[visits$end]
 
   # extract the respective median coordinates
   visits$longitude <- sapply(seq_len(nrow(visits)), function(x){
-    median(currenttrack$longitude[visits$start[x]:visits$end[x]])
+    median(xcoords[visits$start[x]:visits$end[x], 1])
   })
   visits$latitude <- sapply(seq_len(nrow(visits)), function(x){
-    median(currenttrack$latitude[visits$start[x]:visits$end[x]])
+    median(xcoords[visits$start[x]:visits$end[x], 2])
   })
   visits$altitude <- sapply(seq_len(nrow(visits)), function(x){
     median(currenttrack$altitude[visits$start[x]:visits$end[x]])
@@ -150,8 +149,8 @@ trackvisitsFromTrack <- function(currenttrack, tmin = 345600, timeinterval = 30*
   )
 
   # set attributes
-  attr(currenttrackvisits, "coords") <- data.frame(longitude = currenttrack$longitude,
-                                                   latitude = currenttrack$latitude,
+  attr(currenttrackvisits, "coords") <- data.frame(longitude = xcoords[,1],
+                                                   latitude = xcoords[,2],
                                                    altitude = currenttrack$altitude)
   # return currenttrackvisits
   return(currenttrackvisits)

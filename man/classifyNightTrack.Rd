@@ -7,9 +7,7 @@
 classifyNightTrack(currenttrack, night)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.
-\code{currenttracks} must have a variable \code{time} indicating
-the time of all data values.}
+\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
 
 \item{night}{An integer vector with two elements:
 \enumerate{

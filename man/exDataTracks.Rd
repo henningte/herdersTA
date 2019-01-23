@@ -2,7 +2,7 @@
 % Please edit documentation in R/exDataTracks.R
 \name{exDataTracks}
 \alias{exDataTracks}
-\title{Extracts data from a \code{\link[trajectories:Track-class]{Tracks}} object.}
+\title{Extracts data from a Tracks object.}
 \usage{
 exDataTracks(currenttracks)
 }
@@ -11,13 +11,13 @@ exDataTracks(currenttracks)
 }
 \value{
 A \code{data.frame} objects representing the merged slots
-\code{data} and \code{time} of the \code{\link[trajectories:Track-class]{Track}}
+\code{data} of the \code{\link[trajectories:Track-class]{Track}}
 objects of the specified \code{\link[trajectories:Track-class]{Tracks}}
 object.
 }
 \description{
-\code{exDataTracks} extracts data in the \code{data} slot and
-\code{time} slot of all \code{\link[trajectories:Track-class]{Track}} objects
+\code{exDataTracks} extracts data in the \code{data} slot of all
+\code{\link[trajectories:Track-class]{Track}} objects
 of specified \code{\link[trajectories:Track-class]{Tracks}} object and merges
 the values into a \code{data.frame} for each
 \code{\link[trajectories:Track-class]{Track}} object

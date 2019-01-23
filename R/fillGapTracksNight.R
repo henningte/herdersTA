@@ -2,7 +2,7 @@
 #' @import trajectories
 #' @import spacetime
 #' @import doParallel
-#' @import raster
+#' @import foreach
 NULL
 
 #' Imputes gaps in a \code{\link[trajectories]{Tracks}} object.
@@ -39,8 +39,6 @@ NULL
 #' allowed distance between the spatial position of the last data
 #' value before a gap and the spatial position of the first data
 #' value after a gap that is filled [m].
-#' @param timeinterval A numerical value reperesenting the duration
-#' of a time interval represented by one data value of \code{track} [s].
 #' @param night An integer vector with two elements:
 #' \enumerate{
 #'   \item The first element specifies the start hour of the night, e.g. \code{0}
@@ -54,15 +52,12 @@ NULL
 #' \code{\link[parallel]{clusterCall}}.
 #' @return The input \code{\link[trajectories]{Tracks}} object with filled
 #' gaps.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
-#' \code{\link{redefineIndices}},
-#' \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
+#' @seealso \code{\link{reorganizeTracks}}.
 #' @examples #
 #' @export
 fillGapTracksNight <- function(currenttracks,
                           maxduration,
                           maxdistance,
-                          timeinterval,
                           night = c(16, 20),
                           cores = 1,
                           clcall = NULL){
@@ -73,28 +68,16 @@ fillGapTracksNight <- function(currenttracks,
   if(is.null(clcall) == F){
     clusterCall(cl, clcall)
   }
-  clusterCall(cl, function(){library("spacetime")})
-  clusterCall(cl, function(){library("trajectories")})
-  clusterCall(cl, function(){library("raster")})
-  clusterExport(cl = cl, varlist = list("currenttracks", "maxduration", "maxdistance", "timeinterval", "night", "identifyBlocksVariable", "fillGapTrack"), envir=environment())
 
-  newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
+  # fill gaps
+  newcurrenttracks <- Tracks(foreach::foreach(x = currenttracks@tracks, .packages = c("trajectories", "sp", "lubridate"))%dopar%{
 
     newtracks1 <- fillGapTrackNight(currenttrack = x,
-                               maxduration = maxduration,
-                               maxdistance = maxdistance,
-                               timeinterval = timeinterval,
-                               night = night)
-
-    # set crs
-    crs(newtracks1@sp) <- proj4string(currenttracks)
-
-    return(newtracks1)
+                                    maxduration = maxduration,
+                                    maxdistance = maxdistance,
+                                    night = night)
 
   })
-
-  # convert to Tracks object
-  newcurrenttracks <- Tracks(newcurrenttracks)
 
   # stop cluster
   stopCluster(cl)

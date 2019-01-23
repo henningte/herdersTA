@@ -25,15 +25,10 @@ mergeTracks <- function(currenttracks){
   # extract spatial data
   trsSP <- as(as(currenttracks, "SpatialLines"), "SpatialPoints")
 
-  if(length(as.POSIXct(df$time)) == 2){
-    time1 <- as.POSIXct(df$time)
-    time2 <- as.POSIXct(df$time)
-  }else{
-    time1 <- as.POSIXct(df$time)[-length(df$time)]
-    time2 <- as.POSIXct(df$time)[-1]
-  }
+  # extract time information
+  time <- do.call("c", lapply(currenttracks@tracks, function(x) as.POSIXct(x@time)))
 
   # create and return the Track object
-  Track(STIDF(sp = trsSP, time = time1 , data = df, endTime = time2))
+  Track(STIDF(sp = trsSP, time = time , data = df, endTime = time))
 
 }

@@ -1,6 +1,6 @@
 #' @importFrom Rdpack reprompt
 #' @import trajectories
-#' @import raster
+#' @importFrom sp spDists SpatialPoints
 NULL
 
 #' Imputes gaps in a \code{\link[trajectories]{Track-class}} object.
@@ -13,7 +13,7 @@ NULL
 #' value after the gap is \eqn{\le} a user specified distance threshold.
 #' In contrast to \code{\link{fillGapTrack}}, \code{fillGapTrackNight}
 #' considers only values in a specified time interval of the day (e.g.
-#' during night).
+#' during night) as nearest points prior/after a gap.
 #'
 #' It has to be paid
 #' attention to the fact that \code{maxduration} should be adapted to
@@ -37,9 +37,6 @@ NULL
 #' allowed distance between the spatial position of the last data
 #' value before a gap and the spatial position of the first data
 #' value after a gap that is filled [m].
-#' @param timeinterval A numerical value reperesenting the duration
-#' of a time interval represented by one data value of
-#' \code{currenttrack} [s].
 #' @param night An integer vector with two elements:
 #' \enumerate{
 #'   \item The first element specifies the start hour of the night, e.g. \code{0}
@@ -47,134 +44,82 @@ NULL
 #'   \item The first element specifies the start hour of the night, e.g. \code{4}
 #'   for 4 o'clock.
 #' }
-#' @return The input \code{\link[trajectories:Track-class]{Track}} object with filled
-#' gaps.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
-#' \code{\link{redefineIndices}},
-#' \code{\link{fillGapTracksNight}}, \code{\link{fillGapTrack}}.
+#' @return The input \code{\link[trajectories:Track-class]{Track}} object with
+#' the variable \code{gap} set to \code{FALSE} for filled gap values. Additionally,
+#' the output has a new variable \code{filled} indicating if a gap was filled
+#' (\code{filled = TRUE}) or not (\code{filled = FALSE})
+#' @seealso \code{\link{reorganizeTracks}}).
 #' @examples #
 #' @export
-fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, timeinterval, night = c(16, 20)){
-
-  # get the input CRS of the track
-  inputcrs <- proj4string(currenttrack)
+fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, night = c(16, 20)){
 
   # classify data values as night or day values
   currentnighttrack <- classifyNightTrack(currenttrack, night = c(16, 20))
 
-  # get the row indices of night values in currentnighttrack
-  currentnighttrackindex <- which(attr(currentnighttrack, "night") == TRUE)
+  # get the row indices of night values in currentnighttrack that are no gaps
+  currentnighttrackindex <- which(attr(currentnighttrack, "night") == TRUE & currentnighttrack@data$gap == FALSE)
 
-  # delete all day values in currentnighttrack@data
-  currentnighttrackdata <- currentnighttrack@data
-  currentnighttrackdata <- currentnighttrackdata[currentnighttrackindex,]
+  # extract blocks of gap values
+  gaps <- identifyBlocksVariable(currenttrack = currenttrack@data, variable = "gap", value = TRUE)
 
-  # identify blocks of representing gaps
-  blocksgaps1 <- identifyBlocksVariable(currentnighttrackdata, variable = "gap", value = TRUE)
+  # discard leading and ending gaps (cannot be filled)
+  gaps <- gaps[gaps$start != 1 & gaps$end != nrow(currenttrack@data),]
 
-  # convert the block indices to respective indices of all values
-  blocksgaps1 <- apply(blocksgaps1, 2, function(x) currentnighttrackindex[x])
+  # discard all gaps with gaps$start < min(currentnighttrackindex) or gaps$end > max(currentnighttrackindex) (cannote be filled based on the night values)
+  gaps <- gaps[!(gaps$start < currentnighttrackindex[1] | gaps$end > currentnighttrackindex[length(currentnighttrackindex)]), ]
 
-  # convert to a matrix if returned as vector
-  if(length(blocksgaps1) == 2){
-    blocksgaps1 <- matrix(blocksgaps1, ncol = 2, byrow = TRUE)
-  }
+  if(nrow(gaps) > 0){
 
-  # test if blocksgaps1 == NULL
-  if(is.null(blocksgaps1)){
-    currenttrack@data$filled = FALSE
-    return(currenttrack)
-  }
+    # get for each gap the nearest night value before and after the gap
+    nearestvaluebeforegap <- sapply(gaps$start, function(x){
 
-  # remove the first and the last gap (cannot be filled)
-  if(1 %in% blocksgaps1[,1]){
-    blocksgaps1 <- blocksgaps1[-which(blocksgaps1[,1] == 1),]
-  }
-  if(nrow(currenttrack@data) %in% blocksgaps1[,2]){
-    blocksgaps1 <- blocksgaps1[-which(blocksgaps1[,2] == nrow(currenttrack@data)),]
-  }
+      # get all currentnighttrackindex < x
+      currentnighttrackindex_before <- currentnighttrackindex[currentnighttrackindex < x]
 
-  # get duration of gaps
-  discardgaps <-
-    apply(blocksgaps1, 1, function(x){
-      if(length(x[1]:x[2])*timeinterval > maxduration){
-        0
-      }else{
-        1
-      }
-    })
-
-  # discard gaps > maxduration
-  if(length(which(discardgaps == 0)) > 0){
-    blocksgaps1 <- blocksgaps1[which(discardgaps == 1),]
-    if(length(blocksgaps1) == 2){
-      blocksgaps1 <- matrix(blocksgaps1, ncol = 2, byrow = TRUE)
-    }
-    if(length(blocksgaps1) == 0){
-      blocksgaps1 <- NULL
-    }
-  }
-
-  # test if blocksgaps1 == NULL
-  if(is.null(blocksgaps1)){
-    currenttrack@data$filled = FALSE
-    return(currenttrack)
-  }
-
-  # get distance between points adjacent to each gap block
-  discardgaps <-
-    apply(blocksgaps1, 1, function(x){
-
-      block.dist <- pointDistance(c(currenttrack@data$lon[x[1]-1], currenttrack@data$lat[x[1]-1]), c(currenttrack@data$lon[x[2]+1], currenttrack@data$lat[x[2]+1]), lonlat = TRUE)
-      if(is.na(block.dist)){
-        0
-      } else{
-        if(block.dist > maxdistance){
-          0
-        }else{
-          1
-        }
-      }
+      # get the nearest index
+      currentnighttrackindex_before[which.min(abs(currentnighttrackindex_before - x))]
 
     })
+    nearestvalueaftergap <- sapply(gaps$end, function(x){
 
-  # discard gaps with differing locations between points adjacent to each gap block
-  if(length(which(discardgaps == 0)) > 0){
-    blocksgaps1 <- blocksgaps1[which(discardgaps == 1),]
-    if(length(blocksgaps1) == 2){
-      blocksgaps1 <- matrix(blocksgaps1, ncol = 2, byrow = TRUE)
-    }
-    if(length(blocksgaps1) == 0){
-      blocksgaps1 <- NULL
-    }
+      # get all currentnighttrackindex > x
+      currentnighttrackindex_after <- currentnighttrackindex[currentnighttrackindex > x]
+
+      # get the nearest index
+      currentnighttrackindex_after[which.min(abs(currentnighttrackindex_after - x))]
+
+    })
+    gaps$nearestvaluebeforegap <- nearestvaluebeforegap
+    gaps$nearestvalueaftergap <- nearestvalueaftergap
+
+    # extract the SpatialPoints for all values prior and after gaps
+    beforegaps <- currenttrack@sp[gaps$nearestvaluebeforegap,]
+    aftergaps <- currenttrack@sp[gaps$nearestvalueaftergap,]
+
+    # compute the distance between points before and after gaps
+    gaps$gapdistance <- sp::spDists(x = beforegaps, y = aftergaps, longlat = FALSE, diagonal = TRUE)
+
+    # extract the time for all values prior and after gaps
+    gaptime <- data.frame(before = as.POSIXct(currenttrack@time[gaps$start-1,]), after = as.POSIXct(currenttrack@time[gaps$end+1,]))
+
+    # compute the time difference (duration of the gap)
+    gaps$gapduration <- difftime(time1 = gaptime$after, time2 = gaptime$before, units = "secs")
+
+    # check which gaps to fill
+    gaps$tofill <- ifelse(gaps$gapduration <= maxduration & gaps$gapdistance <= maxdistance, TRUE, FALSE)
+
+    # get indices of gaps to fill in the original data set
+    gapstofill <- unlist(apply(gaps[gaps$tofill,], 1, function(x) x[1]:x[2]))
+
+  }else{
+    gapstofill <- logical()
   }
 
-  # test if blocksgaps1 == NULL
-  if(is.null(blocksgaps1)){
-    currenttrack@data$filled = FALSE
-    return(currenttrack)
-  }
+  # define a new variable filled
+  currenttrack@data$filled <- FALSE
+  currenttrack@data$filled[gapstofill] <- TRUE
 
-  # fill gaps
-  currenttrack1 <- currenttrack
-  currenttrack@data[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]}))),] <-
-    do.call(rbind, apply(blocksgaps1, 1, function(x){
-      do.call(rbind, replicate(length(x[1]:x[2]), currenttrack@data[x[1]-1,], simplify = FALSE))
-    }))
-  currenttrack@data$time[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]})))] <-
-    currenttrack1@data$time[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]})))]
-
-  # create a variable to classify filled gaps
-  currenttrack@data$filled <- rep(FALSE, nrow(currenttrack@data))
-  currenttrack@data$filled[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]})))] <- TRUE
-
-  # recreate currenttrack as Track object
-  currenttrack <- Track(STIDF(sp = SpatialPoints(cbind(currenttrack@data$lon, currenttrack@data$lat)), time = as.POSIXct(currenttrack@data$time) , data = currenttrack@data, endTime = as.POSIXct(currenttrack@data$time)))
-
-  # set crs
-  crs(currenttrack@sp) <- inputcrs
-
-  # return result
+  # return currenttrack
   return(currenttrack)
 
 }

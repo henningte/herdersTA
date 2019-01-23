@@ -1,5 +1,6 @@
 #' @importFrom Rdpack reprompt
 #' @import trajectories
+#' @import lubridate
 NULL
 
 #' Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.
@@ -10,8 +11,6 @@ NULL
 #' boundaries are specified by the user.
 #'
 #' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
-#' \code{currenttracks} must have a variable \code{time} indicating
-#' the time of all data values.
 #' @param night An integer vector with two elements:
 #' \enumerate{
 #'   \item The first element specifies the start hour of the night, e.g. \code{0}
@@ -39,7 +38,7 @@ classifyNightTrack <- function(currenttrack, night){
   }
 
   # extract the time information (hours) of the first Track object in currenttrack
-  time <- as.numeric(strftime(currenttrack$time, "%H"))
+  time <- as.numeric(strftime(as.POSIXct(currenttrack@time), "%H"))
 
   # classify the values of time as night (TRUE) or day (FALSE) and add the result as attribute night to currenttrack
   attributes(currenttrack)$night <- ifelse(time >= night[1] & time <= night[2], TRUE, FALSE)

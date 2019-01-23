@@ -5,10 +5,9 @@
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
 locationsTrack(currenttrack, radius = 200, tmin = 345600,
-  tmaxinterstices = 345600, timeinterval = 30 * 60, night = c(16, 20),
+  tmaxinterstices = 345600, night = c(16, 20),
   tmaxintersticenotvalid = data.frame(start =
   as.POSIXct("2016-01-01 00:00:00"), end = as.POSIXct("2016-05-01 00:00:00")),
-  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
   summary = TRUE)
 }
 \arguments{
@@ -28,10 +27,6 @@ contrast to short-term visits of locations. The default is
 at the same location in case of which the duration of these visits
 will be added in order to classify both visits together as long-term
 visit (campsite) or short-term visit, based on \code{tmin}.}
-
-\item{timeinterval}{A numerical value reperesenting the duration
-of a time interval represented by one data value of
-\code{currenttrack} [s].}
 
 \item{night}{An integer vector with two elements:
 \enumerate{
@@ -54,9 +49,6 @@ in-between. Each row indicates a time period in which this should be valid.
 It is evaluated for each visit if its endtime (\code{trackvisits$endtime})
 is within any of the time periods or the starttime (\code{trackvisits$starttime})
 of the next visit at the same location.}
-
-\item{crs}{A character string describing a projection and datum
-in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
 
 \item{summary}{Logical value indicating if the information on the
 locations and visits should be summarised (\code{summary = TRUE})
