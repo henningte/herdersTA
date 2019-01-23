@@ -12,12 +12,23 @@ NULL
 #'
 #' @param currenttrackvisits An object of class \code{\link{trackvisits}} for
 #' which groups have been defined.
+#' @param tmin The minimum residence time at a specific location [s]
+#' which is used to classify visits as campsites (if the residence
+#' time at a specific location is larger than \code{tmin}) in
+#' contrast to short-term visits of locations. The default is
+#' \code{tmin = 345600}, i.e. 4 days.
+#' @param timeinterval The number of seconds one data value (row) in
+#' \code{currenttrack} covers.
+#' @param keepgroup A logical value indicating if the input group values should
+#' be retained for each group (\code{keepgroup = TRUE}) or group should be reset
+#' to \code{NA} (\code{keepgroup = FALSE}).
 #' @return An object of class \code{\link{trackvisits}} in which all
 #' visits belonging to the same group are merged into one visit. The variables
 #' of \code{currenttrackvisits} are changed as:
 #' \describe{
 #'   \item{\code{location}}{not changed (location of the first visit of the group).}
-#'   \item{\code{group}}{reset to \code{NA}.}
+#'   \item{\code{group}}{if \code{keepgroup = TRUE}, the respective input group value,
+#'   if \code{keepgroup = FALSE} reset to \code{NA}.}
 #'   \item{\code{start}}{value of \code{start} of the first visit of the group.}
 #'   \item{\code{end}}{value of \code{end} of the last visit of the group.}
 #'   \item{\code{starttime}}{value of \code{starttime} of the first visit of the group.}
@@ -34,7 +45,7 @@ NULL
 #' @seealso \code{\link{trackvisits}}.
 #' @examples #
 #' @export
-trackvisitsMergeGroups <- function(currenttrackvisits, tmin, timeinterval = 30*60){
+trackvisitsMergeGroups <- function(currenttrackvisits, tmin, timeinterval = 30*60, keepgroup = FALSE){
 
   # checks
   if(!(inherits(currenttrackvisits, "trackvisits"))){
@@ -43,13 +54,23 @@ trackvisitsMergeGroups <- function(currenttrackvisits, tmin, timeinterval = 30*6
   if(!(all(!is.na(currenttrackvisits$group)))){
     stop("group must not contain NA values\n")
   }
+  if(!(is.logical(keepgroup) || length(keepgroup) != 1)){
+    stop("keepgroup must be a numeric value\n")
+  }
 
   # merge visits
   visits <-
     do.call(rbind, tapply(seq_len(nrow(currenttrackvisits)), currenttrackvisits$group, function(x){
 
+      # define group
+      if(keepgroup){
+        group <- currenttrackvisits$group[x[1]]
+      }else{
+        group <- NA
+      }
+
       trackvisits(location = currenttrackvisits$location[x[1]],
-                  group = NA,
+                  group = group,
                   start = currenttrackvisits$start[x[1]],
                   end = currenttrackvisits$end[x[length(x)]],
                   starttime = currenttrackvisits$starttime[x[1]],
@@ -123,66 +144,5 @@ trackvisitsMergeGroups <- function(currenttrackvisits, tmin, timeinterval = 30*6
 
   # return visits
   return(visits)
-
-}
-
-
-#################################################
-
-
-#' @importFrom Rdpack reprompt
-NULL
-
-#' Get the Number of Repeated Campsite Visits.
-#'
-#' \code{trackvisitsSetNorepeatedcampsitevisits} sets the number of repeated campsite visits
-#' for each location of an object of class \code{\link{trackvisits}}. A visit is a repeated
-#' campsite visit if (1) it is a campsite visit and (2) the previous visit is at a different
-#' location.
-#'
-#' @param currenttrackvisits An object of class \code{\link{trackvisits}} for
-#' which the variables \code{campsite} and \code{nextvisitsamelocation} are
-#' defined.
-#' @return An object of class \code{\link{trackvisits}} in which the number of
-#' repeated campsite visits at the same location is set.
-#'
-#' @seealso \code{\link{trackvisits}}.
-#' @examples #
-#' @export
-trackvisitsSetNorepeatedcampsitevisits <- function(currenttrackvisits){
-
-  # checks
-  if(!(inherits(currenttrackvisits, "trackvisits"))){
-    stop("currenttrackvisits must be of class trackvisits\n")
-  }
-
-  # get for each visit the number of repeated campsite currenttrackvisits
-  currenttrackvisits$norepeatedcampsitevisits <- NA
-  repeatedcampsitevisits <- tapply(seq_len(nrow(currenttrackvisits)), currenttrackvisits$location, function(x){
-    counter <- 1
-    currentrepeatedvisits <- rep(NA, length(x))
-    for(y in seq_along(x)){
-      if(y == 1){
-        if(currenttrackvisits$campsite[x[y]]){
-          currentrepeatedvisits[y] <- counter
-        }else{
-          counter <- 0
-        }
-      }else{
-        if(!currenttrackvisits$nextvisitsamelocation[x[y]-1] && currenttrackvisits$campsite[x[y]]){
-          counter <- counter + 1
-          currentrepeatedvisits[y] <- counter
-        }
-      }
-
-    }
-    currentrepeatedvisits
-  }, simplify = FALSE)
-  lapply(seq_along(repeatedcampsitevisits), function(x){
-    currenttrackvisits$norepeatedcampsitevisits[currenttrackvisits$location == names(repeatedcampsitevisits)[x]] <<- repeatedcampsitevisits[[x]]
-  })
-
-  # return currenttrackvisits
-  return(currenttrackvisits)
 
 }
