@@ -1,6 +1,8 @@
 #' @importFrom Rdpack reprompt
-#' @import trajectories Track
+#' @importFrom trajectories Track
 #' @importFrom sp coordinates
+#' @importFrom data.table rbindlist
+#' @importFrom dplyr left_join
 NULL
 
 #' Equalise Track Coordinates to Locations
@@ -9,11 +11,16 @@ NULL
 #' coordinates (longitude, latitude) for each location of a track
 #' (object of class \code{\link[trajectories:Track-class]{Track}})
 #' and assigns these coordinates to matching data values in the track.
+#' During this procedure, filled values are not considered in order to
+#' not influence the median coordinates by the gap filling procedure.
+#' However, filled values are considered if there are only filled values
+#' for a location. This may be the case if non-gap values are only
+#' present during day and at the borders of a visit.
 #'
 #' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object
-#' with a variable \code{location} in the data slot. \code{location} must be
-#' numeric with an integer value for each unique location. Gaps must have the
-#' location \code{0}.
+#' with a variable \code{location} and a variable \code{filled} in the data slot.
+#' \code{location} must be numeric with an integer value for each unique location.
+#' Gaps must have the location \code{0}.
 #' @return \code{currenttrack} with the same longitude and latitude values for
 #' each location and the corresponding data values.
 #' @seealso \code{\link{locationsTrack}}.
@@ -36,17 +43,20 @@ equaliseLocationsCoordinatesTrack <- function(currenttrack){
   xcoords <- sp::coordinates(currenttrack@sp)
 
   # compute median coordinates for each location
-  xcoordsperlocation <- tapply(seq_len(nrow(xcoords)), currenttrack$location, function(x){
-    apply(xcoords[x,], 2, function(y) median(y, na.rm = TRUE))
-  })
+  xcoordsperlocation <- data.table::rbindlist(tapply(seq_len(nrow(xcoords)), currenttrack$location, function(x){
+    if(all(currenttrack$filled[x])){
+      notfilled <- currenttrack$filled[x]
+    }else{
+      notfilled <- !currenttrack$filled[x]
+    }
+    mediancoords <- apply(xcoords[x[notfilled], , drop = FALSE], 2, function(y) median(y, na.rm = TRUE))
+    data.frame(location = currenttrack$location[x[1]], longitude = mediancoords[1], latitude = mediancoords[2])
+  }, simplify = FALSE))
 
   # merge the values
-  xlocations <- merge(y = xlocations, x = xcoords, by = "location", all.x = TRUE, sort = FALSE)
+  xlocations <- dplyr::left_join(x = xlocations, y = xcoordsperlocation, by = "location")
 
   # add the new coordinates to currenttrack
-  sp::coordinates(currenttrack@sp) <- xlocations[,2:3]
-
-  # return currenttrack
-  return(currenttrack)
+  Track(spacetime::STIDF(sp = SpatialPoints(coords = xlocations[,2:3], proj4string = CRS(proj4string(currenttrack))), time = currenttrack@time, data = currenttrack@data, endTime = currenttrack@time))
 
 }
