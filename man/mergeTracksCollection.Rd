@@ -17,11 +17,12 @@ use in parallel computing.}
 \code{\link[trajectories:Track-class]{TracksCollection}} object.}
 }
 \value{
-A \code{\link[trajectories:Track-class]{Tracks}} object with
-a \code{\link[trajectories:Track-class]{Track}} object for each former
+A \code{\link[trajectories:Track-class]{TracksCollection}} object with
+a \code{\link[trajectories:Track-class]{Tracks}} object for each former
 \code{\link[trajectories:Track-class]{Tracks}} object containing
 the merged  \code{\link[trajectories:Track-class]{Track}} objects of the
-input  \code{\link[trajectories:Track-class]{Tracks}} object.
+input  \code{\link[trajectories:Track-class]{Tracks}} object as one
+\code{\link[trajectories:Track-class]{Track}} object.
 }
 \description{
 \code{mergeTracksCollection} merges the \code{\link[trajectories:Track-class]{Track}}

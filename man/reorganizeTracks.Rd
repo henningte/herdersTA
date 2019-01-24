@@ -8,7 +8,9 @@ reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT",
   crs = "+proj=longlat +ellps=WGS84", cores = 1, clcall = NULL)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{TracksCollection}} object
+with only one \code{\link[trajectories:Track-class]{Track}} object per
+\code{\link[trajectories:Track-class]{Tracks}} object.}
 
 \item{cores}{An integer value representing the number of cores to
 use in parallel computing.}
@@ -22,9 +24,11 @@ the reorganised \code{\link[trajectories:Track-class]{Track}} objects of the
 input A \code{\link[trajectories:Track-class]{Tracks}} object.
 }
 \description{
-\code{reorganizeTracks} reorganises a \code{\link[trajectories:Track-class]{Tracks}}
-object with several \code{\link[trajectories:Track-class]{Track}} objects
-covering roughly the same time period by assigning data points to
+\code{reorganizeTracks} reorganises a \code{\link[trajectories:Track-class]{TracksCollection}}
+object with each \code{\link[trajectories:Track-class]{Tracks}} object containing one
+\code{\link[trajectories:Track-class]{Track}} object. The
+\code{\link[trajectories:Track-class]{Track}} objects
+covering roughly the same time period are reorganised by assigning data points to
 the same overall time vector with half-hourly spaced data and including gaps as
 new data points within each \code{\link[trajectories:Track-class]{Track}} object.
 Gaps are filled with dummy values from the next value prior the gap or if there is
@@ -32,7 +36,7 @@ an ending gap, with the next value prior the ending gap.
 }
 \details{
 If there are more than one data point per interval and
-\code{\link[trajectories]{Track-class}} object, only the first data
+\code{\link[trajectories:Track-class]{Track}} object, only the first data
 point within this interval is retained.
 }
 \examples{

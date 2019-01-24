@@ -1,10 +1,6 @@
 #' @importFrom Rdpack reprompt
-#' @import spacetime
 #' @import lubridate
 #' @import trajectories
-#' @import rgdal
-#' @import sp
-#' @import rgeos
 #' @import doParallel
 NULL
 
@@ -36,9 +32,19 @@ NULL
 #' at the same location in case of which the duration of these visits
 #' will be added in order to classify both visits together as long-term
 #' visit (campsite) or short-term visit, based on \code{tmin}.
-#' @param timeinterval A numerical value reperesenting the duration
-#' of a time interval represented by one data value of
-#' \code{currenttrack} [s].
+#' @param tmaxintersticenotvalid A \code{data.frame} object that defines
+#' time periods in which the argument \code{tmaxinterstice} will be ignored,
+#' i.e. visits at the same location are merged irrespective of the duration
+#' between these visits if there is no campsite visit at a different location
+#' in-between. Each row indicates a time period in which this should be valid.
+#' \code{tmaxintersticenotvalid} must contain two columns:
+#' \describe{
+#'   \item{\code{start}}{Represents the start time of the time interval.}
+#'   \item{\code{end}}{Represents the end time of the time interval.}
+#' }
+#' It is evaluated for each visit if its endtime (\code{trackvisits$endtime})
+#' is within any of the time periods or the starttime (\code{trackvisits$starttime})
+#' of the next visit at the same location.
 #' @param summary Logical value indicating if the information on the
 #' locations and visits should be summarised (\code{summary = TRUE})
 #' or not (\code{summary = FALSE}). See the details section for further
@@ -122,8 +128,7 @@ locationsTracks <- function(currenttracks,
                             radius = 200,
                             tmin = 345600,
                             tmaxinterstices = 345600,
-                            timeinterval = 30*60,
-                            crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0",
+                            tmaxintersticenotvalid = data.frame(start = as.POSIXct("2016-01-01 00:00:00"), end = as.POSIXct("2016-05-01 00:00:00")),
                             summary = TRUE,
                             night = c(16, 20),
                             cores = 1,
@@ -135,45 +140,42 @@ locationsTracks <- function(currenttracks,
   if(is.null(clcall) == F){
     clusterCall(cl, clcall)
   }
-  clusterCall(cl, function(){library("spacetime")})
-  clusterCall(cl, function(){library("trajectories")})
-  clusterCall(cl, function(){library("raster")})
-  clusterCall(cl, function(){library("dbscan")})
-  clusterCall(cl, function(){library("sp")})
   clusterExport(cl = cl, varlist = list("currenttracks", "tmin",
-                                        "tmaxinterstices", "timeinterval",
+                                        "tmaxinterstices",
                                         "identifyBlocksVariable",
                                         "extractClustersBuffer", "redefineIndices",
-                                        "countAllReapeatedVisits",
-                                        "aggregateRepeatedVisits", "classifyVisits",
-                                        "countAllReapeatedLongTermVisits",
-                                        "locationsTrack", "crs",
-                                        "TrackToSpatialPointsDataFrame",
+                                        "tmaxintersticenotvalid", "trackvisits",
+                                        "trackvisitsGetGroups", "trackvisitsMergeGroups",
+                                        "trackvisitsFromTrack",
+                                        "locationsTrack",
                                         "classifyNightTrack", "night"), envir=environment())
 
   # extract the names of currenttracks@tracks
-  currenttracksnames <- names(currenttracks@tracks)
+  currenttracksnames <- names(currenttracks@tracksCollection)
 
   # apply locationsTrack to each Track object
-  currenttracks <- foreach(track_i = seq_len(length(currenttracks@tracks)), .multicombine = TRUE)%dopar%{
+  currenttracks <- foreach(track_i = seq_len(length(currenttracks@tracksCollection)), .packages = c("dbscan", "trajectories", "sp", "spacetime"))%dopar%{
 
-    locationsTrack(currenttrack = currenttracks@tracks[[track_i]],
+    locationsTrack(currenttrack = currenttracks@tracksCollection[[track_i]]@tracks[[1]],
                    radius = radius,
                    tmin = tmin,
                    tmaxinterstices = tmaxinterstices,
-                   timeinterval = timeinterval,
-                   crs = crs,
+                   tmaxintersticenotvalid = tmaxintersticenotvalid,
                    summary = summary,
                    night = night)
 
   }
 
+  # get not null elements
+  notnull <- which(!sapply(currenttracks, function(x) is.null(x)))
+
   # convert currenttracks to a Tracks object if summary == FALSE
-  if(summary == FALSE){
-    currenttracks <- Tracks(currenttracks)
-    names(currenttracks@tracks) <- currenttracksnames
+  if(!summary){
+    currenttracks <- TracksCollection(lapply(currenttracks[notnull], function(x) Tracks(list(x))))
+    names(currenttracks@tracksCollection) <- currenttracksnames[notnull]
   }else{
-    names(currenttracks) <- currenttracksnames
+    currenttracks <- currenttracks[notnull]
+    names(currenttracks) <- currenttracksnames[notnull]
   }
 
   stopCluster(cl)

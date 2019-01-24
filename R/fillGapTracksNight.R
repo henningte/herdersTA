@@ -8,8 +8,9 @@ NULL
 #' Imputes gaps in a \code{\link[trajectories]{Tracks}} object.
 #'
 #' \code{fillGapTracksNight} imputes missing values in all
-#' \code{\link[trajectories:Track-class]{Track}} objects of a
-#' \code{\link[trajectories:Track-class]{Tracks}} object. Gaps are filled
+#' \code{\link[trajectories:Track-class]{Track}} objects of the
+#' \code{\link[trajectories:Track-class]{Tracks}} objects of a
+#' \code{\link[trajectories:Track-class]{TracksCollection}}. Gaps are filled
 #' if their duration is \eqn{\le} a user specified duration threshold
 #' and if the distance between the spatial position of the last data
 #' value before the gap and the spatial position of the first data
@@ -28,8 +29,9 @@ NULL
 #' \code{4*24*60*60 + (24 - nightduration)*60*60}, whereby \code{nightduration}
 #' is the duration of the time interval specified as night in hours.
 #'
-#' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object with
-#' \code{\link[trajectories:Track-class]{Track}} objects with a
+#' @param currenttracks A \code{\link[trajectories:Track-class]{TracksCollection}} object with
+#' \code{\link[trajectories:Track-class]{Tracks}} objects with each haveing only one
+#' \code{\link[trajectories:Track-class]{Track}} object with a
 #' boolean column \code{gap} in \code{track@data}. Data values
 #' have to be regularly spaced (may be achieved for example with
 #' \code{\link{reorganizeTracks}}).
@@ -56,14 +58,14 @@ NULL
 #' @examples #
 #' @export
 fillGapTracksNight <- function(currenttracks,
-                          maxduration,
-                          maxdistance,
-                          night = c(16, 20),
-                          cores = 1,
-                          clcall = NULL){
+                               maxduration,
+                               maxdistance,
+                               night = c(16, 20),
+                               cores = 1,
+                               clcall = NULL){
 
   # extract the names
-  currenttracksnames <- names(currenttracks@tracks)
+  currenttracksnames <- names(currenttracks@tracksCollection)
 
   # set up cluster
   cl <- makeCluster(cores, outfile="", type = "PSOCK")
@@ -73,17 +75,17 @@ fillGapTracksNight <- function(currenttracks,
   }
 
   # fill gaps
-  newcurrenttracks <- Tracks(foreach::foreach(x = currenttracks@tracks, .packages = c("trajectories", "sp", "lubridate"))%dopar%{
+  newcurrenttracks <- trajectories::TracksCollection(foreach::foreach(x = currenttracks@tracksCollection, .packages = c("trajectories", "sp", "lubridate"), .export = c("fillGapTrackNight"))%dopar%{
 
-    newtracks1 <- fillGapTrackNight(currenttrack = x,
-                                    maxduration = maxduration,
-                                    maxdistance = maxdistance,
-                                    night = night)
+    newtracks1 <- Tracks(list(fillGapTrackNight(currenttrack = x@tracks[[1]],
+                                                maxduration = maxduration,
+                                                maxdistance = maxdistance,
+                                                night = night)))
 
   })
 
   # restore the names
-  names(newcurrenttracks@tracks) <- currenttracksnames
+  names(newcurrenttracks@tracksCollection) <- currenttracksnames
 
   # stop cluster
   stopCluster(cl)

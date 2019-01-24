@@ -18,11 +18,12 @@ NULL
 #' use in parallel computing.
 #' @param clcall A function that is passed to
 #' \code{\link[parallel]{clusterCall}}.
-#' @return A \code{\link[trajectories:Track-class]{Tracks}} object with
-#' a \code{\link[trajectories:Track-class]{Track}} object for each former
+#' @return A \code{\link[trajectories:Track-class]{TracksCollection}} object with
+#' a \code{\link[trajectories:Track-class]{Tracks}} object for each former
 #' \code{\link[trajectories:Track-class]{Tracks}} object containing
 #' the merged  \code{\link[trajectories:Track-class]{Track}} objects of the
-#' input  \code{\link[trajectories:Track-class]{Tracks}} object.
+#' input  \code{\link[trajectories:Track-class]{Tracks}} object as one
+#' \code{\link[trajectories:Track-class]{Track}} object.
 #' @seealso \code{\link{mergeTracks}}, \code{\link{reorganizeTracks}}.
 #' @examples #
 #' @export
@@ -37,6 +38,7 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
     clusterCall(cl, function(){library("lubridate")})
     clusterCall(cl, function(){library("spacetime")})
     clusterCall(cl, function(){library("data.table")})
+    clusterCall(cl, function(){library("trajectories")})
     clusterExport(cl = cl, varlist = list("exDataTracks", "mergeTracks", "trackscollection"), envir=environment())
 
     # merge the Track objects of each Tracks object
@@ -47,10 +49,10 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
 
 
   # convert newtracks to Tracks object and return the result
-  newtracks <- Tracks(newtracks)
+  newtracks <- TracksCollection(newtracks)
 
   # set the Track names to the original names
-  names(newtracks@tracks) <- names(trackscollection@tracksCollection)
+  names(newtracks@tracksCollection) <- names(trackscollection@tracksCollection)
 
   # return the result
   return(newtracks)

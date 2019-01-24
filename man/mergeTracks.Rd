@@ -10,14 +10,15 @@ mergeTracks(currenttracks)
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 }
 \value{
-A  \code{\link[trajectories:Track-class]{Track}} object containing
+A  \code{\link[trajectories:Track-class]{Tracks}} object containing
 the merged  \code{\link[trajectories:Track-class]{Track}} objects of the
-input  \code{\link[trajectories:Track-class]{Tracks}} object.
+input  \code{\link[trajectories:Track-class]{Tracks}} object as one
+\code{\link[trajectories:Track-class]{Track}} object.
 }
 \description{
 \code{mergeTracks} merges the \code{\link[trajectories:Track-class]{Track}}
 objects of a \code{\link[trajectories:Track-class]{Tracks}} objects into a
-singular \code{\link[trajectories:Track-class]{Track}} object.
+singular \code{\link[trajectories:Track-class]{Tracks}} object.
 }
 \examples{
 #

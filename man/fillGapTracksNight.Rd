@@ -8,8 +8,9 @@ fillGapTracksNight(currenttracks, maxduration, maxdistance, night = c(16, 20),
   cores = 1, clcall = NULL)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
-\code{\link[trajectories:Track-class]{Track}} objects with a
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{TracksCollection}} object with
+\code{\link[trajectories:Track-class]{Tracks}} objects with each haveing only one
+\code{\link[trajectories:Track-class]{Track}} object with a
 boolean column \code{gap} in \code{track@data}. Data values
 have to be regularly spaced (may be achieved for example with
 \code{\link{reorganizeTracks}}).}
@@ -42,8 +43,9 @@ gaps.
 }
 \description{
 \code{fillGapTracksNight} imputes missing values in all
-\code{\link[trajectories:Track-class]{Track}} objects of a
-\code{\link[trajectories:Track-class]{Tracks}} object. Gaps are filled
+\code{\link[trajectories:Track-class]{Track}} objects of the
+\code{\link[trajectories:Track-class]{Tracks}} objects of a
+\code{\link[trajectories:Track-class]{TracksCollection}}. Gaps are filled
 if their duration is \eqn{\le} a user specified duration threshold
 and if the distance between the spatial position of the last data
 value before the gap and the spatial position of the first data
