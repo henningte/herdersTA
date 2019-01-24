@@ -119,6 +119,9 @@ fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, night = c(
   currenttrack@data$filled <- FALSE
   currenttrack@data$filled[gapstofill] <- TRUE
 
+  # set curenttrack$gap to FALSE for filled gaps
+  currenttrack@data$gap[gapstofill] <- FALSE
+
   # return currenttrack
   return(currenttrack)
 
