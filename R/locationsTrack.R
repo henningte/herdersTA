@@ -167,6 +167,7 @@ locationsTrack <- function(currenttrack,
 
     # set all values for currenttrack@data$gap to TRUE for currenttrack@data$location == 0. This has to be done here because locationsTrack redefines gaps because data values are not assigned to any location (i.e. get location = 0) if there are too few points for an own cluster.
     currenttrack$gap[currenttrack$location == 0] <- TRUE
+    currenttrack$filled[currenttrack$location == 0] <- FALSE
 
     # return currenttrack
     return(currenttrack)
