@@ -3,6 +3,7 @@
 #' @importFrom sp coordinates
 #' @importFrom data.table rbindlist
 #' @importFrom dplyr left_join
+#' @importFrom tidyr fill
 NULL
 
 #' Equalise Track Coordinates to Locations
@@ -53,8 +54,15 @@ equaliseLocationsCoordinatesTrack <- function(currenttrack){
     data.frame(location = currenttrack$location[x[1]], longitude = mediancoords[1], latitude = mediancoords[2])
   }, simplify = FALSE))
 
+  # set xcoordsperlocation to NA for location == 0
+  xcoordsperlocation[xcoordsperlocation$location == 0, 2:3] <- NA
+
   # merge the values
   xlocations <- dplyr::left_join(x = xlocations, y = xcoordsperlocation, by = "location")
+
+  # fill in coordinates for gaps
+  xlocations <- tidyr::fill(xlocations, seq_len(ncol(xlocations)), .direction = "up")
+  xlocations <- tidyr::fill(xlocations, seq_len(ncol(xlocations)), .direction = "down")
 
   # add the new coordinates to currenttrack
   Track(spacetime::STIDF(sp = SpatialPoints(coords = xlocations[,2:3], proj4string = CRS(proj4string(currenttrack))), time = currenttrack@time, data = currenttrack@data, endTime = currenttrack@time))
