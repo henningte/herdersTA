@@ -8,9 +8,9 @@ equaliseLocationsCoordinatesTrack(currenttrack)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object
-with a variable \code{location} in the data slot. \code{location} must be
-numeric with an integer value for each unique location. Gaps must have the
-location \code{0}.}
+with a variable \code{location} and a variable \code{filled} in the data slot.
+\code{location} must be numeric with an integer value for each unique location.
+Gaps must have the location \code{0}.}
 }
 \value{
 \code{currenttrack} with the same longitude and latitude values for
@@ -21,6 +21,11 @@ each location and the corresponding data values.
 coordinates (longitude, latitude) for each location of a track
 (object of class \code{\link[trajectories:Track-class]{Track}})
 and assigns these coordinates to matching data values in the track.
+During this procedure, filled values are not considered in order to
+not influence the median coordinates by the gap filling procedure.
+However, filled values are considered if there are only filled values
+for a location. This may be the case if non-gap values are only
+present during day and at the borders of a visit.
 }
 \examples{
 #
