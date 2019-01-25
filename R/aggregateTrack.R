@@ -43,7 +43,7 @@ aggregateTrack <- function(x, by = list(strftime(x@time, format = "%Y-%m-%d"))){
   #### aggregation of existing variables ####
 
   # index of non-gap groups
-  nongapgroupsindex <- which(x$group != 0)
+  nongapgroupsindex <- which(x$location != 0)
 
   # collect any group (visit) related data
   groupdata <- data.table::rbindlist(tapply(seq_len(nrow(x@data))[nongapgroupsindex], x$group[nongapgroupsindex], function(y){
@@ -77,6 +77,9 @@ aggregateTrack <- function(x, by = list(strftime(x@time, format = "%Y-%m-%d"))){
 
   # aggregate other variables
   agg <- plyr::join(x = agg, y = groupdata, by = "group", type = "left")
+
+  # fill NA locations with 0 (gaps)
+  agg$location[is.na(agg$location)] <- 0
 
   # aggregate start and end
   agg$start <- !duplicated(x = agg$group, fromLast = FALSE) & agg$group != 0
@@ -145,13 +148,13 @@ aggregateTrack <- function(x, by = list(strftime(x@time, format = "%Y-%m-%d"))){
   # distancenextvisit_wis_campsite
   agg$distancenextvisit_wis_campsite <- distancenextvisit_wis_campsite(agg = agg)
 
-  # distancenextvisit_wis
+  # altitudinaldistancenextvisit_wis
   agg$altitudinaldistancenextvisit_wis <- altitudinaldistancenextvisit_wis(agg = agg, aggcoords = aggcoords)
 
-  # distancenextvisit_wos
+  # altitudinaldistancenextvisit_wos
   agg$altitudinaldistancenextvisit_wos <- altitudinaldistancenextvisit_wos(agg = agg, aggcoords = aggcoords)
 
-  # distancenextvisit_wis_campsite
+  # altitudinaldistancenextvisit_wis_campsite
   agg$altitudinaldistancenextvisit_wis_campsite <- altitudinaldistancenextvisit_wis_campsite(agg = agg)
 
   #### creation of the Track object ####
@@ -194,7 +197,10 @@ gapdurationnextcampsite_wos <- function(agg){
   noncampsites <- noncampsites[noncampsites$start != 1,]
 
   # discard all blocks with no previous campsite (value cannot be assigned)
-  noncampsites <- noncampsites[sapply(noncampsites$start, function(x) any(campsiteends < x)),]
+  indexnopreviouscampsite <- which(sapply(noncampsites$start, function(x) any(campsiteends < x)) > 0)
+  if(length(indexnopreviouscampsite) > 0){
+    noncampsites <- noncampsites[sapply(noncampsites$start, function(x) any(campsiteends < x)),]
+  }
 
   if(nrow(noncampsites) > 0){
 
@@ -255,7 +261,10 @@ gapdurationnextcampsite_wis <- function(agg){
   gaps <- gaps[gaps$start != 1,]
 
   # discard all blocks with no previous campsite (value cannot be assigned)
-  gaps <- gaps[sapply(gaps$start, function(x) any(campsiteends < x)),]
+  indexnopreviouscampsite <- which(sapply(gaps$start, function(x) any(campsiteends < x)) > 0)
+  if(length(indexnopreviouscampsite) > 0){
+    gaps <- gaps[sapply(gaps$start, function(x) any(campsiteends < x)),]
+  }
 
   if(nrow(gaps) > 0){
 
@@ -379,9 +388,12 @@ distancenextvisit_wos <- function(agg, aggcoords){
   locationblocks <- locationblocks[locationblocks$start != 1,]
 
   # discard all blocks with no previous campsite (value cannot be assigned)
-  locationblocks <- locationblocks[sapply(locationblocks$start, function(x) any(campsiteends < x)),]
+  indexnopreviouscampsite <- which(sapply(locationblocks$start, function(x) any(campsiteends < x)) > 0)
+  if(length(indexnopreviouscampsite) > 0){
+    locationblocks <- locationblocks[sapply(locationblocks$start, function(x) any(campsiteends < x)),]
+  }
 
-  if(nrow(locationblocks) > 0){
+  if(nrow(locationblocks) > 1){
 
     # get for each location block the nearest end of a campsite
     nearestvaluebeforegap <- sapply(locationblocks$start, function(x){
@@ -451,7 +463,7 @@ distancenextvisit_wis_campsite <- function(agg){
   # change the indices so that they display interstices between campsites
   locationblocks <- data.frame(start = locationblocks$end[-nrow(locationblocks)], end = locationblocks$start[-1])
 
-  if(nrow(campsites) > 0){
+  if(nrow(locationblocks) > 0){
 
     # get the distance between campsites along short-term visit locations
     locationblocks$distance <- apply(locationblocks, 1, function(x) sum(agg$distancenextvisit_wis[x[1]:x[2]]))
@@ -554,9 +566,12 @@ altitudinaldistancenextvisit_wos <- function(agg, aggcoords){
   locationblocks <- locationblocks[locationblocks$start != 1,]
 
   # discard all blocks with no previous campsite (value cannot be assigned)
-  locationblocks <- locationblocks[sapply(locationblocks$start, function(x) any(campsiteends < x)),]
+  indexnopreviouscampsite <- which(sapply(locationblocks$start, function(x) any(campsiteends < x)) > 0)
+  if(length(indexnopreviouscampsite) > 0){
+    locationblocks <- locationblocks[sapply(locationblocks$start, function(x) any(campsiteends < x)),]
+  }
 
-  if(nrow(locationblocks) > 0){
+  if(nrow(locationblocks) > 1){
 
     # get for each location block the nearest end of a campsite
     nearestvaluebeforegap <- sapply(locationblocks$start, function(x){
@@ -622,7 +637,7 @@ altitudinaldistancenextvisit_wis_campsite <- function(agg){
   # change the indices so that they display interstices between campsites
   locationblocks <- data.frame(start = locationblocks$end[-nrow(locationblocks)], end = locationblocks$start[-1])
 
-  if(nrow(campsites) > 0){
+  if(nrow(locationblocks) > 0){
 
     # get the distance between campsites along short-term visit locations
     locationblocks$distance <- apply(locationblocks, 1, function(x) sum(agg$altitudinaldistancenextvisit_wis[x[1]:x[2]]))
