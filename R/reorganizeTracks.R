@@ -75,6 +75,7 @@ reorganizeTracks <- function(currenttracks,
   if(is.null(clcall) == F){
     clusterCall(cl, clcall)
   }
+  on.exit(expr = stopCluster(cl))
 
   newcurrenttracks <- trajectories::TracksCollection(foreach(x = currenttracks@tracksCollection, .packages = c("lubridate", "tidyr", "trajectories", "spacetime", "sp"))%dopar%{
 
@@ -115,9 +116,6 @@ reorganizeTracks <- function(currenttracks,
 
   # restore the names
   names(newcurrenttracks@tracksCollection) <- currenttracksnames
-
-  # stop cluster
-  stopCluster(cl)
 
   # return newcurrenttracks
   return(newcurrenttracks)

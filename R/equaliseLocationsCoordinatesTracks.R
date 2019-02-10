@@ -46,6 +46,7 @@ equaliseLocationsCoordinatesTracks <- function(currenttracks, cores = 1, clcall 
   if(is.null(clcall) == F){
     clusterCall(cl, clcall)
   }
+  on.exit(expr = stopCluster(cl))
 
   # adjust the coordinates
   newcurrenttracks <- trajectories::TracksCollection(foreach::foreach(x = currenttracks@tracksCollection, .packages = c("trajectories", "sp", "data.table"), .export = c("equaliseLocationsCoordinatesTrack"))%dopar%{
@@ -54,9 +55,6 @@ equaliseLocationsCoordinatesTracks <- function(currenttracks, cores = 1, clcall 
 
   # restore the names
   names(newcurrenttracks@tracksCollection) <- currenttracksnames
-
-  # stop cluster
-  stopCluster(cl)
 
   # return currenttrack
   return(newcurrenttracks)

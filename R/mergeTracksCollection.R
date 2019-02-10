@@ -35,6 +35,7 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
     if(is.null(clcall) == FALSE){
       clusterCall(cl, clcall)
     }
+    on.exit(expr = stopCluster(cl))
     clusterCall(cl, function(){library("lubridate")})
     clusterCall(cl, function(){library("spacetime")})
     clusterCall(cl, function(){library("data.table")})
@@ -43,10 +44,6 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
 
     # merge the Track objects of each Tracks object
     newtracks <- parLapply(cl, trackscollection@tracksCollection, fun = function(x){mergeTracks(currenttracks = x)})
-
-    # stop cluster
-    stopCluster(cl)
-
 
   # convert newtracks to Tracks object and return the result
   newtracks <- TracksCollection(newtracks)
