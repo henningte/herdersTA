@@ -48,7 +48,7 @@ aggregateTrack <- function(x, by = list(strftime(x@time, format = "%Y-%m-%d"))){
   # collect any group (visit) related data
   groupdata <- data.table::rbindlist(tapply(seq_len(nrow(x@data))[nongapgroupsindex], x$group[nongapgroupsindex], function(y){
 
-    data.frame(group = x$group[y[1]], location = x$location[y[1]], campsite = x$campsite[y[1]], norepeatedcampsitevisits = x$norepeatedcampsitevisits[y[1]], longitude = sp::coordinates(x@sp)[y[1],1], latitude = sp::coordinates(x@sp)[y[1],2], altitude = x$altitude[y[1]])
+    data.frame(group = x$group[y[1]], location = x$location[y[1]], campsite = x$campsite[y[1]], norepeatedcampsitevisits = x$norepeatedcampsitevisits[y[1]], longitude = sp::coordinates(x@sp)[y[1],1], latitude = sp::coordinates(x@sp)[y[1],2], altitude = x$altitude[y[1],])
 
   }, simplify = FALSE))
 
