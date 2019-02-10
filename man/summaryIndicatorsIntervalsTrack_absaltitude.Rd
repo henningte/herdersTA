@@ -4,7 +4,8 @@
 \alias{summaryIndicatorsIntervalsTrack_absaltitude}
 \title{Computes summary indicators for GPS tracks.}
 \usage{
-summaryIndicatorsIntervalsTrack_absaltitude(currenttrack, normalise = FALSE)
+summaryIndicatorsIntervalsTrack_absaltitude(currenttrack,
+  normalise = FALSE)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that

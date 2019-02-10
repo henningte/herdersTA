@@ -7,8 +7,8 @@
 locationsTrack(currenttrack, radius = 200, tmin = 345600,
   tmaxinterstices = 345600, night = c(16, 20),
   tmaxintersticenotvalid = data.frame(start =
-  as.POSIXct("2016-01-01 00:00:00"), end = as.POSIXct("2016-05-01 00:00:00")),
-  summary = TRUE)
+  as.POSIXct("2016-01-01 00:00:00"), end =
+  as.POSIXct("2016-05-01 00:00:00")), summary = TRUE)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}

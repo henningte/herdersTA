@@ -4,7 +4,8 @@
 \alias{equaliseLocationsCoordinatesTracks}
 \title{Equalise Track Coordinates to Locations.}
 \usage{
-equaliseLocationsCoordinatesTracks(currenttracks, cores = 1, clcall = NULL)
+equaliseLocationsCoordinatesTracks(currenttracks, cores = 1,
+  clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{TracksCollection}}

@@ -4,7 +4,8 @@
 \alias{totalGapDuration}
 \title{Computes the duration of gaps in GPS tracks.}
 \usage{
-totalGapDuration(currenttracks, tstart = min(currenttracks@tracksData$tmin),
+totalGapDuration(currenttracks,
+  tstart = min(currenttracks@tracksData$tmin),
   tend = max(currenttracks@tracksData$tmax), threshold = 18000,
   tolerance = 2)
 }

@@ -5,7 +5,8 @@
 \title{Finds gaps in GPS tracks.}
 \usage{
 findGaps(currenttrack, tstart = min(index(currenttrack@time)),
-  tend = max(index(currenttrack@time)), threshold = 18000, tolerance = 2)
+  tend = max(index(currenttrack@time)), threshold = 18000,
+  tolerance = 2)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}

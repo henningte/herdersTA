@@ -4,8 +4,9 @@
 \alias{plotLocationsTrackSummary}
 \title{Plots Summarised Tracks as Returned by \code{\link{locaitonsTrack}}.}
 \usage{
-plotLocationsTrackSummary(x, seasons = data.frame(start = c(3, 5, 9, 11), end
-  = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1", "lightgray")))
+plotLocationsTrackSummary(x, seasons = data.frame(start = c(3, 5, 9, 11),
+  end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1",
+  "lightgray")))
 }
 \arguments{
 \item{x}{An object as returned by \code{\link{locationsTrack}} with

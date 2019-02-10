@@ -4,11 +4,11 @@
 \alias{trackvisits}
 \title{Visits from a Track with Locations}
 \usage{
-trackvisits(location, group = NA, start, end, starttime, endtime, longitude,
-  latitude, altitude, currentvisitduration, nextvisitduration = NA,
-  nextvisitsamelocationindex = NA, nextvisitsamelocationduration = NA,
-  nextvisitsamelocation = FALSE, campsite = FALSE,
-  campsiteinbetween = FALSE, mergewithnext = FALSE,
+trackvisits(location, group = NA, start, end, starttime, endtime,
+  longitude, latitude, altitude, currentvisitduration,
+  nextvisitduration = NA, nextvisitsamelocationindex = NA,
+  nextvisitsamelocationduration = NA, nextvisitsamelocation = FALSE,
+  campsite = FALSE, campsiteinbetween = FALSE, mergewithnext = FALSE,
   norepeatedcampsitevisits = NA)
 }
 \arguments{

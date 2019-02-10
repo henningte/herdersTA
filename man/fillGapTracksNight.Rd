@@ -4,8 +4,8 @@
 \alias{fillGapTracksNight}
 \title{Imputes gaps in a \code{\link[trajectories]{Tracks}} object.}
 \usage{
-fillGapTracksNight(currenttracks, maxduration, maxdistance, night = c(16, 20),
-  cores = 1, clcall = NULL)
+fillGapTracksNight(currenttracks, maxduration, maxdistance, night = c(16,
+  20), cores = 1, clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{TracksCollection}} object with

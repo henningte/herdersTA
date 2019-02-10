@@ -4,9 +4,10 @@
 \alias{plot.trackvisits}
 \title{Plots Visits from a Track with Locations}
 \usage{
-plot.trackvisits(x, what = "lonlatanonymuous", seasons = data.frame(start =
-  c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red",
-  "burlywood1", "lightgray")), timethreshold = 0)
+plot.trackvisits(x, what = "lonlatanonymuous",
+  seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2),
+  colour = c("yellow", "red", "burlywood1", "lightgray")),
+  timethreshold = 0)
 }
 \arguments{
 \item{x}{An object of class \code{link{trackvisits}} with the variable

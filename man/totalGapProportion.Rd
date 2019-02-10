@@ -4,7 +4,8 @@
 \alias{totalGapProportion}
 \title{Computes the relative duration of gaps in GPS tracks.}
 \usage{
-totalGapProportion(currenttracks, tstart = min(currenttracks@tracksData$tmin),
+totalGapProportion(currenttracks,
+  tstart = min(currenttracks@tracksData$tmin),
   tend = max(currenttracks@tracksData$tmax), threshold = 18000,
   tolerance = 2)
 }
