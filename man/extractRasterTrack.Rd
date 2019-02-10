@@ -4,36 +4,48 @@
 \alias{extractRasterTrack}
 \title{Extracts corresponding raster values for GPS tracks.}
 \usage{
-extractRasterTrack(currenttrack, raster, timedate, resolution,
-  aggregation = "allvisits")
+extractRasterTrack(x, y, datetime = NULL, method = "simple",
+  buffer = 0, small = TRUE, fun = NULL, na.rm = TRUE,
+  fixedlocationcoords = FALSE)
 }
 \arguments{
-\item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
-has a column \code{time} containing the time information of the data
-values.}
+\item{x}{A Raster* object. \code{x} must either have one layer or
+the number of layers of \code{x} has to be the same as the number of
+data values in \code{y}. If a multi-layer object is provided, it
+is automatically assumed that this is the case.}
 
-\item{raster}{raster based time series (\code{RasterBrick} or
-\code{RasterStack} object, see: \code{\link[raster]{Raster-class}}).}
+\item{y}{A \code{\link[trajectories:Track-class]{Track}} object.
+Depending on other parameters set, there may be certain variables required.}
 
-\item{timedate}{A \code{POSIXct} vector with values for each layer of
-\code{raster}.}
+\item{buffer}{A numeric value indicating the radius of the buffer
+around each point that should be considered during extraction of
+the raster values. If the data are not projected
+(latitude/longitude), the unit should be meters. Otherwise it should
+be in map-units (typically also meters).}
 
-\item{resolution}{A character value indicating the temporal resolution
-of \code{raster} and \code{timedate}, respectively. One of \code{"days"},
-\code{"fixedtendays"}, \code{"movingwindowtendays"} and \code{"months"}.}
+\item{small}{logical. If \code{TRUE} and a \code{buffer} argument is used,
+the function always returns a number, also when the buffer does not include
+the center of a single cell. The value of the cell in which the point falls
+is returned if no cell center is within the buffer.}
 
-\item{aggregation}{A character value indicating for which spatial
-aggregation of data values of \code{currenttrack} values of  \code{raster}
-should be extracted:
-\describe{
-  \item{\code{"raw"}}{Values of  \code{raster} will be extracted for the
-  data values of the original \code{\link[trajectories:Track-class]{Track}} object.
-  This may take a long time depending on the value of \code{resolution}
-  and the amount of values of \code{currentrack}.}
-  \item{\code{"allvisits"}}{Values of  \code{raster} will be extracted values
-  aggregated for each visit, whereby it is distinguished between long-term
-  visits (campsites) and short-term visits.}
-}}
+\item{fun}{function to summarize the values (e.g. \code{mean}). The function
+should take a single numeric vector as argument and return a single value
+and accept a \code{na.rm} argument.}
+
+\item{na.rm}{logical. Only useful when an argument fun is supplied. If
+\code{na.rm = TRUE} (the default value), \code{NA} values are removed
+before \code{fun} is applied. This argument may be ignored if the function
+used has a \code{...} argument and ignores an additional \code{na.rm} argument.}
+
+\item{fixedlocationcoords}{A logical value indicating if for each location in \code{y}
+the same position is assumed for all data values. In this case, computation
+can be speed up by setting \code{location = TRUE} and the function uses
+simply the coordinates of the first value for each location.}
+
+\item{character.}{\code{"simple"} or \code{"bilinear"}. If \code{"simple"}
+values for the cell a point falls in are returned. If \code{"bilinear"} the
+returned values are interpolated from the values of the four nearest raster
+cells.}
 }
 \value{
 A vector with a value for each data value of \code{currenttrack}.
@@ -41,10 +53,10 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \code{NA} is returned for the respective data value.
 }
 \description{
-\code{extractRasterTrack} extracts values from raster based time series
-(\code{RasterBrick} or \code{RasterStack} object, see:
-\code{\link[raster]{Raster-class}}) that correspond the the respective
-position and time of a \code{\link[trajectories:Track-class]{Track}} object.
+\code{extractRasterTrack} is the \code{\link[raster:extract]{extract}} method
+in order to extract values from \code{\link[raster:raster]{Raster*}} objects
+for an object of class \code{\link[trajectories:Track-class]{Track}}. Different
+options are available.
 }
 \examples{
 #
