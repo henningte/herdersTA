@@ -100,7 +100,7 @@ NULL
 #' @examples #
 #' @export
 locationsTrack <- function(currenttrack,
-                           radius = 200,
+                           radius = 800,
                            tmin = 345600,
                            tmaxinterstices = 345600,
                            night = c(16, 20),

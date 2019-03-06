@@ -34,7 +34,7 @@ NULL
 #' \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-extractClustersBuffer <- function(currenttrack, radius = 200){
+extractClustersBuffer <- function(currenttrack, radius = 800){
 
   # use density based clustering in order to identify locations
   locations_night <- dbscan(x = coordinates(currenttrack@sp)[attributes(currenttrack)$night == TRUE,], eps = radius, minPts = 5)

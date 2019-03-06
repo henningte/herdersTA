@@ -125,7 +125,7 @@ NULL
 #' @examples #
 #' @export
 locationsTracks <- function(currenttracks,
-                            radius = 200,
+                            radius = 800,
                             tmin = 345600,
                             tmaxinterstices = 345600,
                             tmaxintersticenotvalid = data.frame(start = as.POSIXct("2016-01-01 00:00:00"), end = as.POSIXct("2016-05-01 00:00:00")),
