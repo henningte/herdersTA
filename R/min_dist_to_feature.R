@@ -43,6 +43,6 @@ min_dist_to_feature <- function(hh, feature, minrange=10000){
     #all locations
     distances[i] <- dist2Line(locations[i],feat_in_range)[,1]
   }
-  print(Sys.time())
+
   return(distances)
 }
