@@ -17,7 +17,9 @@ NULL
 min_dist_to_feature <- function(hh, feature, minrange=10000){
 
   #extract SpatialPoints of locations
-  locations <- SpatialPoints(unique(hh@tracks[[1]]@sp@coords), proj4string = hh@tracks[[1]]@sp@proj4string)
+  locationIDs <- sort(unique(hh@tracks[[1]]@data$location[hh@tracks[[1]]@data$location>0]))
+  locationcoords <- unique(hh@tracks[[1]]@sp@coords[which(hh@tracks[[1]]@data$location %in% locationIDs),])
+  locations <- SpatialPoints(locationcoords, proj4string = hh@tracks[[1]]@sp@proj4string)
 
   #check CRS of both inputs
   if(!proj4string(locations)=="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
