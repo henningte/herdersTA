@@ -3,6 +3,7 @@
 #'@import rgdal
 #'@import geosphere
 #'@import sp
+#'#'@import raster
 NULL
 
 #' Computes the minimum distance of locations to the nearest line or polygon border
