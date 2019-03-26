@@ -4,7 +4,7 @@
 \alias{locationsTrack}
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
-locationsTrack(currenttrack, radius = 200, tmin = 345600,
+locationsTrack(currenttrack, radius = 800, tmin = 345600,
   tmaxinterstices = 345600, night = c(16, 20),
   tmaxintersticenotvalid = data.frame(start =
   as.POSIXct("2016-01-01 00:00:00"), end =

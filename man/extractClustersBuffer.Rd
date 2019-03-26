@@ -4,7 +4,7 @@
 \alias{extractClustersBuffer}
 \title{Identifies clusters of points of GPS tracks.}
 \usage{
-extractClustersBuffer(currenttrack, radius = 200)
+extractClustersBuffer(currenttrack, radius = 800)
 }
 \arguments{
 \item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}.
