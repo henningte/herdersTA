@@ -10,6 +10,7 @@ Depends:
   sp,
   rgdal,
   rgeos,
+  geosphere,
   foreach,
   doParallel,
   spacetime,
