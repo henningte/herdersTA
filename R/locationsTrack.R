@@ -158,6 +158,8 @@ locationsTrack <- function(currenttrack,
     sapply(seq_len(nrow(currenttrackvisits)), function(x){
       currenttrack$group[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- currenttrackvisits$group[x]
       currenttrack$location[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- currenttrackvisits$location[x]
+      currenttrack$filled[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- ifelse(currenttrack$gap[currenttrackvisits$start[x]:currenttrackvisits$end[x]], TRUE, FALSE)
+      currenttrack$gap[currenttrackvisits$start[x]:currenttrackvisits$end[x]] <<- FALSE
       currenttrack$start[currenttrackvisits$start[x]] <<- TRUE
       currenttrack$end[currenttrackvisits$end[x]] <<- TRUE
     })
