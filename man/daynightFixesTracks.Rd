@@ -7,7 +7,7 @@
 daynightFixesTracks(currenttracks, tstart = 16, tend = 20)
 }
 \arguments{
-\item{currenttracks}{A \code{\link[trajectories::Track-class]{Tracks}} object.}
+\item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 
 \item{tstart}{A numeric value indicating the start of the time interval
 [h, values between 0 and 24]. \code{tstart} has to be smaller than
@@ -18,17 +18,17 @@ daynightFixesTracks(currenttracks, tstart = 16, tend = 20)
 \code{tstart}.}
 }
 \value{
-a \code{\link[sp]{SpatialPointsDataFrame}} containing all data
-of the slot \code{data} of the \code{\link[trajectories::Track-class]{Track}}
-objects of the input \code{\link[trajectories::Track-class]{Tracks}}
+a \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} containing all data
+of the slot \code{data} of the \code{\link[trajectories:Track-class]{Track}}
+objects of the input \code{\link[trajectories:Track-class]{Tracks}}
 object and a column \code{night} indicating if a data point is within
 the specified time interval (\code{night = 1}) or not
 (\code{night = 0}).
 }
 \description{
 \code{daynightFixesTracks} classifies the values of all
-\code{\link[trajectories::Track-class]{Track}} object of a given
-\code{\link[trajectories::Track-class]{Tracks}} objectin two classes on a
+\code{\link[trajectories:Track-class]{Track}} object of a given
+\code{\link[trajectories:Track-class]{Tracks}} objectin two classes on a
 sub-daily basis by defining threshold hour values (for example
 in order to classify values as recorded during daytime and
 nighttime).
@@ -39,6 +39,6 @@ nighttime).
 \seealso{
 \code{\link{downByDrop}}, \code{\link{downByDropTrs}},
 \code{\link{getNightTrack}}, \code{\link{getNightTrs}},
-\code{\link{dayNightFixesTrack}},
+\code{\link{daynightFixesTrack}},
 \code{\link{getNightConnectionsTrack}}.
 }

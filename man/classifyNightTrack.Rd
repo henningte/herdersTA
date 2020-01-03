@@ -2,7 +2,7 @@
 % Please edit documentation in R/classifyNightTrack.R
 \name{classifyNightTrack}
 \alias{classifyNightTrack}
-\title{Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.}
+\title{Classifies Data Values of a \code{Tracks} object as Night or Day Values.}
 \usage{
 classifyNightTrack(currenttrack, night)
 }

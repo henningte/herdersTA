@@ -1,7 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Classifies GPS track parts as evaluatable.
 #'
 #' \code{removeDataTrack} determine if data values of a
@@ -15,8 +11,8 @@ NULL
 
 #'
 #' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object with a
-#' \code{boolean} column \code{gap} in \code{currenttrack@data} and a
-#' \code{POSIXct} column \code{time} in \code{currenttrack@data}. Data
+#' \code{boolean} column \code{gap} in the data slot of \code{currenttrack} and a
+#' \code{POSIXct} column \code{time} in the data slot of \code{currenttrack}. Data
 #' values have to be regularly spaced (may be achieved for example with
 #' \code{\link{reorganizeTracks}}).
 #' @param timeinterval One of \code{"year"}, \code{"month"},
@@ -37,23 +33,25 @@ NULL
 #' \code{timeinterval = "month"}.
 #' @param threshold A numerical value representing the maximum proportion
 #' of data values within a timeinterval that is allowed to represent gaps
-#' (\code{currenttrack@data$gap == TRUE}) in order to \emph{not} discard all data
-#' values for the corresponding month [%]. Default is \code{threshold = 40}.
+#' (\code{gap == TRUE}) in order to \emph{not} discard all data
+#' values for the corresponding month [\%]. Default is \code{threshold = 40}.
 #' @return A \code{\link[trajectories:Track-class]{Track}} object identical with
-#' \code{currenttrack}, except for a new column \code{currenttrack@data$remove}
+#' \code{currenttrack}, except for a new column \code{remove}
 #' indicating if a data value should be included in following analyses (
-#' \code{currenttrack@data$remove == FALSE}) or not (
-#' \code{currenttrack@data$remove == TRUE}), based on the specifications of the user,
-#' a new column \code{currenttrack@data$id_timeinterval} representing the id of the
+#' \code{remove == FALSE}) or not (
+#' \code{remove == TRUE}), based on the specifications of the user,
+#' a new column \code{id_timeinterval} representing the id of the
 #' respective time interval specified by \code{timeinterval} and a new column
-#' \code{currenttrack@data$proportion_gaps} representing the temporal proportion of
+#' \code{proportion_gaps} representing the temporal proportion of
 #' missing values within a time interval specified by
-#' \code{currenttrack@data$id_timeinterval}.
+#' \code{id_timeinterval}.
 #' @seealso \code{\link{identifyTimeIntervals}}, \code{\link{removeDataTracks}},
 #' \code{\link{nogapDurationTrack}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
 #' @export
-removeDataTrack <- function(currenttrack, timeinterval = "month", threshold = 40){
+removeDataTrack <- function(currenttrack,
+                            timeinterval = "month",
+                            threshold = 40) {
 
   # assign data values to time intervals
   timeinterval <- identifyTimeIntervals(currenttrack, timeinterval)
@@ -80,8 +78,6 @@ removeDataTrack <- function(currenttrack, timeinterval = "month", threshold = 40
 
   # add proportion_gaps to currenttrack@data
   currenttrack@data$proportion_gaps <- prop_gaps_ges
-
-  # return result
-  return(currenttrack)
+  currenttrack
 
 }

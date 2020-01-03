@@ -8,8 +8,8 @@ removeDataTrack(currenttrack, timeinterval = "month", threshold = 40)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object with a
-\code{boolean} column \code{gap} in \code{currenttrack@data} and a
-\code{POSIXct} column \code{time} in \code{currenttrack@data}. Data
+\code{boolean} column \code{gap} in the data slot of \code{currenttrack} and a
+\code{POSIXct} column \code{time} in the data slot of \code{currenttrack}. Data
 values have to be regularly spaced (may be achieved for example with
 \code{\link{reorganizeTracks}}).}
 
@@ -32,20 +32,20 @@ all data values will be assigned to one class. Default is
 
 \item{threshold}{A numerical value representing the maximum proportion
 of data values within a timeinterval that is allowed to represent gaps
-(\code{currenttrack@data$gap == TRUE}) in order to \emph{not} discard all data
-values for the corresponding month [%]. Default is \code{threshold = 40}.}
+(\code{gap == TRUE}) in order to \emph{not} discard all data
+values for the corresponding month [\%]. Default is \code{threshold = 40}.}
 }
 \value{
 A \code{\link[trajectories:Track-class]{Track}} object identical with
-\code{currenttrack}, except for a new column \code{currenttrack@data$remove}
+\code{currenttrack}, except for a new column \code{remove}
 indicating if a data value should be included in following analyses (
-\code{currenttrack@data$remove == FALSE}) or not (
-\code{currenttrack@data$remove == TRUE}), based on the specifications of the user,
-a new column \code{currenttrack@data$id_timeinterval} representing the id of the
+\code{remove == FALSE}) or not (
+\code{remove == TRUE}), based on the specifications of the user,
+a new column \code{id_timeinterval} representing the id of the
 respective time interval specified by \code{timeinterval} and a new column
-\code{currenttrack@data$proportion_gaps} representing the temporal proportion of
+\code{proportion_gaps} representing the temporal proportion of
 missing values within a time interval specified by
-\code{currenttrack@data$id_timeinterval}.
+\code{id_timeinterval}.
 }
 \description{
 \code{removeDataTrack} determine if data values of a

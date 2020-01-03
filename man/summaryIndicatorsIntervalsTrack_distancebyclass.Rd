@@ -5,8 +5,11 @@
 \alias{summaryIndicatorsIntervalsTrack_distancebyclass}
 \title{Computes summary indicators for GPS tracks.}
 \usage{
-summaryIndicatorsIntervalsTrack_distancebyclass(currenttrack,
-  normalise = FALSE, classvariable)
+summaryIndicatorsIntervalsTrack_distancebyclass(
+  currenttrack,
+  normalise = FALSE,
+  classvariable
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that

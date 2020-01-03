@@ -11,7 +11,7 @@ extractRasterTrackSingleLayer(currenttrack, raster, buffer = 0)
 has a column \code{day} containing the time information of the data
 values.}
 
-\item{raster}{A \code{RasterLayer} (see: \code{\link[raster]{Raster-class}}).
+\item{raster}{A \code{RasterLayer} (see: \code{\link[raster:Raster-classes]{Raster-classes}}).
 from which values should be extracted.}
 
 \item{buffer}{A numeric value indicating the radius of the buffer
@@ -27,7 +27,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 }
 \description{
 \code{extractRasterTrackSingleLayer} extracts values from \code{RasterLayer}
-(see: \code{\link[raster]{Raster-class}}) that corresponds to the the respective
+(see: \code{\link[raster:Raster-classes]{Raster-classes}}) that corresponds to the the respective
 position of a \code{\link[trajectories:Track-class]{Track}} object with
 daily resolution.
 }

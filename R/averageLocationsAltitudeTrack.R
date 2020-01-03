@@ -1,15 +1,14 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom stats median
 NULL
 
 #' Computes the average altitude of locations of a Track object.
 #'
 #' \code{averageLocationsAltitudeTrack} computes the average altitude of lcoations of a
-#' \code{\link[trajectories:Track]{Track}}. Several options are available. For each
+#' \code{\link[trajectories:Track-class]{Track}}. Several options are available. For each
 #' location, only one value is considered (i.e. thetemporal duration of visits is not
 #' considered as weights during computations).
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{altitude} and a variable \code{location} and \code{campsite}
 #' as created by \code{\link{locationsTrack}} in the data slot.
 #' @param fun One of \code{mean} or \code{median)}, depending on which function should be
@@ -20,7 +19,7 @@ NULL
 #' @seealso .
 #' @examples #
 #' @export
-averageLocationsAltitudeTrack <- function(currenttrack, fun = median, campsite = TRUE){
+averageLocationsAltitudeTrack <- function(currenttrack, fun = stats::median, campsite = TRUE){
 
   # checks
   if(!(inherits(currenttrack, "Track"))) {

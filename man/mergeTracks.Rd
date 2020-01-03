@@ -2,7 +2,7 @@
 % Please edit documentation in R/mergeTracks.R
 \name{mergeTracks}
 \alias{mergeTracks}
-\title{Merges \code{\link[trajectories:Track-class]{Track}} objects of a \code{\link[trajectories:Track-class]{Tracks}} object.}
+\title{Merges \code{Track} objects of a \code{Tracks} object.}
 \usage{
 mergeTracks(currenttracks)
 }

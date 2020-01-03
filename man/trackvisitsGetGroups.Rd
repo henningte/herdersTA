@@ -4,8 +4,13 @@
 \alias{trackvisitsGetGroups}
 \title{Groups Visits from Track Objects}
 \usage{
-trackvisitsGetGroups(trackvisits, tmin, timeinterval = 30 * 60,
-  tmaxintersticenotvalid = NULL, tmaxinterstice)
+trackvisitsGetGroups(
+  trackvisits,
+  tmin,
+  timeinterval = 30 * 60,
+  tmaxintersticenotvalid = NULL,
+  tmaxinterstice
+)
 }
 \arguments{
 \item{trackvisits}{An object of class \code{\link{trackvisits}}.}

@@ -1,5 +1,5 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#' @importFrom spacetime STIDF
+#' @importFrom trajectories Track
 NULL
 
 #' Extracts sub-daily values of GPS tracks.
@@ -21,21 +21,23 @@ NULL
 #' \code{\link{getNightConnectionsTrack}}.
 #' @examples #
 #' @export
-getNightTrack <- function(currenttrack, tstart = 16, tend = 20){
+getNightTrack <- function(currenttrack,
+                          tstart = 16,
+                          tend = 20) {
 
   # get indices of fixes within the specified daily time interval
   nightindexes <- which(hour(currenttrack@time) >= tstart & hour(currenttrack@time) < tend)
 
   #build new Track from data at all indexes in 'nightindexes', but only if there are at least two of them
   if(length(nightindexes) > 1){
-      Track(
-        STIDF(
-          sp = currenttrack@sp[nightindexes],
-          time = currenttrack@time[nightindexes],
-          endTime = currenttrack@endTime[nightindexes],
-          data = currenttrack@data[nightindexes, ]
-        )
+    trajectories::Track(
+      spacetime::STIDF(
+        sp = currenttrack@sp[nightindexes],
+        time = currenttrack@time[nightindexes],
+        endTime = currenttrack@endTime[nightindexes],
+        data = currenttrack@data[nightindexes, ]
       )
+    )
   }
 
 }

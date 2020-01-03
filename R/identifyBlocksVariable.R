@@ -1,6 +1,4 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @importFrom data.table data.table rbindlist
+#' @importFrom data.table data.table rbindlist rleidv
 NULL
 
 #' Identifies data value groups within a \code{data.frame} column.
@@ -25,12 +23,14 @@ NULL
 #' where the block begins and the second column indicates the row of
 #' \code{currenttrack@data} where the block ends or \code{NULL} if
 #' \code{value} does not exist for \code{variable}.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
+#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
 #' \code{\link{redefineIndices}}, \code{\link{fillGapTrack}},
 #' \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-identifyBlocksVariable <- function(currenttrack, variable, value){
+identifyBlocksVariable <- function(currenttrack,
+                                   variable,
+                                   value) {
 
   # extract the data.frame if necessary
   if(!inherits(currenttrack, "data.frame")){
@@ -45,7 +45,9 @@ identifyBlocksVariable <- function(currenttrack, variable, value){
 
   # extract the respective block starts and ends
   data.table::rbindlist(tapply(seq_len(nrow(currenttrack))[indexvariablevalue], groups[indexvariablevalue], function(x){
-    data.table(start = x[1], end = x[length(x)])
+    data.table::data.table(start = x[1],
+                           end = x[length(x)],
+                           stringsAsFactors = FALSE)
   }, simplify = FALSE))
 
 }

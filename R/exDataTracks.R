@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@importFrom data.table rbindlist
-NULL
-
 #' Extracts data from a Tracks object.
 #'
 #' \code{exDataTracks} extracts data in the \code{data} slot of all

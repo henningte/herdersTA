@@ -1,5 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
 #' @importFrom raster area
 NULL
 
@@ -25,7 +23,7 @@ NULL
 #'   \item \code{\link{gapProportionTrack}}
 #' }
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location} and \code{campsite}
 #' @param fun One of \code{mean} or \code{median)}, depending on which function should be
 #' used in order to compute average values.
@@ -36,7 +34,7 @@ NULL
 #' @seealso .
 #' @examples #
 #' @export
-siTrack <- function(currenttrack, fun = median){
+siTrack <- function(currenttrack, fun = stats::median){
 
   # checks
   if(!(inherits(currenttrack, "Track"))) {
@@ -69,6 +67,7 @@ siTrack <- function(currenttrack, fun = median){
   locations_number <- countUniqueLocationsTrack(currenttrack, campsite = campsite, repeated = FALSE)
   locations_number_withrepeated <- countUniqueLocationsTrack(currenttrack, campsite = campsite, repeated = TRUE)
   gaps_proportion <- gapProportionTrack(currenttrack)
+  linearity <- linearityCampsiteLocationsTrack(currenttrack)
 
   # collect all variables in a data.frame
   data.frame(
@@ -91,6 +90,7 @@ siTrack <- function(currenttrack, fun = median){
     locations_number = locations_number,
     locations_number_withrepeated = locations_number_withrepeated,
     gaps_proportion = gaps_proportion,
+    linearity = linearity,
     stringsAsFactors = FALSE
   )
 

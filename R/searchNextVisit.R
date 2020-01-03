@@ -1,6 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import spatstat
-#'@import sp
+#'@importFrom stats na.omit
 NULL
 
 #' Determines the number of visits of a cluster.
@@ -11,19 +9,20 @@ NULL
 #' of the current visit. This function is used by function `
 #' \code{\link{clusterOrder}}.
 #'
-#' @param clusters A \code{\link[sp]{SpatialGridDataFrame}} object containing
+#' @param clusters A \code{\link[sp:SpatialPixelsDataFrame-class]{SpatialGridDataFrame}} object containing
 #' point clusters, as created with \code{\link{extractClusters}}.
-#' @param trs_spdf A \code{\link[sp]{SpatialPointsDataFrame}} of the
-#' household movement (as converted from a \code {\link[trajectories:Track-class]{Tracks}}
+#' @param trs_spdf A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} of the
+#' household movement (as converted from a \code{\link[trajectories:Track-class]{Tracks}}
 #' object).
-#' @return A \code{\link[sp]{SpatialPointsDataFrame}} holding the
+#' @return A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} holding the
 #' clusters/campsites with updated \code{times_visited}.
 #' @seealso \code{\link{qTopology}}, \code{\link{pointsPerQuad}},
 #' \code{\link{extractClusters}}, \code{\link{findStarts}},
 #' \code{\link{clusterOrder}}.
 #' @examples #
 #' @export
-searchNextVisit <- function(clusters, trs_spdf){
+searchNextVisit <- function(clusters,
+                            trs_spdf) {
 
   # get last occurence of points in cell from the cluster data frame
   last_in_cell <- clusters$last_in_cluster
@@ -38,7 +37,7 @@ searchNextVisit <- function(clusters, trs_spdf){
   current_rank <- clusters@data[[ncol(clusters@data)]]
 
   #loop through clusters by rank
-  for(i in 1:(max(current_rank, na.rm = T) - 1)){
+  for(i in 1:(max(current_rank, na.rm = TRUE) - 1)) {
 
     # if current latest point is later in time than the earliest point of the following cluster...
     if(last_in_cell[which(current_rank == i)] > first_of_visit[which(current_rank == i + 1)]){
@@ -47,7 +46,7 @@ searchNextVisit <- function(clusters, trs_spdf){
       clusters$times_visited[which(current_rank == i)] <- clusters$times_visited[which(current_rank == i)] + 1
 
       # also determine end of current visit as the latest point in the cluster that is still earlier than the earliest point in the following cluster
-      last_of_visit[which(current_rank == i)] <- max(na.omit(trs_spdf$time[trs_spdf$clrank == i & trs_spdf$time < first_of_visit[which(current_rank == i + 1)]]))
+      last_of_visit[which(current_rank == i)] <- max(stats::na.omit(trs_spdf$time[trs_spdf$clrank == i & trs_spdf$time < first_of_visit[which(current_rank == i + 1)]]))
 
       # set newVisit to TRUE
       clusters$newVisit[which(current_rank == i)] <- TRUE
@@ -66,8 +65,6 @@ searchNextVisit <- function(clusters, trs_spdf){
 
   # update end time of current visit (second last coloumn) with newly determined last last_of_visit
   clusters@data[[ncol(clusters@data)-1]] <- last_of_visit
-
-  # return clusters
-  return(clusters)
+  clusters
 
 }

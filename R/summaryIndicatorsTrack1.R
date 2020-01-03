@@ -1,12 +1,8 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Computes summary indicators for GPS tracks.
 #'
 #' \code{summaryIndicatorsTrack1} computes various summary indicators
 #' for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
-#' with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} or
+#' with \code{\link{reorganizeTracks}}, \code{\link{locationsTrack}} or
 #' \code{\link{clusterOrder}}, \code{\link{removeDataTrack}} and
 #' \code{\link{nogapDurationTrack}}.
 #'
@@ -63,7 +59,7 @@ NULL
 summaryIndicatorsTrack1 <- function(currenttrack,
                                     normalise = TRUE,
                                     timeinterval = 30*60,
-                                    aggregation = "allvisits"){
+                                    aggregation = "allvisits") {
 
   # collapse currenttrack to the specified aggregation level
   switch(aggregation,
@@ -72,7 +68,8 @@ summaryIndicatorsTrack1 <- function(currenttrack,
          },
          allvisits = {
            # compute mean coordinates for each visit and location
-           visitscoordinates <- extractCoordinatesVisitsTrack(currenttrack, aggregated = FALSE)
+           visitscoordinates <- extractCoordinatesVisitsTrack(currenttrack,
+                                                              aggregated = FALSE)
 
            # aggregate all visits at all locations
            currenttrack$lon <- visitscoordinates$lon
@@ -81,7 +78,8 @@ summaryIndicatorsTrack1 <- function(currenttrack,
          },
          campsites = {
            # compute mean coordinates for each visit and location
-           visitscoordinates <- extractCoordinatesVisitsTrack(currenttrack, aggregated = TRUE)
+           visitscoordinates <- extractCoordinatesVisitsTrack(currenttrack,
+                                                              aggregated = TRUE)
 
            # aggregate all visits at all locations
            currenttrack$lon <- visitscoordinates$lon

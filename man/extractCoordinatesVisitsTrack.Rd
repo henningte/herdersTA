@@ -4,8 +4,11 @@
 \alias{extractCoordinatesVisitsTrack}
 \title{Extracts centroid coordinates of visits from GPS tracks.}
 \usage{
-extractCoordinatesVisitsTrack(currenttrack, aggregated = FALSE,
-  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+extractCoordinatesVisitsTrack(
+  currenttrack,
+  aggregated = FALSE,
+  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object as

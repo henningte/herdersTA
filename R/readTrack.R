@@ -1,5 +1,6 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#' @importFrom sp SpatialPoints CRS
+#' @importFrom trajectories Track
+#' @importFrom spacetime STIDF
 NULL
 
 #' Reads data from an individual GPS track file.
@@ -32,17 +33,18 @@ readTrack <- function(fname){
   print(paste("reading file", fname))
 
   # import the .csv file
-  x <- read.csv(fname, skipNul = TRUE) # most files contain embedded nuls
+  x <- utils::read.csv(fname, skipNul = TRUE) # most files contain embedded nuls
 
   # reformatting
   x <- x[!is.na(x$DATE),]
   x$lat = as.numeric(sub("N", "", x$LATITUDE.N.S))
   x$lon = x$LONGITUDE.E.W
   tm = dt2POSIX(x$DATE, x$TIME)
-  pts = SpatialPoints(cbind(x$lon, x$lat), CRS("+proj=longlat +ellps=WGS84"))
-  st = STIDF(pts, tm, x)
+  pts = sp::SpatialPoints(coords = cbind(x$lon, x$lat),
+                          proj4string = sp::CRS("+proj=longlat +ellps=WGS84"))
+  st = spacetime::STIDF(pts, tm, x)
 
   # convert to Track object
-  Track(st)
+  trajectories::Track(st)
 
 }

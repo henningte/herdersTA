@@ -1,5 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#'@importFrom trajectories Tracks
 NULL
 
 #' Cleans and regularises GPS tracks.
@@ -19,7 +18,8 @@ NULL
 #' \code{\link{getNightConnectionsTrack}}.
 #' @examples #
 #' @export
-downByDropTrs <- function(currenttracks, timeInterval = 1770){
+downByDropTrs <- function(currenttracks,
+                          timeInterval = 1770) {
 
   # appply downByDrops to all Track objects of the Tracks object
   tracklist <- lapply(currenttracks@tracks, function(x) downByDrop(x))
@@ -29,7 +29,7 @@ downByDropTrs <- function(currenttracks, timeInterval = 1770){
 
   # return the downsampled Tracks object
   if(length(tracklist) > 0){
-    Tracks(tracklist)
+    trajectories::Tracks(tracklist)
   }
 
 }

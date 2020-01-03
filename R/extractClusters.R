@@ -1,8 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import spatstat
-#'@import sp
-NULL
-
 #' Extracts clusters based on point counts in a spatial grid.
 #'
 #' \code{extractClusters} extract clusters using the function
@@ -21,7 +16,9 @@ NULL
 #' \code{\link{clusterOrder}}.
 #' @examples #
 #' @export
-extractClusters <- function(currenttracks, targetQsize = 800, threshold = 20){
+extractClusters <- function(currenttracks,
+                            targetQsize = 800,
+                            threshold = 20) {
 
     # count the number of points of the Tracks object within the spatial grid cells
     trsGrid <- pointsPerQuad(currenttracks, targetQsize)

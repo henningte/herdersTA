@@ -4,10 +4,10 @@
 \alias{averageDirectionCampsiteLocationsTrack}
 \title{Computes the average direction (as absolute difference of angles) between campsite locations of a Track object in the order of movement.}
 \usage{
-averageDirectionCampsiteLocationsTrack(currenttrack, fun = median)
+averageDirectionCampsiteLocationsTrack(currenttrack, fun = stats::median)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location} and \code{campsite}}
 
 \item{fun}{One of \code{mean} or \code{median)}, depending on which function should be
@@ -19,7 +19,7 @@ locations in \code{currenttrack} in the order of movement.
 }
 \description{
 \code{averageDirectionCampsiteLocationsTrack} computes the average direction between
-locations of a \code{\link[trajectories:Track]{Track}} in the order of movement.
+locations of a \code{\link[trajectories:Track-class]{Track}} in the order of movement.
 Directions are computed as angle difference between the previous campsite location
 and the current campsite location and the next campsite location and the current
 campsite location. Several options are available.

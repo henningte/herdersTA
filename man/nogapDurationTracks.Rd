@@ -4,8 +4,12 @@
 \alias{nogapDurationTracks}
 \title{Determines the duration of non-gaps in GPS tracks.}
 \usage{
-nogapDurationTracks(currenttracks, timeinterval = 30 * 60, cores = 1,
-  clcall = NULL)
+nogapDurationTracks(
+  currenttracks,
+  timeinterval = 30 * 60,
+  cores = 1,
+  clcall = NULL
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
@@ -22,7 +26,7 @@ time interval represented by one data value of \code{currenttrack} [s].}
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 A \code{\link[trajectories:Track-class]{Tracks}} object identical to

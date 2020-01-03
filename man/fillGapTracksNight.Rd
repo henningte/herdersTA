@@ -2,10 +2,16 @@
 % Please edit documentation in R/fillGapTracksNight.R
 \name{fillGapTracksNight}
 \alias{fillGapTracksNight}
-\title{Imputes gaps in a \code{\link[trajectories]{Tracks}} object.}
+\title{Imputes gaps in a \code{Tracks} object.}
 \usage{
-fillGapTracksNight(currenttracks, maxduration, maxdistance, night = c(16,
-  20), cores = 1, clcall = NULL)
+fillGapTracksNight(
+  currenttracks,
+  maxduration,
+  maxdistance,
+  night = c(16, 20),
+  cores = 1,
+  clcall = NULL
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{TracksCollection}} object with
@@ -35,10 +41,10 @@ value after a gap that is filled [m].}
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
-The input \code{\link[trajectories]{Tracks}} object with filled
+The input \code{\link[trajectories:Track-class]{Tracks}} object with filled
 gaps.
 }
 \description{

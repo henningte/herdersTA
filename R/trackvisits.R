@@ -1,4 +1,3 @@
-#' @importFrom Rdpack reprompt
 #' @importFrom lubridate is.POSIXct
 NULL
 
@@ -159,8 +158,7 @@ trackvisits <- function(location,
                         campsite = FALSE,
                         campsiteinbetween = FALSE,
                         mergewithnext = FALSE,
-                        norepeatedcampsitevisits = NA
-){
+                        norepeatedcampsitevisits = NA) {
 
   # checks
   if(!(is.numeric(location) || !(0 %in% location) || all(location %% 1 == 0))){

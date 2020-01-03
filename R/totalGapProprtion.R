@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-NULL
-
 #' Computes the relative duration of gaps in GPS tracks.
 #'
 #' \code{totalGapProprtion} computes the relative duration of gaps [s] for all
@@ -39,7 +35,7 @@ totalGapProportion <- function(currenttracks,
                                tstart = min(currenttracks@tracksData$tmin),
                                tend = max(currenttracks@tracksData$tmax),
                                threshold = 18000,
-                               tolerance = 2){
+                               tolerance = 2) {
 
   totalGapDuration(currenttracks = currenttracks,
                    tstart = tstart,

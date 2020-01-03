@@ -1,7 +1,6 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import doParallel
-#' @import raster
+#' @importFrom parallel clusterExport makeCluster stopCluster parLapply
+#' @importFrom doParallel registerDoParallel
+#' @importFrom trajectories Tracks
 NULL
 
 #' Determines the duration of non-gaps in GPS tracks.
@@ -25,7 +24,7 @@ NULL
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
-#' \code{\link[parallel]{clusterCall}}.
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return A \code{\link[trajectories:Track-class]{Tracks}} object identical to
 #' \code{currenttracks}, except for a new column
 #' \code{currenttrack@data$duration_nogap}
@@ -37,34 +36,32 @@ NULL
 #' \code{\link{removeDataTracks}}, \code{\link{nogapDurationTrack}}.
 #' @examples #
 #' @export
-nogapDurationTracks <- function(currenttracks, timeinterval = 30 * 60, cores = 1, clcall = NULL){
+nogapDurationTracks <- function(currenttracks,
+                                timeinterval = 30 * 60,
+                                cores = 1,
+                                clcall = NULL) {
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == FALSE){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  clusterCall(cl, function(){library("raster")})
-  clusterCall(cl, function(){library("spacetime")})
-  clusterCall(cl, function(){library("trajectories")})
-  clusterExport(cl = cl, varlist = list("currenttracks", "timeinterval", "nogapDurationTrack"), envir=environment())
+  parallel::clusterCall(cl, function(){library("raster")})
+  parallel::clusterCall(cl, function(){library("spacetime")})
+  parallel::clusterCall(cl, function(){library("trajectories")})
+  parallel::clusterExport(cl = cl,
+                          varlist = list("currenttracks",
+                                         "timeinterval",
+                                         "nogapDurationTrack"),
+                          envir=environment())
+  on.exit(expr = parallel::stopCluster(cl))
 
-  newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
-
-    newcurrenttracks1 <- nogapDurationTrack(currenttrack = x, timeinterval = timeinterval)
-
-    return(newcurrenttracks1)
-
+  newcurrenttracks <- parallel::parLapply(cl, currenttracks@tracks, fun = function(x){
+    nogapDurationTrack(currenttrack = x, timeinterval = timeinterval)
   })
 
   # convert to Tracks object
-  newcurrenttracks <- Tracks(newcurrenttracks)
-
-  # stop cluster
-  stopCluster(cl)
-
-  # return result
-  return(newcurrenttracks)
+  trajectories::Tracks(newcurrenttracks)
 
 }

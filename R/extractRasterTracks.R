@@ -1,6 +1,6 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import raster
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel clusterExport makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
 NULL
 
 #' Extracts corresponding raster values for GPS tracks.
@@ -56,17 +56,25 @@ extractRasterTracks <- function(x, y, datetime, method = "simple", buffer = 0, s
   }
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == FALSE){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  on.exit(expr = stopCluster(cl))
+  on.exit(expr = parallel::stopCluster(cl))
 
   # merge the Track objects of each Tracks object
-  foreach(tracks = seq_along(y@tracksCollection), .packages = c("trajectories", "sp", "dplyr", "raster"), .export = c("extractRasterTrack"))%dopar%{
+  foreach::foreach(tracks = seq_along(y@tracksCollection), .packages = c("trajectories", "sp", "dplyr", "raster"), .export = c("extractRasterTrack"))%dopar%{
 
-    res <- extractRasterTrack(x = x, y = y@tracksCollection[[tracks]]@tracks[[1]], datetime = datetime, method = method, buffer = buffer, small = small, fun = fun, na.rm = na.rm, fixedlocationcoords = fixedlocationcoords)
+    res <- extractRasterTrack(x = x,
+                              y = y@tracksCollection[[tracks]]@tracks[[1]],
+                              datetime = datetime,
+                              method = method,
+                              buffer = buffer,
+                              small = small,
+                              fun = fun,
+                              na.rm = na.rm,
+                              fixedlocationcoords = fixedlocationcoords)
     res$household <- tracks
     res
 

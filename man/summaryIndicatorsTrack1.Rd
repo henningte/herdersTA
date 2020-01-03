@@ -4,8 +4,12 @@
 \alias{summaryIndicatorsTrack1}
 \title{Computes summary indicators for GPS tracks.}
 \usage{
-summaryIndicatorsTrack1(currenttrack, normalise = TRUE,
-  timeinterval = 30 * 60, aggregation = "allvisits")
+summaryIndicatorsTrack1(
+  currenttrack,
+  normalise = TRUE,
+  timeinterval = 30 * 60,
+  aggregation = "allvisits"
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
@@ -64,7 +68,7 @@ following variables:
 \description{
 \code{summaryIndicatorsTrack1} computes various summary indicators
 for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
-with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} or
+with \code{\link{reorganizeTracks}}, \code{\link{locationsTrack}} or
 \code{\link{clusterOrder}}, \code{\link{removeDataTrack}} and
 \code{\link{nogapDurationTrack}}.
 }

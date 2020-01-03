@@ -1,5 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#' @importFrom stats na.omit
 NULL
 
 #' Finds outliers in GPS tracks.
@@ -34,6 +33,6 @@ findOutliersTrack <- function(currenttrack,
   connectionsub <- currenttrack@connections[index(currenttrack@time) >= tstart &
                              index(currenttrack@time) <= tend, ]
 
-  na.omit(connectionsub[connectionsub$speed > threshold, ])
+  stats::na.omit(connectionsub[connectionsub$speed > threshold, ])
 
 }

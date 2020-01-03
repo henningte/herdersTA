@@ -1,13 +1,9 @@
-#' @importFrom Rdpack reprompt
-#' @import spacetime
-#' @import lubridate
-#' @import trajectories
-#' @import rgdal
-#' @import sp
-#' @import rgeos
+#' @importFrom sp SpatialPoints CRS proj4string
+#' @importFrom trajectories Track
+#' @importFrom stats median na.omit
 NULL
 
-#' Aggregates a \code{\link[trajectories:Track-class]{Track}} object to Daily Resolution and to Locations.
+#' Aggregates a \code{Track} object to Daily Resolution and to Locations.
 #'
 #' \code{aggregateDailyLocationsTrack} aggregates the data values
 #' of a \code{\link[trajectories:Track-class]{Track}} object that has been
@@ -37,10 +33,11 @@ NULL
 #' centroids for the location that has the main data values for that day that were assigned
 #' to a location.
 #'
-#' @seealso \code{\link{reorganizeTrack}}.
+#' @seealso \code{\link{reorganizeTracks}}.
 #' @examples #
 #' @export
-aggregateDailyLocationsTrack <- function(currenttrack, crs){
+aggregateDailyLocationsTrack <- function(currenttrack,
+                                         crs) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -56,7 +53,9 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
   night <- attributes(currenttrack)$night
 
   # transform currenttrack to a SPDF
-  trsSP <- TrackToSpatialPointsDataFrame(currenttrack = currenttrack, toproject = TRUE, crs = crs)
+  trsSP <- TrackToSpatialPointsDataFrame(currenttrack = currenttrack,
+                                         toproject = TRUE,
+                                         crs = crs)
 
   # compute centroid longitude, latitude and altitude values for each location
   locationscentroidpositions <- as.data.frame(do.call(rbind, lapply(unique(trsSP@data$location), function(x){
@@ -65,7 +64,7 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
     indexlocation <- which(trsSP$location[night] == x)
 
     # median of the longitude, latitude, altitude
-    c(x, apply(matrix(trsSP@coords[night,][indexlocation,], ncol = 2), 2, median), median(na.omit(as.numeric(trsSP$HEIGHT[night][indexlocation]))))
+    c(x, apply(matrix(trsSP@coords[night,][indexlocation,], ncol = 2), 2, stats::median), stats::median(stats::na.omit(as.numeric(trsSP$HEIGHT[night][indexlocation]))))
 
   })), stringsAsFactors = FALSE)
   colnames(locationscentroidpositions) <- c("location", "longitude", "latitude", "altitude")
@@ -123,12 +122,15 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
     c(days[x[1]], targetlocation, as.numeric(locationscentroidpositions[locationscentroidpositions$location == targetlocation,-1]), arrival, departure, numberofvisit, nogapsproportion)
 
   }))
-  aggregatedcurrenttracksdata <- as.data.frame(aggregatedcurrenttracksdata, stringsAsFactors = FALSE)
+  aggregatedcurrenttracksdata <- as.data.frame(aggregatedcurrenttracksdata,
+                                               stringsAsFactors = FALSE)
   colnames(aggregatedcurrenttracksdata) <- c("day", "location", "longitude", "latitude", "altitude", "arrived", "left", "visitscampsite", "nogapsproportion")
   aggregatedcurrenttracksdata[,-c(1, 6, 7)] <- apply(aggregatedcurrenttracksdata[,-c(1, 6, 7)], 2, as.numeric)
 
   # redefine the lon/lat data of gaps to the respective previous location
-  gapsblocks <- identifyBlocksVariable(currenttrack = aggregatedcurrenttracksdata, variable = "location", value = 0)
+  gapsblocks <- identifyBlocksVariable(currenttrack = aggregatedcurrenttracksdata,
+                                       variable = "location",
+                                       value = 0)
 
   # if there are gaps
   if(!is.null(gapsblocks) && length(unique(aggregatedcurrenttracksdata$location)) != 1){
@@ -159,14 +161,14 @@ aggregateDailyLocationsTrack <- function(currenttrack, crs){
   newtime <- as.POSIXct(aggregatedcurrenttracksdata$day, format = "%Y-%m-%d")
 
   # create a new Track object
-  Track(track = STIDF(
-    sp = SpatialPoints(coords =
-                         data.frame(lon = aggregatedcurrenttracksdata$longitude,
-                                    lat = aggregatedcurrenttracksdata$latitude),
-                       proj4string = CRS(proj4string(currenttrack@sp))),
+  trajectories::Track(track = spacetime::STIDF(
+    sp = sp::SpatialPoints(coords =
+                             data.frame(lon = aggregatedcurrenttracksdata$longitude,
+                                        lat = aggregatedcurrenttracksdata$latitude),
+                           proj4string = sp::CRS(sp::proj4string(currenttrack@sp))),
     time = newtime,
     endTime = newtime,
     data = aggregatedcurrenttracksdata)
-        )
+  )
 
 }

@@ -4,8 +4,12 @@
 \alias{trackvisitsMergeGroups}
 \title{Merges Grouped Visits from Track Objects}
 \usage{
-trackvisitsMergeGroups(currenttrackvisits, tmin, timeinterval = 30 * 60,
-  keepgroup = FALSE)
+trackvisitsMergeGroups(
+  currenttrackvisits,
+  tmin,
+  timeinterval = 30 * 60,
+  keepgroup = FALSE
+)
 }
 \arguments{
 \item{currenttrackvisits}{An object of class \code{\link{trackvisits}} for

@@ -1,5 +1,4 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom stats na.omit
 NULL
 
 #' Computes summary indicators for GPS tracks.
@@ -28,8 +27,7 @@ NULL
 #' @examples #
 #' @export
 summaryIndicatorsIntervalsTrack_altitude <- function(currenttrack,
-                                                        normalise = FALSE
-){
+                                                     normalise = FALSE) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -37,7 +35,8 @@ summaryIndicatorsIntervalsTrack_altitude <- function(currenttrack,
   }
 
   # assign each day in currenttrack$day to a ftdi
-  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
+  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"),
+                                    startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
   ftdi <- ftdi - min(ftdi) + 1
 
@@ -63,7 +62,9 @@ summaryIndicatorsIntervalsTrack_altitude <- function(currenttrack,
       currentconnections <- as.data.frame(connections[c(x, x[length(x)]+1),])
 
       # identify block of gaps in connection
-      currentgapblocks <- identifyBlocksVariable(currenttrack = currentconnections, variable = "gap", value = TRUE)
+      currentgapblocks <- identifyBlocksVariable(currenttrack = currentconnections,
+                                                 variable = "gap",
+                                                 value = TRUE)
       if(!is.null(currentgapblocks)){
 
         # remove blocks at the boundary of the tdi
@@ -88,7 +89,7 @@ summaryIndicatorsIntervalsTrack_altitude <- function(currenttrack,
 
       # sum the values
       apply(matrix(currentconnections$altitude, ncol = 1), 2, function(y){
-        sum(na.omit(y))
+        sum(stats::na.omit(y))
       })
 
     })), stringsAsFactors = FALSE)

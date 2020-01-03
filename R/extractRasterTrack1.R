@@ -1,13 +1,12 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import raster
+#' @importFrom sp SpatialPointsDataFrame CRS proj4string
+#' @importFrom raster extract nlayers
 NULL
 
 #' Extracts corresponding raster values for GPS tracks.
 #'
 #' \code{extractRasterTrack1} extracts values from raster based time series
 #' (\code{RasterBrick} or \code{RasterStack} object, see:
-#' \code{\link[raster]{Raster-class}}) that correspond the the respective
+#' \code{\link[raster:Raster-classes]{Raster-classes}}) that correspond the the respective
 #' position and time of a \code{\link[trajectories:Track-class]{Track}} object with
 #' daily resolution.
 #'
@@ -15,7 +14,7 @@ NULL
 #' has a column \code{day} containing the time information of the data
 #' values.
 #' @param raster raster based time series (\code{RasterBrick} or
-#' \code{RasterStack} object, see: \code{\link[raster]{Raster-class}}).
+#' \code{RasterStack} object, see: \code{\link[raster:Raster-classes]{Raster-classes}}).
 #' Eacj layer of \code{raster} has to correspond to a value in
 #' \code{currenttrack}, i.e. both must have daily resolution and
 #' the same number of values and layers, respectively.
@@ -32,9 +31,8 @@ NULL
 #' @examples #
 #' @export
 extractRasterTrack1 <- function(currenttrack,
-                               raster,
-                               buffer = 0
-                               ){
+                                raster,
+                                buffer = 0) {
 
   # check if currenttrack is specified correctly
   if(!inherits(currenttrack, "Track")){
@@ -45,13 +43,15 @@ extractRasterTrack1 <- function(currenttrack,
   }
 
   # check if raster has the same number of layers as there are values in currenttrack
-  if(nrow(currenttrack@data) != nlayers(raster)){
+  if(nrow(currenttrack@data) != raster::nlayers(raster)){
     stop("raster must have the same number of layers as there are values in currenttrack\n")
   }
 
   # extract the position of each location from currenttrack
   locationsdata <- currenttrack@data[!duplicated(currenttrack@data$location), c(2,3,4)]
-  locationsdata <- SpatialPointsDataFrame(coords = locationsdata[,c(2,3)], data = locationsdata, proj4string = CRS(proj4string(currenttrack@sp)))
+  locationsdata <- sp::SpatialPointsDataFrame(coords = locationsdata[,c(2,3)],
+                                              data = locationsdata,
+                                              proj4string = sp::CRS(sp::proj4string(currenttrack@sp)))
 
   # extract the location for each day
   eachdaylocation <- currenttrack@data$location
@@ -70,7 +70,14 @@ extractRasterTrack1 <- function(currenttrack,
     raster <- raster[[indexnongaps]]
 
     # extract the values for all locations
-    extractedvalues <- t(raster::extract(x = raster, y = locationsdata, method = "simple", buffer = buffer, na.rm = TRUE, layer = 1, nl = nlayers(raster), fun = mean))
+    extractedvalues <- t(raster::extract(x = raster,
+                                         y = locationsdata,
+                                         method = "simple",
+                                         buffer = buffer,
+                                         na.rm = TRUE,
+                                         layer = 1,
+                                         nl = raster::nlayers(raster),
+                                         fun = mean))
 
     # filter the values for each day for the target location
     extractedvalues <- sapply(seq_along(eachdaylocation), function(x) extractedvalues[x,][which(locationsdata$location == eachdaylocation[x])])

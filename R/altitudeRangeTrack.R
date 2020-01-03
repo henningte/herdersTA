@@ -1,14 +1,10 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Extracts the altitude range from a Track object.
 #'
 #' \code{altitudeRangeTrack} extracts the altitude range
-#' \code{\link[trajectories:Track]{Track}} object with a variable
+#' \code{\link[trajectories:Track-class]{Track}} object with a variable
 #' \code{altitude} in the data slot. \code{NA}s are removed.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{altitude} in the data slot.
 #' @return a numeric vector of length two with the range of the altitude values
 #' of \code{currenttrack}.

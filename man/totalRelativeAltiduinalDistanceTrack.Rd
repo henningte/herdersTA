@@ -7,7 +7,7 @@
 totalRelativeAltiduinalDistanceTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{altitude} in the \code{data} slot.}
 }
 \value{
@@ -16,7 +16,7 @@ a numeric value representing the total altitudinal distance covered by
 }
 \description{
 \code{totalRelativeAltitudeDistanceTrack} computes the total altitudinal distance
-covered by a \code{\link[trajectories:Track]{Track}} (sum of absolute altitudinal
+covered by a \code{\link[trajectories:Track-class]{Track}} (sum of absolute altitudinal
 distances).
 }
 \examples{

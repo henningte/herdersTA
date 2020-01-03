@@ -7,7 +7,7 @@
 sumLatitudeTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location} and \code{campsite} in the data slot.}
 }
 \value{
@@ -16,7 +16,7 @@ for \code{currenttrack}.
 }
 \description{
 \code{sumLatitudeTrack} sums the latitude differences between adjacent campsite
-locations for a \code{\link[trajectories:Track]{Track}}.
+locations for a \code{\link[trajectories:Track-class]{Track}}.
 }
 \examples{
 #

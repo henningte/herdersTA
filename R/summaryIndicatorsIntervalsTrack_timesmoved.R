@@ -1,5 +1,4 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom stats na.omit
 NULL
 
 #' Computes summary indicators for GPS tracks.
@@ -28,8 +27,7 @@ NULL
 #' @examples #
 #' @export
 summaryIndicatorsIntervalsTrack_timesmoved <- function(currenttrack,
-                                                       normalise = FALSE
-){
+                                                       normalise = FALSE) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -37,7 +35,8 @@ summaryIndicatorsIntervalsTrack_timesmoved <- function(currenttrack,
   }
 
   # assign each day in currenttrack$day to a ftdi
-  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
+  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"),
+                                    startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
   ftdi <- ftdi - min(ftdi) + 1
 
@@ -46,7 +45,7 @@ summaryIndicatorsIntervalsTrack_timesmoved <- function(currenttrack,
     as.data.frame(cbind(names(ftdi[!duplicated(ftdi)]), tapply(seq_along(ftdi), ftdi, function(x){
 
       # compute the number of arrivals
-      noarrivals <- sum(na.omit(as.numeric(as.logical(currenttrack@data$arrived[x]))))
+      noarrivals <- sum(stats::na.omit(as.numeric(as.logical(currenttrack@data$arrived[x]))))
 
       # compute the number of departures
       nodepartures <- sum(na.omit(as.numeric(as.logical(currenttrack@data$left[x]))))

@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import spatstat
-NULL
-
 #' Defines the topology of a spatial grid.
 #'
 #' \code{qTopology} determines topology for grid and quadratcount, i.e.
@@ -21,7 +17,8 @@ NULL
 #' \code{\link{clusterOrder}}.
 #' @examples #
 #' @export
-qTopology <- function(ppp, targetQsize){
+qTopology <- function(ppp,
+                      targetQsize) {
 
   #determine next number of quadrats in x and y direction, by simple rounding
   nqx <- round((ppp$window$xrange[2] - ppp$window$xrange[1]) / targetQsize)

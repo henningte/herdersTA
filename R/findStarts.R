@@ -1,8 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import spatstat
-#'@import sp
-NULL
-
 #' Determines the start times of visits of a cluster.
 #'
 #' \code{findStarts} determines the start date/time of the latest visit
@@ -13,9 +8,9 @@ NULL
 #' returned by \code{\link{searchNextVisit}}. This function is used by
 #' function \code{\link{clusterOrder}}.
 #'
-#' @param clusters A \code{\link[sp]{SpatialGridDataFrame}} object containing
+#' @param clusters A \code{\link[sp:SpatialGridDataFrame-class]{SpatialGridDataFrame}} object containing
 #' point clusters, as created with \code{\link{extractClusters}}.
-#' @param trs_spdf A \code{\link[sp]{SpatialPointsDataFrame}} of the
+#' @param trs_spdf A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} of the
 #' household movement (as converted from a \code{\link[trajectories:Track-class]{Tracks}}
 #' object).
 #' @return A \code{POSIXct} vector of containing the starts (first points)
@@ -25,7 +20,8 @@ NULL
 #' \code{\link{clusterOrder}}.
 #' @examples #
 #' @export
-findStarts <- function(clusters, trs_spdf){
+findStarts <- function(clusters,
+                       trs_spdf) {
 
   # get the end of previous visit from the second last coloumn of data frame
   last_of_previous <- clusters@data[[ncol(clusters@data)-1]]

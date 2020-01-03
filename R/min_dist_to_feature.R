@@ -1,7 +1,7 @@
-#'@importFrom Rdpack reprompt
-#'@import rgdal
-#'@import geosphere
-#'@import sp
+#' @importFrom geosphere dist2Line
+#' @importFrom sp proj4string spTransform CRS SpatialPoints
+#' @importFrom raster intersect buffer
+#' @importFrom dplyr left_join
 NULL
 
 #' Computes the minimum distance of locations to the nearest line or polygon border
@@ -36,14 +36,16 @@ min_dist_to_feature <- function(currenttrack, feature, minrange = 10000){
   distance <- data.frame(location = currenttrack$location[index], stringsAsFactors = FALSE)
 
   # extract locations as SpatialPoints
-  locations <- SpatialPoints(currenttrack@sp@coords[index,, drop = FALSE], proj4string = currenttrack@sp@proj4string)
+  locations <- sp::SpatialPoints(currenttrack@sp@coords[index,, drop = FALSE], proj4string = currenttrack@sp@proj4string)
 
   #check CRS of both inputs
-  if(!proj4string(locations)=="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
-    locations <- spTransform(locations,CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+  if(!sp::proj4string(locations)=="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
+    locations <- sp::spTransform(locations,
+                                 sp::CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
   }
-  if(!proj4string(feature)=="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
-    feature <- spTransform(feature,CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+  if(!sp::proj4string(feature)=="+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
+    feature <- sp::spTransform(feature,
+                               sp::CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
   }
 
   #iterate through locations, for each location...
@@ -51,16 +53,16 @@ min_dist_to_feature <- function(currenttrack, feature, minrange = 10000){
     sapply(seq_along(locations), function(i){
       #check whether there are features in the minimum range (specified by minrange)
       bufferrange <- minrange
-      feat_in_range <- suppressWarnings(intersect(feature, buffer(locations[i], bufferrange)))
+      feat_in_range <- suppressWarnings(raster::intersect(feature, raster::buffer(locations[i], width = bufferrange)))
       # if there are none, feat_in_range will be NULL, in this case extend range iteratively by 10000m until
       #feat_in_range is not NULL
       while(length(feat_in_range) < 2){
         bufferrange <- bufferrange + 10000
-        feat_in_range <- suppressWarnings(intersect(feature,buffer(locations[i], bufferrange)))
+        feat_in_range <- suppressWarnings(raster::intersect(feature, raster::buffer(locations[i], width = bufferrange)))
       }
       #then calculate shortest distance to features in feat_in_range and add it to the vector of distances for
       #all locations
-      dist2Line(locations[i],feat_in_range)[,1]
+      geosphere::dist2Line(locations[i],feat_in_range)[,1]
     })
 
   # join the distance values to the data values in currenttrack@data

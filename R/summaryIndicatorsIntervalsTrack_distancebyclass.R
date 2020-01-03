@@ -1,6 +1,4 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import plyr
+#' @importFrom stats na.omit
 NULL
 
 #' Computes summary indicators for GPS tracks.
@@ -34,8 +32,7 @@ NULL
 #' @export
 summaryIndicatorsIntervalsTrack_distancebyclass <- function(currenttrack,
                                                             normalise = FALSE,
-                                                            classvariable
-){
+                                                            classvariable) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -48,7 +45,8 @@ summaryIndicatorsIntervalsTrack_distancebyclass <- function(currenttrack,
   }
 
   # assign each day in currenttrack$day to a ftdi
-  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
+  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"),
+                                    startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
   ftdi <- ftdi - min(ftdi) + 1
 
@@ -59,17 +57,18 @@ summaryIndicatorsIntervalsTrack_distancebyclass <- function(currenttrack,
       # get the class indices
       index <- c(x[1]-1, x)
       index <- index[index != 0]
-      classindices <- tapply(index, currenttrack@data[c(x, x[length(x)]+1),names(currenttrack@data) == classvariable], function(y){
+      classindices <- tapply(index, currenttrack@data[c(x, x[length(x)]+1), names(currenttrack@data) == classvariable], function(y){
         y
       }, simplify = FALSE)
 
       summarisedvalues <- sapply(classindices, function(y){
         apply(matrix(currenttrack@connections$distance[y], ncol = 1), 2, function(z){
-          sum(na.omit(z))
+          sum(stats::na.omit(z))
         })
       })
       names(summarisedvalues) <- names(classindices)
-      summarisedvalues <- as.data.frame(matrix(summarisedvalues, nrow = 1), stringsAsFactors = FALSE)
+      summarisedvalues <- as.data.frame(matrix(summarisedvalues, nrow = 1),
+                                        stringsAsFactors = FALSE)
       colnames(summarisedvalues) <- names(classindices)
 
       return(summarisedvalues)

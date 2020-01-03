@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-NULL
-
 #' Analyses the temporal coverage of GPS tracks.
 #'
 #' \code{timeActiveTrack} computes the time [s] during which position data was
@@ -22,10 +18,12 @@ NULL
 #'   \item The number of seconds the time period and the track intersect in any
 #'   other case.
 #' }
-#' @seealso \code{\link{timeActiveTracks}}, \code{\link{timeActiveTrackCollection}}.
+#' @seealso \code{\link{timeActiveTracks}}, \code{\link{timeActiveTracksCollection}}.
 #' @examples #
 #' @export
-timeActiveTrack <- function(currenttrack, tstart, tend){
+timeActiveTrack <- function(currenttrack,
+                            tstart,
+                            tend) {
 
   # return 0 if no intersection and touching of the track and the time period
   if (max(index(currenttrack@time)) < tstart | min(index(currenttrack@time)) > tend){
@@ -39,8 +37,8 @@ timeActiveTrack <- function(currenttrack, tstart, tend){
   else{
     as.double(difftime(
       max(index(currenttrack@time)[index(currenttrack@time) <= tend]),
-      min(index(currenttrack@time)[index(currenttrack@time) >= tstart]), units =
-      "sec"))
+      min(index(currenttrack@time)[index(currenttrack@time) >= tstart]),
+      units = "sec"))
   }
 
 }

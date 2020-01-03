@@ -1,6 +1,8 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import raster
+#' @importFrom raster extract nlayers
+#' @importFrom sp SpatialPointsDataFrame CRS proj4string
+#' @importFrom lubridate as_date
+#' @importFrom data.table rbindlist
+#' @importFrom dplyr left_join
 NULL
 
 #' Extracts corresponding raster values for GPS tracks.
@@ -47,8 +49,16 @@ NULL
 #' \code{\link{extractRasterTracks}}.
 #' @examples #
 #' @export
-extractRasterTrack <- function(x, y, datetime = NULL, method = "simple", buffer = 0, small = TRUE, fun = NULL, na.rm = TRUE, fixedlocationcoords = FALSE
-){
+extractRasterTrack <- function(x,
+                               y,
+                               datetime = NULL,
+                               method = "simple",
+                               buffer = 0,
+                               small = TRUE,
+                               fun = NULL,
+                               na.rm = TRUE,
+                               fixedlocationcoords = FALSE
+) {
 
   # checks
   if(!(inherits(y, "Track"))){
@@ -62,10 +72,10 @@ extractRasterTrack <- function(x, y, datetime = NULL, method = "simple", buffer 
   }
 
   # number of layers in x
-  xnlayers <- nlayers(x)
+  xnlayers <- raster::nlayers(x)
 
-  # check if xnlayers == 1 || nlayers == nrow(y@data)
-  if(!(length(xnlayers) == 1 || nlayers == nrow(y@data))){
+  # check if xnlayers == 1 || xnlayers == nrow(y@data)
+  if(!(length(xnlayers) == 1 || xnlayers == nrow(y@data))){
     stop("x must contain either one layer or the number of layers of x must match the number of values in y\n")
   }
 
@@ -77,7 +87,7 @@ extractRasterTrack <- function(x, y, datetime = NULL, method = "simple", buffer 
     ypts <- y@sp[nongapsindex]
   }else{
     uniquelocationindex <- which(!duplicated(y@data$location) & y@data$location != 0)
-    ypts <- sp::SpatialPointsDataFrame(coords = y@sp[uniquelocationindex], data = data.frame(location = y@data$location[uniquelocationindex]), proj4string = CRS(proj4string(y)))
+    ypts <- sp::SpatialPointsDataFrame(coords = y@sp[uniquelocationindex], data = data.frame(location = y@data$location[uniquelocationindex]), proj4string = sp::CRS(sp::proj4string(y)))
   }
 
   # define layer
@@ -86,7 +96,15 @@ extractRasterTrack <- function(x, y, datetime = NULL, method = "simple", buffer 
   if(xnlayers == 1){
 
     # extract the values for all locations
-    res <- raster::extract(x = x, y = ypts, method = method, buffer = buffer, na.rm = na.rm, layer = layer, nl = xnlayers, fun = fun, df = TRUE)[,2]
+    res <- raster::extract(x = x,
+                           y = ypts,
+                           method = method,
+                           buffer = buffer,
+                           na.rm = na.rm,
+                           layer = layer,
+                           nl = xnlayers,
+                           fun = fun,
+                           df = TRUE)[,2]
 
   }else{
 
@@ -99,7 +117,7 @@ extractRasterTrack <- function(x, y, datetime = NULL, method = "simple", buffer 
     # create a clipped version of x
     trackdatetimeindex <- which(tracktime %in% dateinterval)
     xclipped <- x
-    xnlayersclipped <- nlayers(xclipped)
+    xnlayersclipped <- raster::nlayers(xclipped)
 
     # create a data.frame to store the results in
     res <- data.frame(date = rep(tracktime, length(uniquelocationindex)),
@@ -110,10 +128,17 @@ extractRasterTrack <- function(x, y, datetime = NULL, method = "simple", buffer 
     # extract the values for all locations (and stack them to a column)
     cellnumbers <- raster::extract(x = xclipped[[1]], y = ypts, method = method, buffer = buffer, na.rm = na.rm, layer = layer, nl = xnlayersclipped, fun = NULL, df = FALSE, cellnumbers = TRUE)
     cellnumbers <- data.table::rbindlist(lapply(seq_along(cellnumbers), function(z){
-      cellnumbers <- data.frame(location = ypts$location[z], matrix(cellnumbers[[z]], ncol = 2), stringsAsFactors = FALSE)
+      cellnumbers <- data.frame(location = ypts$location[z],
+                                matrix(cellnumbers[[z]],
+                                       ncol = 2),
+                                stringsAsFactors = FALSE)
     }))
 
-    xres <- raster::extract(x = xclipped, y = unlist(cellnumbers[,2]), layer = layer, nl = xnlayersclipped, df = TRUE)[,-1]
+    xres <- raster::extract(x = xclipped,
+                            y = unlist(cellnumbers[,2]),
+                            layer = layer,
+                            nl = xnlayersclipped,
+                            df = TRUE)[,-1]
     if(!(tracktime[1] %in% datetime)){
       xres[,1] <- rep(NA, nrow(xres))
     }

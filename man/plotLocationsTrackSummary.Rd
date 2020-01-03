@@ -2,11 +2,13 @@
 % Please edit documentation in R/plotLocationsTrackSummary.R
 \name{plotLocationsTrackSummary}
 \alias{plotLocationsTrackSummary}
-\title{Plots Summarised Tracks as Returned by \code{\link{locaitonsTrack}}.}
+\title{Plots Summarised Tracks as Returned by \code{locationsTrack}.}
 \usage{
-plotLocationsTrackSummary(x, seasons = data.frame(start = c(3, 5, 9, 11),
-  end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1",
-  "lightgray")))
+plotLocationsTrackSummary(
+  x,
+  seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour =
+    c("yellow", "red", "burlywood1", "lightgray"))
+)
 }
 \arguments{
 \item{x}{An object as returned by \code{\link{locationsTrack}} with
@@ -24,10 +26,10 @@ and three columns:
 }}
 }
 \value{
-A  \code{\link[ggplot2]{ggplotobj}} object.
+A  \code{\link[ggplot2]{ggplot}} object.
 }
 \description{
-\code{plotLocationsTrackSummary} plots the result of \code{\link{locaitonsTrack}}
+\code{plotLocationsTrackSummary} plots the result of \code{\link{locationsTrack}}
 (with parameter  \code{summary = TRUE}) for a \code{\link[trajectories:Track-class]{Track}}
 object. This means that idividual campsites are plotted as dots linked with a
 line. Labels indicate the step (i.e. the sequence of visits), the location id,

@@ -4,8 +4,14 @@
 \alias{reorganizeTracks}
 \title{Reorganises \code{\link[trajectories:Track-class]{Tracks}} objects.}
 \usage{
-reorganizeTracks(currenttracks, interval = 60 * 30, tz = "GMT",
-  crs = "+proj=longlat +ellps=WGS84", cores = 1, clcall = NULL)
+reorganizeTracks(
+  currenttracks,
+  interval = 60 * 30,
+  tz = "GMT",
+  crs = "+proj=longlat +ellps=WGS84",
+  cores = 1,
+  clcall = NULL
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{TracksCollection}} object
@@ -16,7 +22,7 @@ with only one \code{\link[trajectories:Track-class]{Track}} object per
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 A \code{\link[trajectories:Track-class]{Tracks}} object containing

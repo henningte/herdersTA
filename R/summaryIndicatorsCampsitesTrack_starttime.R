@@ -1,7 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Extracts a Vector of Matched Unique Values for Campsites.
 #'
 #' \code{summaryIndicatorsCampsitesTrack_starttime} extracts for each

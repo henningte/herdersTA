@@ -4,10 +4,13 @@
 \alias{totalGapProportion}
 \title{Computes the relative duration of gaps in GPS tracks.}
 \usage{
-totalGapProportion(currenttracks,
+totalGapProportion(
+  currenttracks,
   tstart = min(currenttracks@tracksData$tmin),
-  tend = max(currenttracks@tracksData$tmax), threshold = 18000,
-  tolerance = 2)
+  tend = max(currenttracks@tracksData$tmax),
+  threshold = 18000,
+  tolerance = 2
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}

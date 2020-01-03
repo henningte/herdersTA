@@ -1,6 +1,3 @@
-#'@importFrom Rdpack reprompt
-NULL
-
 #' Finds non-empty .csv files in a directory.
 #'
 #' \code{removeEmptyFiles} returns the names of non-empty .csv files within a

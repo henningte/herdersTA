@@ -1,5 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#'@importFrom trajectories Tracks
 NULL
 
 #' Reads data from a set of GPS track files.
@@ -16,18 +15,18 @@ NULL
 #' @seealso \code{\link{removeEmptyFiles}}, \code{\link{readTrack}}.
 #' @examples #
 #' @export
-loadTracks <- function(folder){
+loadTracks <- function(folder) {
 
   # print message
-  print(paste("Loading tracks from folder", folder, sep = " "),quote = F)
+  print(paste("Loading tracks from folder", folder, sep = " "), quote = FALSE)
 
   # get filenames
-  lst <- list.files(folder, pattern = "*.CSV", full.names = T)
+  lst <- list.files(folder, pattern = "*.CSV", full.names = TRUE)
 
   # get names of not epty files
   lst <- removeEmptyFiles(lst)
 
   # load the data and return a Tracks object
-  Tracks(lapply(lst, readTrack))
+  trajectories::Tracks(lapply(lst, readTrack))
 
 }

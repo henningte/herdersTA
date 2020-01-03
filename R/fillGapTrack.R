@@ -1,9 +1,9 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import raster
+#' @importFrom trajectories Track
+#' @importFrom spacetime STIDF
+#' @importFrom raster crs pointDistance
 NULL
 
-#' Imputes gaps in a \code{\link[trajectories:Track-class]{Track}} object.
+#' Imputes gaps in a \code{Track} object.
 #'
 #' \code{fillGapTrack} imputes missing values in a
 #' \code{\link[trajectories:Track-class]{Track}} object. Gaps are filled
@@ -27,18 +27,23 @@ NULL
 #' \code{currenttrack} [s].
 #' @return The input \code{\link[trajectories:Track-class]{Track}} object with filled
 #' gaps.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
+#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
 #' \code{\link{redefineIndices}},
 #' \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
+fillGapTrack <- function(currenttrack,
+                         maxduration,
+                         maxdistance,
+                         timeinterval) {
 
   # get the input CRS of the track
-  inputcrs <- proj4string(currenttrack)
+  inputcrs <- sp::proj4string(currenttrack)
 
   # identify blocks of representing gaps
-  blocksgaps1 <- identifyBlocksVariable(currenttrack, variable = "gap", value = TRUE)
+  blocksgaps1 <- identifyBlocksVariable(currenttrack,
+                                        variable = "gap",
+                                        value = TRUE)
 
   # test if blocksgaps1 == NULL
   if(is.null(blocksgaps1)){
@@ -57,7 +62,7 @@ fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
   # get duration of gaps
   discardgaps <-
     apply(blocksgaps1, 1, function(x){
-      if(length(x[1]:x[2])*timeinterval > maxduration){
+      if(length(x[1]:x[2]) * timeinterval > maxduration){
         0
       }else{
         1
@@ -79,7 +84,11 @@ fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
   discardgaps <-
     apply(blocksgaps1, 1, function(x){
 
-      block.dist <- pointDistance(c(currenttrack@data$lon[x[1]-1], currenttrack@data$lat[x[1]-1]), c(currenttrack@data$lon[x[2]+1], currenttrack@data$lat[x[2]+1]), lonlat = TRUE)
+      block.dist <- raster::pointDistance(c(currenttrack@data$lon[x[1]-1],
+                                            currenttrack@data$lat[x[1]-1]),
+                                          c(currenttrack@data$lon[x[2]+1],
+                                            currenttrack@data$lat[x[2]+1]),
+                                          lonlat = TRUE)
       if(is.na(block.dist)){
         0
       } else{
@@ -117,10 +126,15 @@ fillGapTrack <- function(currenttrack, maxduration, maxdistance, timeinterval){
   currenttrack@data$filled[as.vector(unlist(apply(blocksgaps1, 1, function(x){x[1]:x[2]})))] <- TRUE
 
   # recreate currenttrack as Track object
-  currenttrack <- Track(STIDF(sp = SpatialPoints(cbind(currenttrack@data$lon, currenttrack@data$lat)), time = as.POSIXct(currenttrack@data$time) , data = currenttrack@data, endTime = as.POSIXct(currenttrack@data$time)))
+  currenttrack <- trajectories::Track(
+    spacetime::STIDF(sp = sp::SpatialPoints(
+      coords = cbind(currenttrack@data$lon, currenttrack@data$lat)),
+      time = as.POSIXct(currenttrack@data$time),
+      data = currenttrack@data,
+      endTime = as.POSIXct(currenttrack@data$time)))
 
   # set crs
-  crs(currenttrack@sp) <- inputcrs
+  raster::crs(currenttrack@sp) <- inputcrs
 
   # return result
   return(currenttrack)

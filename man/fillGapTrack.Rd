@@ -2,7 +2,7 @@
 % Please edit documentation in R/fillGapTrack.R
 \name{fillGapTrack}
 \alias{fillGapTrack}
-\title{Imputes gaps in a \code{\link[trajectories:Track-class]{Track}} object.}
+\title{Imputes gaps in a \code{Track} object.}
 \usage{
 fillGapTrack(currenttrack, maxduration, maxdistance, timeinterval)
 }
@@ -40,7 +40,7 @@ value after the gap is \eqn{\le} a user specified distance threshold.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
+\code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
 \code{\link{redefineIndices}},
 \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 }

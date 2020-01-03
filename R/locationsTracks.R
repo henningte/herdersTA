@@ -1,7 +1,7 @@
-#' @importFrom Rdpack reprompt
-#' @import lubridate
-#' @import trajectories
-#' @import doParallel
+#' @importFrom trajectories TracksCollection
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel clusterExport makeCluster stopCluster
+#' @importFrom foreach foreach
 NULL
 
 #' Identifies and classifies visits in GPS tracks.
@@ -37,11 +37,9 @@ NULL
 #' i.e. visits at the same location are merged irrespective of the duration
 #' between these visits if there is no campsite visit at a different location
 #' in-between. Each row indicates a time period in which this should be valid.
-#' \code{tmaxintersticenotvalid} must contain two columns:
-#' \describe{
-#'   \item{\code{start}}{Represents the start time of the time interval.}
-#'   \item{\code{end}}{Represents the end time of the time interval.}
-#' }
+#' \code{tmaxintersticenotvalid} must contain two columns: \code{start} represents
+#' the start time of the time interval and \code{end} represents the end time of
+#' the time interval.
 #' It is evaluated for each visit if its endtime (\code{trackvisits$endtime})
 #' is within any of the time periods or the starttime (\code{trackvisits$starttime})
 #' of the next visit at the same location.
@@ -59,7 +57,7 @@ NULL
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
-#' \code{\link[parallel]{clusterCall}}.
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return
 #' \describe{
 #'   \item{If (\code{summary = FALSE})}{A
@@ -68,7 +66,7 @@ NULL
 #'   to the input \code{\link[trajectories:Track-class]{Track}} objects, but
 #'   have four additional columns in their \code{data} slot:
 #'   \describe{
-#'     \item {\code{location}}{An integer value for each identified
+#'     \item{\code{location}}{An integer value for each identified
 #'     spatial point cluster (location) increasing with the time starting
 #'     from 1.}
 #'     \item{\code{campsite}}{A logical value indicating if a visits of a
@@ -92,11 +90,11 @@ NULL
 #'     \item{location}{An integer value for each identified
 #'     spatial point cluster (location) increasing with the time starting
 #'     from 1.}
-#'     \code{lon}{The longitude of the respective location (as mean value of
+#'     \item{lon}{The longitude of the respective location (as mean value of
 #'     the coordinates of the data values assigned to the visit).}
-#'     \code{lat}{The latitude of the respective location (as mean value of
+#'     \item{lat}{The latitude of the respective location (as mean value of
 #'     the coordinates of the data values assigned to the visit).}
-#'     \code{alt}{The altitude of the respective location (as mean value of
+#'     \item{alt}{The altitude of the respective location (as mean value of
 #'     the coordinates of the data values assigned to the visit).}
 #'     \item{\code{visitsloc}}{An integer vector indicating the number of
 #'     visits at a specific location the data point is assigned to (i.e.
@@ -114,7 +112,7 @@ NULL
 #'     time of the visit from the respective location.}
 #'     \item{residencetime}{A numerical vector indicating the residence time
 #'     of each visit [s].}
-#'     \code{speed}{The speed of the respective location (as mean value of
+#'     \item{speed}{The speed of the respective location (as mean value of
 #'     the speed values of the data values assigned to the visit).}
 #'   }
 #'   }
@@ -135,12 +133,12 @@ locationsTracks <- function(currenttracks,
                             clcall = NULL){
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == F){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  clusterExport(cl = cl, varlist = list("currenttracks", "tmin",
+  parallel::clusterExport(cl = cl, varlist = list("currenttracks", "tmin",
                                         "tmaxinterstices",
                                         "identifyBlocksVariable",
                                         "extractClustersBuffer", "redefineIndices",
@@ -154,7 +152,7 @@ locationsTracks <- function(currenttracks,
   currenttracksnames <- names(currenttracks@tracksCollection)
 
   # apply locationsTrack to each Track object
-  currenttracks <- foreach(track_i = seq_len(length(currenttracks@tracksCollection)), .packages = c("dbscan", "trajectories", "sp", "spacetime"))%dopar%{
+  currenttracks <- foreach::foreach(track_i = seq_len(length(currenttracks@tracksCollection)), .packages = c("dbscan", "trajectories", "sp", "spacetime"))%dopar%{
 
     locationsTrack(currenttrack = currenttracks@tracksCollection[[track_i]]@tracks[[1]],
                    radius = radius,
@@ -171,14 +169,14 @@ locationsTracks <- function(currenttracks,
 
   # convert currenttracks to a Tracks object if summary == FALSE
   if(!summary){
-    currenttracks <- TracksCollection(lapply(currenttracks[notnull], function(x) Tracks(list(x))))
+    currenttracks <- trajectories::TracksCollection(lapply(currenttracks[notnull], function(x) Tracks(list(x))))
     names(currenttracks@tracksCollection) <- currenttracksnames[notnull]
   }else{
     currenttracks <- currenttracks[notnull]
     names(currenttracks) <- currenttracksnames[notnull]
   }
 
-  stopCluster(cl)
+  parallel::stopCluster(cl)
 
   # return the result
   return(currenttracks)

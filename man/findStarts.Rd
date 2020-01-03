@@ -7,10 +7,10 @@
 findStarts(clusters, trs_spdf)
 }
 \arguments{
-\item{clusters}{A \code{\link[sp]{SpatialGridDataFrame}} object containing
+\item{clusters}{A \code{\link[sp:SpatialGridDataFrame-class]{SpatialGridDataFrame}} object containing
 point clusters, as created with \code{\link{extractClusters}}.}
 
-\item{trs_spdf}{A \code{\link[sp]{SpatialPointsDataFrame}} of the
+\item{trs_spdf}{A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} of the
 household movement (as converted from a \code{\link[trajectories:Track-class]{Tracks}}
 object).}
 }

@@ -1,12 +1,10 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import raster
+#' @importFrom sp SpatialPointsDataFrame CRS proj4string
 NULL
 
 #' Extracts corresponding raster values for GPS tracks.
 #'
 #' \code{extractRasterTrackTimeinterval} extracts values from a \code{RasterBrick}
-#' or \code{RasterStack} object (see: \code{\link[raster]{Raster-class}}) with a
+#' or \code{RasterStack} object (see: \code{\link[raster:Raster-classes]{Raster-classes}}) with a
 #' temporal resolution greater than one day that corresponds to the respective
 #' position of values of a \code{\link[trajectories:Track-class]{Track}} object with
 #' daily resolution.
@@ -15,7 +13,7 @@ NULL
 #' has a column \code{day} containing the time information of the data
 #' values.
 #' @param raster A \code{RasterBrick} or \code{RasterStack} (see:
-#' \code{\link[raster]{Raster-class}}). from which values should be
+#' \code{\link[raster:Raster-classes]{Raster-classes}}). from which values should be
 #' extracted. Each layer has to correspond to a time interval with
 #' a duration longer than a day.
 #' @param timedate A \code{POSIXct} vector with each element representing
@@ -35,9 +33,8 @@ NULL
 #' @examples #
 #' @export
 extractRasterTrackTimeinterval <- function(currenttrack,
-                                          raster,
-                                          buffer = 0
-){
+                                           raster,
+                                           buffer = 0) {
 
   # check if currenttrack is specified correctly
   if(!inherits(currenttrack, "Track")){
@@ -49,7 +46,9 @@ extractRasterTrackTimeinterval <- function(currenttrack,
 
   # extract the position of each location from currenttrack
   locationsdata <- currenttrack@data[!duplicated(currenttrack@data$location), c(2,3,4)]
-  locationsdata <- SpatialPointsDataFrame(coords = locationsdata[,c(2,3)], data = locationsdata, proj4string = CRS(proj4string(currenttrack@sp)))
+  locationsdata <- sp::SpatialPointsDataFrame(coords = locationsdata[,c(2,3)],
+                                              data = locationsdata,
+                                              proj4string = sp::CRS(sp::proj4string(currenttrack@sp)))
 
   # extract the location for each day
   eachdaylocation <- currenttrack@data$location
@@ -81,8 +80,6 @@ extractRasterTrackTimeinterval <- function(currenttrack,
 
   # insert the values into res
   res[indexnongaps] <- extractedvalues
-
-  # return res
-  return(res)
+  res
 
 }

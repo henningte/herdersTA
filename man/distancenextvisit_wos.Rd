@@ -9,7 +9,7 @@ distancenextvisit_wos(agg, aggcoords)
 \arguments{
 \item{agg}{A \code{data.frame} object as created internally in \code{\link{aggregateTrack}}.}
 
-\item{aggcoords}{A \code{\link[sp]{SpatialPoints}} object with a value for each value
+\item{aggcoords}{A \code{\link[sp:SpatialPoints-class]{SpatialPoints}} object with a value for each value
 in \code{agg}.}
 }
 \value{

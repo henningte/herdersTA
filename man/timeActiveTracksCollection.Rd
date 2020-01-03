@@ -22,7 +22,7 @@ specified time period relative to the total duration of the specified time
 period.
 }
 \description{
-\code{timeActiveTrackCollection} computes the time [s] during which position data
+\code{timeActiveTracksCollection} computes the time [s] during which position data
 was collected in all \code{\link[trajectories:Track-class]{Tracks}} objects of a specified
 \code{\link[trajectories:Track-class]{TracksCollection}} object within a given time period.
 }

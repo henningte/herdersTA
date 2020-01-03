@@ -1,13 +1,9 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Computes the proportion of gaps in a Track object.
 #'
 #' \code{gapProportionTrack} computes the proportion of gaps in a
-#' \code{\link[trajectories:Track]{Track}}.
+#' \code{\link[trajectories:Track-class]{Track}}.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location}.
 #' @return A numeric value representing the proportion of gaps
 #' in \code{currenttrack}.

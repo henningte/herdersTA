@@ -32,5 +32,5 @@ coverage of all \code{\link[trajectories:Track-class]{Track}} objects is summed.
 #
 }
 \seealso{
-\code{\link{timeActiveTrack}}, \code{\link{timeActiveTrackCollection}}.
+\code{\link{timeActiveTrack}}, \code{\link{timeActiveTracksCollection}}.
 }

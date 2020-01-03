@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractSpatialPolygonsDataFrameTrack.R
 \name{extractSpatialPolygonsDataFrameTrack}
 \alias{extractSpatialPolygonsDataFrameTrack}
-\title{Assigns \code{\link[sp]{SpatialPolygonsDataFrame}} values to values of a GPS tracks.}
+\title{Assigns \code{SpatialPolygonsDataFrame} values to values of a GPS tracks.}
 \usage{
 extractSpatialPolygonsDataFrameTrack(currenttrack, sppdf, variable)
 }
@@ -11,7 +11,7 @@ extractSpatialPolygonsDataFrameTrack(currenttrack, sppdf, variable)
 has a column \code{time} containing the time information of the data
 values.}
 
-\item{sppdf}{A \code{\link[sp]{SpatialPolygonsDataFrame}} object.}
+\item{sppdf}{A \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} object.}
 
 \item{variable}{A \code{character} value indicating for which variable
 to extract values from \code{sppdf}.}
@@ -25,7 +25,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \description{
 \code{extractSpatialPolygonsDataFrameTrack} extracts for each data
 value of a \code{\link[trajectories:Track-class]{Track}} object a value
-of a \code{\link[sp]{SpatialPolygonsDataFrame}} object of a specified
+of a \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} object of a specified
 variable.
 }
 \examples{

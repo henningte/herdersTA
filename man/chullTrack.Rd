@@ -7,16 +7,16 @@
 chullTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}.}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}.}
 }
 \value{
-A \code{\link[sp:SpatialPolygon]{SpatialPolygon}}
+A \code{\link[sp:SpatialPolygons-class]{SpatialPolygons}} object
 with coordinates corresponding to coordinates of points of the convex hull.
 }
 \description{
 \code{chullTrack} extracts the convex hull from a
-\code{\link[trajectories:Track]{Track}} object and returns it
-as \code{\link[sp:SpatialPolygon]{SpatialPolygon}}.
+\code{\link[trajectories:Track-class]{Track}} object and returns it
+as \code{\link[sp:SpatialPolygons-class]{SpatialPolygons}} object.
 }
 \examples{
 #

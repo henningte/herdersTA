@@ -1,19 +1,18 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import raster
+#' @importFrom sp SpatialPointsDataFrame CRS proj4string
+#' @importFrom raster extract
 NULL
 
 #' Extracts corresponding raster values for GPS tracks.
 #'
 #' \code{extractRasterTrackSingleLayer} extracts values from \code{RasterLayer}
-#' (see: \code{\link[raster]{Raster-class}}) that corresponds to the the respective
+#' (see: \code{\link[raster:Raster-classes]{Raster-classes}}) that corresponds to the the respective
 #' position of a \code{\link[trajectories:Track-class]{Track}} object with
 #' daily resolution.
 #'
 #' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object that
 #' has a column \code{day} containing the time information of the data
 #' values.
-#' @param raster A \code{RasterLayer} (see: \code{\link[raster]{Raster-class}}).
+#' @param raster A \code{RasterLayer} (see: \code{\link[raster:Raster-classes]{Raster-classes}}).
 #' from which values should be extracted.
 #' @param buffer A numeric value indicating the radius of the buffer
 #' around each point that should be considered during extraction of
@@ -29,8 +28,7 @@ NULL
 #' @export
 extractRasterTrackSingleLayer <- function(currenttrack,
                                           raster,
-                                          buffer = 0
-){
+                                          buffer = 0) {
 
   # check if currenttrack is specified correctly
   if(!inherits(currenttrack, "Track")){
@@ -42,7 +40,9 @@ extractRasterTrackSingleLayer <- function(currenttrack,
 
   # extract the position of each location from currenttrack
   locationsdata <- currenttrack@data[!duplicated(currenttrack@data$location), c(2,3,4)]
-  locationsdata <- SpatialPointsDataFrame(coords = locationsdata[,c(2,3)], data = locationsdata, proj4string = CRS(proj4string(currenttrack@sp)))
+  locationsdata <- sp::SpatialPointsDataFrame(coords = locationsdata[,c(2,3)],
+                                              data = locationsdata,
+                                              proj4string = sp::CRS(sp::proj4string(currenttrack@sp)))
 
   # extract the location for each day
   eachdaylocation <- currenttrack@data$location
@@ -57,15 +57,17 @@ extractRasterTrackSingleLayer <- function(currenttrack,
   eachdaylocation <- eachdaylocation[indexnongaps]
 
   # extract the values for all locations
-  extractedvalues <- do.call(cbind, raster::extract(x = raster, y = locationsdata, method = "simple", buffer = buffer, na.rm = TRUE))
+  extractedvalues <- do.call(cbind, raster::extract(x = raster,
+                                                    y = locationsdata,
+                                                    method = "simple",
+                                                    buffer = buffer,
+                                                    na.rm = TRUE))
 
   # filter the values for each day for the target location
   extractedvalues <- unlist(sapply(seq_along(eachdaylocation), function(x) extractedvalues[which(locationsdata$location == eachdaylocation[x])]))
 
   # insert the values into res
   res[indexnongaps] <- extractedvalues
-
-  # return res
-  return(res)
+  res
 
 }

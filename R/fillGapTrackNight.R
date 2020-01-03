@@ -1,9 +1,7 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @importFrom sp spDists SpatialPoints
+#' @importFrom sp spDists
 NULL
 
-#' Imputes gaps in a \code{\link[trajectories]{Track-class}} object.
+#' Imputes gaps in a \code{Track} object.
 #'
 #' \code{fillGapTrackNight} imputes missing values in a
 #' \code{\link[trajectories:Track-class]{Track}} object. Gaps are filled
@@ -51,16 +49,22 @@ NULL
 #' @seealso \code{\link{reorganizeTracks}}).
 #' @examples #
 #' @export
-fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, night = c(16, 20)){
+fillGapTrackNight <- function(currenttrack,
+                              maxduration,
+                              maxdistance,
+                              night = c(16, 20)){
 
   # classify data values as night or day values
-  currentnighttrack <- classifyNightTrack(currenttrack, night = c(16, 20))
+  currentnighttrack <- classifyNightTrack(currenttrack,
+                                          night = c(16, 20))
 
   # get the row indices of night values in currentnighttrack that are no gaps
   currentnighttrackindex <- which(attr(currentnighttrack, "night") == TRUE & currentnighttrack@data$gap == FALSE)
 
   # extract blocks of gap values
-  gaps <- identifyBlocksVariable(currenttrack = currenttrack@data, variable = "gap", value = TRUE)
+  gaps <- identifyBlocksVariable(currenttrack = currenttrack@data,
+                                 variable = "gap",
+                                 value = TRUE)
 
   # discard leading and ending gaps (cannot be filled)
   gaps <- gaps[gaps$start != 1 & gaps$end != nrow(currenttrack@data),]
@@ -97,13 +101,19 @@ fillGapTrackNight <- function(currenttrack, maxduration, maxdistance, night = c(
     aftergaps <- currenttrack@sp[gaps$nearestvalueaftergap,]
 
     # compute the distance between points before and after gaps
-    gaps$gapdistance <- sp::spDists(x = beforegaps, y = aftergaps, longlat = FALSE, diagonal = TRUE)
+    gaps$gapdistance <- sp::spDists(x = beforegaps,
+                                    y = aftergaps,
+                                    longlat = FALSE,
+                                    diagonal = TRUE)
 
     # extract the time for all values prior and after gaps
-    gaptime <- data.frame(before = as.POSIXct(currenttrack@time[gaps$start-1,]), after = as.POSIXct(currenttrack@time[gaps$end+1,]))
+    gaptime <- data.frame(before = as.POSIXct(currenttrack@time[gaps$start-1,]),
+                          after = as.POSIXct(currenttrack@time[gaps$end+1,]))
 
     # compute the time difference (duration of the gap)
-    gaps$gapduration <- difftime(time1 = gaptime$after, time2 = gaptime$before, units = "secs")
+    gaps$gapduration <- difftime(time1 = gaptime$after,
+                                 time2 = gaptime$before,
+                                 units = "secs")
 
     # check which gaps to fill
     gaps$tofill <- ifelse(gaps$gapduration <= maxduration & gaps$gapdistance <= maxdistance, TRUE, FALSE)

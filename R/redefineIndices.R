@@ -1,6 +1,3 @@
-#' @importFrom Rdpack reprompt
-NULL
-
 #' Redefines indices based on a time vector.
 #'
 #' \code{redefineIndices} redefines the values of a numeric vector
@@ -24,7 +21,8 @@ redefineIndices <- function(x, notchange = NULL
   }
 
   # get first element for each gorup in x
-  xgroups <- data.frame(old = x[!duplicated(x)])
+  xgroups <- data.frame(old = x[!duplicated(x)],
+                        stringsAsFactors = FALSE)
 
   # define new groupings (times 2 to ensure that no notchange is covered)
   newgroups <- seq_len(nrow(xgroups)*2)

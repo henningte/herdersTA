@@ -4,8 +4,11 @@
 \alias{pointsPerQuad}
 \title{Counts the number of points in the cells of a spatial grid.}
 \usage{
-pointsPerQuad(currenttrack, targetQsize,
-  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+pointsPerQuad(
+  currenttrack,
+  targetQsize,
+  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+)
 }
 \arguments{
 \item{targetQsize}{Numerical value representing the target size of the

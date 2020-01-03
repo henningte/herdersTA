@@ -1,13 +1,13 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom spacetime STIDF
+#' @importFrom trajectories Track
 NULL
 
 #' Computes the sum of the latitudinal transitions of a Track object.
 #'
 #' \code{sumLatitudeTrack} sums the latitude differences between adjacent campsite
-#' locations for a \code{\link[trajectories:Track]{Track}}.
+#' locations for a \code{\link[trajectories:Track-class]{Track}}.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location} and \code{campsite} in the data slot.
 #' @return a numeric value representing the sum of the latitude transitions
 #' for \code{currenttrack}.

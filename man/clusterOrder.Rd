@@ -9,21 +9,21 @@ clusterOrder(currenttracks, cellsize = 800, threshold = 20)
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
 
+\item{cellsize}{Numerical value representing the target size of the
+quadrats to create.}
+
 \item{threshold}{An integer value specifying the minimum number of
 points within a grid cell needed in order to consider these points
 as cluster.}
-
-\item{targetQsize}{Numerical value representing the target size of the
-quadrats to create.}
 }
 \value{
-A \code{\link[sp]{SpatialPointsDataFrame}} holding grid cells
+A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} holding grid cells
 determined as clusters including data on the number of visits per cluster,
 start and end times etc.
 }
 \description{
 \code{clusterOrder} identifies campsites (clusters of points) of a household
-(\code{\link[trajectories]{Tracks}} object) and for each cluster/campsite
+(\code{\link[trajectories:Track-class]{Tracks}} object) and for each cluster/campsite
 determines the number of visits, the order in which the clusters have been
 visited, and the start and end times (first and last point) of each visit.
 }

@@ -1,6 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import sp
 #' @importFrom plyr join
 NULL
 
@@ -41,13 +38,9 @@ NULL
 #' at the same location in case of which the duration of these visits
 #' will be added in order to classify both visits together as long-term
 #' visit (campsite) or short-term visit, based on \code{tmin}.
-#' @param night An integer vector with two elements:
-#' \enumerate{
-#'   \item The first element specifies the start hour of the night, e.g. \code{0}
-#'   for 0 o'clock.
-#'   \item The first element specifies the start hour of the night, e.g. \code{4}
-#'   for 4 o'clock.
-#' }
+#' @param night An integer vector with two elements: The first element specifies
+#' the start hour of the night, e.g. \code{0} for 0 o'clock. The second element
+#' specifies the start hour of the night, e.g. \code{4} for 4 o'clock.
 #' @param tmaxintersticenotvalid A \code{data.frame} object that defines
 #' time periods in which the argument \code{tmaxinterstice} will be ignored,
 #' i.e. visits at the same location are merged irrespective of the duration
@@ -72,9 +65,9 @@ NULL
 #'   to the input \code{\link[trajectories:Track-class]{Track}} object, but
 #'   has five additional columns in the \code{data} slot:
 #'   \describe{
-#'     \item {\code{location}}{A numeric integer value for each identified
+#'     \item{\code{location}}{A numeric integer value for each identified
 #'     spatial point cluster (location) increasing with the time starting.}
-#'     \item {\code{visit}}{A numeric integer value for each identified
+#'     \item{\code{visit}}{A numeric integer value for each identified
 #'     visit increasing with the time starting.}
 #'     \item{\code{campsite}}{A logical value indicating if a visits of a
 #'     location is classified as long-term visit (campsite) (\code{TRUE})
@@ -91,7 +84,7 @@ NULL
 #'   \code{location}, \code{campsite}, \code{norepeatedcampsitevisits} and \code{FALSE}
 #'   values for \code{start} and \code{end}.
 #'   }
-#'   \item{If (\code{summary = TRUE})}{An object of class \code{\link{trackindicesvisits}}
+#'   \item{If (\code{summary = TRUE})}{An object of class \code{\link{trackvisits}}
 #'   summarising the locations and visits for \code{currenttrack}.}
 #' }
 #' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},

@@ -1,9 +1,4 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import lubridate
-NULL
-
-#' Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.
+#' Classifies Data Values of a \code{Tracks} object as Night or Day Values.
 #'
 #' \code{classifyNightTrack} creates labels for the data values
 #' of a \code{\link[trajectories:Track-class]{Track}} object marking

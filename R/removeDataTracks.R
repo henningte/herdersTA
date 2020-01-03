@@ -1,7 +1,6 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import doParallel
-#' @import spacetime
+#' @importFrom parallel clusterExport makeCluster stopCluster parLapply
+#' @importFrom doParallel registerDoParallel
+#' @importFrom trajectories Tracks
 NULL
 
 #' Classifies GPS track parts as evaluatable.
@@ -42,23 +41,23 @@ NULL
 #' \code{timeinterval = "month"}.
 #' @param threshold A numerical value representing the maximum proportion
 #' of data values within a timeinterval that is allowed to represent gaps
-#' (\code{currenttrack@data$gap == TRUE}) in order to \emph{not} discard all data
-#' values for the corresponding month [%]. Default is \code{threshold = 40}.
+#' (\code{$gap == TRUE}) in order to \emph{not} discard all data
+#' values for the corresponding month [\%]. Default is \code{threshold = 40}.
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
-#' \code{\link[parallel]{clusterCall}}.
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return A \code{\link[trajectories:Track-class]{Tracks}} object identical with
-#' \code{currenttracks}, except for a new column \code{currenttrack@data$remove}
+#' \code{currenttracks}, except for a new column \code{remove}
 #' in each \code{\link[trajectories:Track-class]{Track}} (\code{currenttrack}) object
 #' indicating if a data value should be included in following analyses (
-#' \code{currenttrack@data$remove == FALSE}) or not (
-#' \code{currenttrack@data$remove == TRUE}), based on the specifications of the user,
-#' a new column \code{currenttrack@data$id_timeinterval} representing the id of the
+#' \code{remove == FALSE}) or not (
+#' \code{remove == TRUE}), based on the specifications of the user,
+#' a new column \code{id_timeinterval} representing the id of the
 #' respective time interval specified by \code{timeinterval} and a new column
-#' \code{currenttrack@data$proportion_gaps} representing the temporal proportion of
+#' \code{proportion_gaps} representing the temporal proportion of
 #' missing values within a time interval specified by
-#' \code{currenttrack@data$id_timeinterval}.
+#' \code{id_timeinterval}.
 #' @seealso \code{\link{identifyTimeIntervals}}, \code{\link{removeDataTrack}},
 #' \code{\link{nogapDurationTrack}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
@@ -67,32 +66,27 @@ removeDataTracks <- function(currenttracks,
                              timeinterval = "month",
                              threshold = 40,
                              cores = 1,
-                             clcall = NULL){
+                             clcall = NULL) {
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == FALSE){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  clusterCall(cl, function(){library("raster")})
-  clusterCall(cl, function(){library("spacetime")})
-  clusterCall(cl, function(){library("trajectories")})
-  clusterExport(cl = cl, varlist = list("currenttracks", "timeinterval", "threshold", "removeDataTrack", "identifyTimeIntervals"), envir=environment())
+  parallel::clusterCall(cl, function(){library("raster")})
+  parallel::clusterCall(cl, function(){library("spacetime")})
+  parallel::clusterCall(cl, function(){library("trajectories")})
+  parallel::clusterExport(cl = cl, varlist = list("currenttracks", "timeinterval", "threshold", "removeDataTrack", "identifyTimeIntervals"), envir=environment())
+  on.exit(expr = parallel::stopCluster(cl))
 
-  newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
+  newcurrenttracks <- parallel::parLapply(cl, currenttracks@tracks, fun = function(x){
 
     removeDataTrack(currenttrack = x, timeinterval = timeinterval, threshold = threshold)
 
   })
 
   # convert to Tracks object
-  newcurrenttracks <- Tracks(newcurrenttracks)
-
-  # stop cluster
-  stopCluster(cl)
-
-  # return result
-  return(newcurrenttracks)
+  trajectories::Tracks(newcurrenttracks)
 
 }

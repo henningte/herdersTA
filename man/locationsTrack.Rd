@@ -4,11 +4,16 @@
 \alias{locationsTrack}
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
-locationsTrack(currenttrack, radius = 800, tmin = 345600,
-  tmaxinterstices = 345600, night = c(16, 20),
-  tmaxintersticenotvalid = data.frame(start =
-  as.POSIXct("2016-01-01 00:00:00"), end =
-  as.POSIXct("2016-05-01 00:00:00")), summary = TRUE)
+locationsTrack(
+  currenttrack,
+  radius = 800,
+  tmin = 345600,
+  tmaxinterstices = 345600,
+  night = c(16, 20),
+  tmaxintersticenotvalid = data.frame(start = as.POSIXct("2016-01-01 00:00:00"), end =
+    as.POSIXct("2016-05-01 00:00:00")),
+  summary = TRUE
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
@@ -28,13 +33,9 @@ at the same location in case of which the duration of these visits
 will be added in order to classify both visits together as long-term
 visit (campsite) or short-term visit, based on \code{tmin}.}
 
-\item{night}{An integer vector with two elements:
-\enumerate{
-  \item The first element specifies the start hour of the night, e.g. \code{0}
-  for 0 o'clock.
-  \item The first element specifies the start hour of the night, e.g. \code{4}
-  for 4 o'clock.
-}}
+\item{night}{An integer vector with two elements: The first element specifies
+the start hour of the night, e.g. \code{0} for 0 o'clock. The second element
+specifies the start hour of the night, e.g. \code{4} for 4 o'clock.}
 
 \item{tmaxintersticenotvalid}{A \code{data.frame} object that defines
 time periods in which the argument \code{tmaxinterstice} will be ignored,
@@ -62,9 +63,9 @@ information.}
   to the input \code{\link[trajectories:Track-class]{Track}} object, but
   has five additional columns in the \code{data} slot:
   \describe{
-    \item {\code{location}}{A numeric integer value for each identified
+    \item{\code{location}}{A numeric integer value for each identified
     spatial point cluster (location) increasing with the time starting.}
-    \item {\code{visit}}{A numeric integer value for each identified
+    \item{\code{visit}}{A numeric integer value for each identified
     visit increasing with the time starting.}
     \item{\code{campsite}}{A logical value indicating if a visits of a
     location is classified as long-term visit (campsite) (\code{TRUE})
@@ -81,7 +82,7 @@ information.}
   \code{location}, \code{campsite}, \code{norepeatedcampsitevisits} and \code{FALSE}
   values for \code{start} and \code{end}.
   }
-  \item{If (\code{summary = TRUE})}{An object of class \code{\link{trackindicesvisits}}
+  \item{If (\code{summary = TRUE})}{An object of class \code{\link{trackvisits}}
   summarising the locations and visits for \code{currenttrack}.}
 }
 }

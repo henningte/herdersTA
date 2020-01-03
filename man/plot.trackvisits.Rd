@@ -4,10 +4,13 @@
 \alias{plot.trackvisits}
 \title{Plots Visits from a Track with Locations}
 \usage{
-plot.trackvisits(x, what = "lonlatanonymuous",
-  seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2),
-  colour = c("yellow", "red", "burlywood1", "lightgray")),
-  timethreshold = 0)
+\method{plot}{trackvisits}(
+  x,
+  what = "lonlatanonymuous",
+  seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour =
+    c("yellow", "red", "burlywood1", "lightgray")),
+  timethreshold = 0
+)
 }
 \arguments{
 \item{x}{An object of class \code{link{trackvisits}} with the variable
@@ -31,7 +34,7 @@ adjacent visits [s]. If the duration between a visit and a next visit is larger 
 \code{timethreshold}, this will be shown as dashed line in the plot.}
 }
 \value{
-A  \code{\link[ggplot2]{ggplotobj}} object
+A  \code{\link[ggplot2]{ggplot}} object
 }
 \description{
 \code{plot.trackvisits} is the plot function for objects of class

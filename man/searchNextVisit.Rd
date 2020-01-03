@@ -7,15 +7,15 @@
 searchNextVisit(clusters, trs_spdf)
 }
 \arguments{
-\item{clusters}{A \code{\link[sp]{SpatialGridDataFrame}} object containing
+\item{clusters}{A \code{\link[sp:SpatialPixelsDataFrame-class]{SpatialGridDataFrame}} object containing
 point clusters, as created with \code{\link{extractClusters}}.}
 
-\item{trs_spdf}{A \code{\link[sp]{SpatialPointsDataFrame}} of the
-household movement (as converted from a \code {\link[trajectories:Track-class]{Tracks}}
+\item{trs_spdf}{A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} of the
+household movement (as converted from a \code{\link[trajectories:Track-class]{Tracks}}
 object).}
 }
 \value{
-A \code{\link[sp]{SpatialPointsDataFrame}} holding the
+A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} holding the
 clusters/campsites with updated \code{times_visited}.
 }
 \description{

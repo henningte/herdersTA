@@ -4,10 +4,13 @@
 \alias{totalGapDuration}
 \title{Computes the duration of gaps in GPS tracks.}
 \usage{
-totalGapDuration(currenttracks,
+totalGapDuration(
+  currenttracks,
   tstart = min(currenttracks@tracksData$tmin),
-  tend = max(currenttracks@tracksData$tmax), threshold = 18000,
-  tolerance = 2)
+  tend = max(currenttracks@tracksData$tmax),
+  threshold = 18000,
+  tolerance = 2
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}

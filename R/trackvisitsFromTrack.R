@@ -1,6 +1,4 @@
-#' @importFrom Rdpack reprompt
 #' @importFrom data.table rbindlist
-#' @importFrom lubridate is.POSIXct
 #' @importFrom sp coordinates
 NULL
 
@@ -26,7 +24,8 @@ NULL
 #' @seealso \code{\link{trackvisits}}.
 #' @examples #
 #' @export
-trackvisitsFromTrack <- function(currenttrack, tmin = 345600){
+trackvisitsFromTrack <- function(currenttrack,
+                                 tmin = 345600) {
 
   # checks
   if(!inherits(currenttrack, "Track")){
@@ -40,7 +39,9 @@ trackvisitsFromTrack <- function(currenttrack, tmin = 345600){
   }
 
   # extract the time interval of adjacent values in currenttrack
-  timeinterval <- as.numeric(difftime(time1 = as.POSIXct(currenttrack@time)[2], time2 = as.POSIXct(currenttrack@time)[1], units = "secs"))
+  timeinterval <- as.numeric(difftime(time1 = as.POSIXct(currenttrack@time)[2],
+                                      time2 = as.POSIXct(currenttrack@time)[1],
+                                      units = "secs"))
 
   # extract the coordinates of currenttrack
   xcoords <- sp::coordinates(currenttrack@sp)
@@ -48,7 +49,9 @@ trackvisitsFromTrack <- function(currenttrack, tmin = 345600){
   # extract visits for each location
   visits <- data.table::rbindlist(lapply(unique(currenttrack$location), function(x){
     if(x != 0){
-      currentblock <- identifyBlocksVariable(currenttrack = currenttrack, variable = "location", value = x)
+      currentblock <- identifyBlocksVariable(currenttrack = currenttrack,
+                                             variable = "location",
+                                             value = x)
       currentblock$location <- rep(x, nrow(currentblock))
       currentblock
     }

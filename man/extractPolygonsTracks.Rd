@@ -4,8 +4,16 @@
 \alias{extractPolygonsTracks}
 \title{Extracts corresponding raster values for GPS tracks.}
 \usage{
-extractPolygonsTracks(x, y, fn = NULL, ..., fixedlocationcoords = TRUE,
-  what = NULL, cores, clcall = NULL)
+extractPolygonsTracks(
+  x,
+  y,
+  fn = NULL,
+  ...,
+  fixedlocationcoords = TRUE,
+  what = NULL,
+  cores,
+  clcall = NULL
+)
 }
 \arguments{
 \item{x}{A \code{\link[sp:SpatialPolygons]{SpatialPolygons}} object.}
@@ -15,7 +23,7 @@ Depending on other parameters set, there may be certain variables required.}
 
 \item{fn}{function to summarize the values (e.g. \code{mean}).}
 
-\item{...}{further arguments passed to \code{\link[sp]{over}}.}
+\item{...}{further arguments passed to \code{\link[sp:over]{over}}.}
 
 \item{fixedlocationcoords}{A logical value indicating if for each location in \code{y}
 the same position is assumed for all data values. In this case, computation
@@ -33,7 +41,7 @@ If a value of \code{x} cannot be assigned to a respective data value,
 }
 \description{
 \code{extractPolygonsTracks} is a function
-in order to extract values from \code{\link[sp:SpatialPolygons]{SpatialPolygons}} objects
+in order to extract values from \code{\link[sp:SpatialPolygons-class]{SpatialPolygons}} objects
 for an object of class \code{\link[trajectories:Track-class]{TracksCollection}}.
 }
 \examples{

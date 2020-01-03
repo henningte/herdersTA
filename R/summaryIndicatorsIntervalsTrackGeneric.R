@@ -1,12 +1,8 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Computes summary indicators for GPS tracks.
 #'
 #' \code{summaryIndicatorsIntervalsTrackGeneric} computes various summary indicators
 #' for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
-#' with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} and
+#' with \code{\link{reorganizeTracks}}, \code{\link{locationsTracks}} and
 #' \code{\link{aggregateDailyLocationsTrack}}. Summary
 #' indicators are computed for a temporal resolution of fixed ten-day intervals. In
 #' contrast to
@@ -53,8 +49,7 @@ NULL
 summaryIndicatorsIntervalsTrackGeneric <- function(currenttrack,
                                     normalise = TRUE,
                                     fun = mean,
-                                    what
-                                    ){
+                                    what) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -62,7 +57,8 @@ summaryIndicatorsIntervalsTrackGeneric <- function(currenttrack,
   }
 
   # assign each day in currenttrack$day to a ftdi
-  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
+  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"),
+                                    startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
   ftdi <- ftdi - min(ftdi) + 1
 

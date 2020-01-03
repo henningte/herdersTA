@@ -1,11 +1,11 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import spacetime
-#' @import doParallel
-#' @import raster
+#' @importFrom trajectories Tracks
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel clusterExport makeCluster stopCluster parLapply
+#' @importFrom raster crs
+#' @importFrom sp proj4string
 NULL
 
-#' Imputes gaps in a \code{\link[trajectories:Track-class]{Tracks}} object.
+#' Imputes gaps in a \code{Tracks} object.
 #'
 #' \code{fillGapTracks} imputes missing values in all
 #' \code{\link[trajectories:Track-class]{Track}} objects of a
@@ -31,10 +31,10 @@ NULL
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
-#' \code{\link[parallel]{clusterCall}}.
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return The input \code{\link[trajectories:Track-class]{Tracks}} object with filled
 #' gaps.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
+#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
 #' \code{\link{redefineIndices}},
 #' \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 #' @examples #
@@ -44,20 +44,21 @@ fillGapTracks <- function(currenttracks,
                           maxdistance,
                           timeinterval,
                           cores = 1,
-                          clcall = NULL){
+                          clcall = NULL) {
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == F){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  clusterCall(cl, function(){library("spacetime")})
-  clusterCall(cl, function(){library("trajectories")})
-  clusterCall(cl, function(){library("raster")})
-  clusterExport(cl = cl, varlist = list("currenttracks", "maxduration", "maxdistance", "timeinterval", "identifyBlocksVariable", "fillGapTrack"), envir=environment())
+  parallel::clusterCall(cl, function(){library("spacetime")})
+  parallel::clusterCall(cl, function(){library("trajectories")})
+  parallel::clusterCall(cl, function(){library("raster")})
+  parallel::clusterExport(cl = cl, varlist = list("currenttracks", "maxduration", "maxdistance", "timeinterval", "identifyBlocksVariable", "fillGapTrack"), envir=environment())
+  on.exit(expr = parallel::stopCluster(cl))
 
-  newcurrenttracks <- parLapply(cl, currenttracks@tracks, fun = function(x){
+  newcurrenttracks <- parallel::parLapply(cl, currenttracks@tracks, fun = function(x){
 
     newtracks1 <- fillGapTrack(currenttrack = x,
                                maxduration = maxduration,
@@ -65,17 +66,14 @@ fillGapTracks <- function(currenttracks,
                                timeinterval = timeinterval)
 
     # set crs
-    crs(newtracks1@sp) <- proj4string(currenttracks)
+    raster::crs(newtracks1@sp) <- sp::proj4string(currenttracks)
 
     return(newtracks1)
 
   })
 
   # convert to Tracks object
-  newcurrenttracks <- Tracks(newcurrenttracks)
-
-  # stop cluster
-  stopCluster(cl)
+  newcurrenttracks <- trajectories::Tracks(newcurrenttracks)
 
   # return result
   return(newcurrenttracks)

@@ -7,14 +7,14 @@
 totalDistanceTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}.}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}.}
 }
 \value{
 a numeric value representing the total distance covered by \code{currenttrack}.
 }
 \description{
 \code{totalDistanceTrack} computes the total distance covered by a
-\code{\link[trajectories:Track]{Track}}. This is the sum of all distance
+\code{\link[trajectories:Track-class]{Track}}. This is the sum of all distance
 values in the \code{connections} slot.
 }
 \examples{

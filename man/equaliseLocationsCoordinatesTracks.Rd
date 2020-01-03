@@ -4,8 +4,7 @@
 \alias{equaliseLocationsCoordinatesTracks}
 \title{Equalise Track Coordinates to Locations.}
 \usage{
-equaliseLocationsCoordinatesTracks(currenttracks, cores = 1,
-  clcall = NULL)
+equaliseLocationsCoordinatesTracks(currenttracks, cores = 1, clcall = NULL)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{TracksCollection}}
@@ -19,7 +18,7 @@ Gaps must have the location \code{0}.}
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 \code{currenttracks} with the same longitude and latitude values for

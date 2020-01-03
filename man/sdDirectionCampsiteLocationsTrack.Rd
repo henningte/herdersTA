@@ -4,10 +4,10 @@
 \alias{sdDirectionCampsiteLocationsTrack}
 \title{Computes the standard eviation of the direction (as absolute difference of angles) between campsite locations of a Track object in the order of movement.}
 \usage{
-sdDirectionCampsiteLocationsTrack(currenttrack, fun = median)
+sdDirectionCampsiteLocationsTrack(currenttrack, fun = stats::median)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location} and \code{campsite}.}
 }
 \value{
@@ -16,7 +16,7 @@ campsites in the order of movement.
 }
 \description{
 \code{sdDirectionCampsiteLocationsTrack} computes the standard deviation of directions
-between locations of a \code{\link[trajectories:Track]{Track}} in the order of movement.
+between locations of a \code{\link[trajectories:Track-class]{Track}} in the order of movement.
 Directions are computed as angle difference between the previous campsite location
 and the current campsite location and the next campsite location and the current
 campsite location. Several options are available.

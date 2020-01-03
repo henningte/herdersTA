@@ -1,4 +1,3 @@
-#' @importFrom Rdpack reprompt
 #' @import ggplot2
 #' @importFrom ggrepel geom_label_repel
 NULL
@@ -51,15 +50,19 @@ NULL
 #' @param timethreshold A numeric value representing a time threshold of duarions between
 #' adjacent visits [s]. If the duration between a visit and a next visit is larger than
 #' \code{timethreshold}, this will be shown as dashed line in the plot.
-#' @return A  \code{\link[ggplot2]{ggplotobj}} object
+#' @return A  \code{\link[ggplot2]{ggplot}} object
 #'
 #' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
 #' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
 #' \code{\link{extractClustersBuffer}}.
 #' @examples #
 #' @export
-plot.trackvisits <- function(x, what = "lonlatanonymuous", seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1", "lightgray")), timethreshold = 0
-){
+plot.trackvisits <- function(x,
+                             what = "lonlatanonymuous",
+                             seasons = data.frame(start = c(3, 5, 9, 11),
+                                                  end = c(4, 8, 10, 2),
+                                                  colour = c("yellow", "red", "burlywood1", "lightgray")),
+                             timethreshold = 0) {
 
   # checks
   if(!(inherits(x, "trackvisits"))){
@@ -99,7 +102,8 @@ plot.trackvisits <- function(x, what = "lonlatanonymuous", seasons = data.frame(
   tracksegments <- data.frame(x = x$longitude[-nrow(x)],
                               y = x$latitude[-nrow(x)],
                               xend = x$longitude[-1],
-                              yend = x$latitude[-1])
+                              yend = x$latitude[-1],
+                              stringsAsFactors = FALSE)
 
   # define the labels
   labels <- paste0("step: ", seq_len(nrow(x)), ", ", "loc: ", x$location, ", ",
@@ -116,7 +120,8 @@ plot.trackvisits <- function(x, what = "lonlatanonymuous", seasons = data.frame(
                                    xstarttime = x$endtime[-nrow(x)],
                                    xendtime = x$starttime[-1],
                                    ystartaltitude = x$altitude[-nrow(x)],
-                                   yendaltitude = x$altitude[-1])
+                                   yendaltitude = x$altitude[-1],
+                                   stringsAsFactors = FALSE)
 
   # retain only segments for gaps >= 24h + 20h (for at least one night, there were no values)
   plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(abs(difftime(as.POSIXct(x$endtime[-nrow(x)]), as.POSIXct(x$starttime[-1]), units = "sec")) >= timethreshold, TRUE, FALSE)),]
@@ -136,41 +141,113 @@ plot.trackvisits <- function(x, what = "lonlatanonymuous", seasons = data.frame(
   switch(what,
          lonlat = {
 
-           ggplot() +
-             geom_point(data = plotdfpoints, aes(x = x, y = y, fill = plotdfpoints$campsite), shape = 21, size = 3) +
-             geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend)) +
-             geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
-             geom_label_repel(data = plotdfpoints[which(seq_len(nrow(plotdfpoints)) %% 2 == 0)-1,], aes(x = x, y = y, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival])) +
-             coord_fixed() +
-             theme(legend.position = "none") +
-             scale_fill_manual(values = scale_fill_manual_values) +
-             scale_x_continuous(limits = c(min(x$longitude) - abs(diff(range(x$longitude)))*0.15, max(x$longitude) + abs(diff(range(x$longitude)))*0.15)) +
-             scale_y_continuous(limits = c(min(x$latitude) - abs(diff(range(x$latitude)))*0.15, max(x$latitude) + abs(diff(range(x$latitude)))*0.15))
+           ggplot2::ggplot() +
+             ggplot2::geom_point(data = plotdfpoints, ggplot2::aes(x = x,
+                                                                   y = y,
+                                                                   fill = plotdfpoints$campsite),
+                                 shape = 21,
+                                 size = 3) +
+             ggplot2::geom_segment(data = tracksegments,
+                                   ggplot2::aes(x = x,
+                                                y = y,
+                                                xend = xend,
+                                                yend = yend)) +
+             ggplot2::geom_segment(data = plotdfsegmentsgaps,
+                                   ggplot2::aes(x = xstart,
+                                                xend = xend,
+                                                y = ystart,
+                                                yend = yend),
+                                   colour = "white",
+                                   linetype = 2) +
+             ggrepel::geom_label_repel(data = plotdfpoints[which(seq_len(nrow(plotdfpoints)) %% 2 == 0)-1,],
+                                       ggplot2::aes(x = x,
+                                                    y = y,
+                                                    label = labels),
+                                       segment.colour = "gray",
+                                       point.padding = 0.2,
+                                       size = 1.5,
+                                       nudge_x = 0,
+                                       nudge_y = 0,
+                                       box.padding = 0.7,
+                                       fill = as.character(seasons$colour[seasonsarrival])) +
+             ggplot2::coord_fixed() +
+             ggplot2::theme(legend.position = "none") +
+             ggplot2::scale_fill_manual(values = scale_fill_manual_values) +
+             ggplot2::scale_x_continuous(limits = c(min(x$longitude) - abs(diff(range(x$longitude)))*0.15, max(x$longitude) + abs(diff(range(x$longitude)))*0.15)) +
+             ggplot2::scale_y_continuous(limits = c(min(x$latitude) - abs(diff(range(x$latitude)))*0.15, max(x$latitude) + abs(diff(range(x$latitude)))*0.15))
 
          },
          lonlatanonymuous = {
 
-           ggplot() +
-             geom_point(data = plotdfpoints, aes(x = x, y = y, fill = plotdfpoints$campsite), shape = 21, size = 3) +
-             geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend)) +
-             geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
-             geom_label_repel(data = plotdfpoints[which(seq_len(nrow(plotdfpoints)) %% 2 == 0)-1,], aes(x = x, y = y, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival])) +
-             coord_fixed() +
-             theme(axis.text = element_blank(), legend.position = "none") +
-             scale_fill_manual(values = scale_fill_manual_values) +
-             scale_x_continuous(limits = c(min(x$longitude) - abs(diff(range(x$longitude)))*0.15, max(x$longitude) + abs(diff(range(x$longitude)))*0.15)) +
-             scale_y_continuous(limits = c(min(x$latitude) - abs(diff(range(x$latitude)))*0.15, max(x$latitude) + abs(diff(range(x$latitude)))*0.15))
+           ggplot2::ggplot() +
+             ggplot2::geom_point(data = plotdfpoints,
+                                 ggplot2::aes(x = x,
+                                              y = y,
+                                              fill = plotdfpoints$campsite),
+                                 shape = 21,
+                                 size = 3) +
+             ggplot2::geom_segment(data = tracksegments,
+                                   ggplot2::aes(x = x,
+                                                y = y,
+                                                xend = xend,
+                                                yend = yend)) +
+             ggplot2::geom_segment(data = plotdfsegmentsgaps,
+                                   ggplot2::aes(x = xstart,
+                                                xend = xend,
+                                                y = ystart,
+                                                yend = yend),
+                                   colour = "white",
+                                   linetype = 2) +
+             ggrepel::geom_label_repel(data = plotdfpoints[which(seq_len(nrow(plotdfpoints)) %% 2 == 0)-1,],
+                                       ggplot2::aes(x = x,
+                                                    y = y,
+                                                    label = labels),
+                                       segment.colour = "gray",
+                                       point.padding = 0.2,
+                                       size = 1.5,
+                                       nudge_x = 0,
+                                       nudge_y = 0,
+                                       box.padding = 0.7,
+                                       fill = as.character(seasons$colour[seasonsarrival])) +
+             ggplot2::coord_fixed() +
+             ggplot2::theme(axis.text = element_blank(),
+                            legend.position = "none") +
+             ggplot2::scale_fill_manual(values = scale_fill_manual_values) +
+             ggplot2::scale_x_continuous(limits = c(min(x$longitude) - abs(diff(range(x$longitude)))*0.15, max(x$longitude) + abs(diff(range(x$longitude)))*0.15)) +
+             ggplot2::scale_y_continuous(limits = c(min(x$latitude) - abs(diff(range(x$latitude)))*0.15, max(x$latitude) + abs(diff(range(x$latitude)))*0.15))
 
          },
          altitude = {
 
-           ggplot() +
-             geom_path(data = plotdfpoints, aes(x = time, y = alt)) +
-             geom_segment(data = plotdfsegmentsgaps, aes(x = xstarttime, xend = xendtime, y = ystartaltitude, yend = yendaltitude), colour = "white", linetype = 2) +
-             geom_point(data = plotdfpoints, aes(x = time, y = alt, fill = plotdfpoints$campsite), shape = 21, size = 3) +
-             scale_fill_manual(values = scale_fill_manual_values) +
-             theme(legend.position = "none") +
-             geom_label_repel(data = plotdfpoints[seq(1, nrow(plotdfpoints)-1, by = 2),], aes(x = time, y = alt, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival]))
+           ggplot2::ggplot() +
+             ggplot2::geom_path(data = plotdfpoints,
+                                ggplot2::aes(x = time, y = alt)) +
+             ggplot2::geom_segment(data = plotdfsegmentsgaps,
+                                   ggplot2::aes(x = xstarttime,
+                                                xend = xendtime,
+                                                y = ystartaltitude,
+                                                yend = yendaltitude),
+                                   colour = "white",
+                                   linetype = 2) +
+             ggplot2::geom_point(data = plotdfpoints,
+                                 ggplot2::aes(x = time,
+                                              y = alt,
+                                              fill = plotdfpoints$campsite),
+                                 shape = 21,
+                                 size = 3) +
+             ggplot2::scale_fill_manual(values = scale_fill_manual_values) +
+             ggplot2::theme(legend.position = "none") +
+             ggrepel::geom_label_repel(data = plotdfpoints[seq(1, nrow(plotdfpoints)-1, by = 2),],
+                                       ggplot2::aes(x = time,
+                                                    y = alt,
+                                                    label = labels),
+                                       segment.colour = "gray",
+                                       point.padding = 0.2,
+                                       size = 1.5,
+                                       nudge_x = 0,
+                                       nudge_y = 0,
+                                       box.padding = 0.7,
+                                       fill = as.character(seasons$colour[seasonsarrival]))
 
          },
          stop("Invalid what\n")

@@ -7,7 +7,7 @@
 gapProportionTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location}.}
 }
 \value{
@@ -16,7 +16,7 @@ in \code{currenttrack}.
 }
 \description{
 \code{gapProportionTrack} computes the proportion of gaps in a
-\code{\link[trajectories:Track]{Track}}.
+\code{\link[trajectories:Track-class]{Track}}.
 }
 \examples{
 #

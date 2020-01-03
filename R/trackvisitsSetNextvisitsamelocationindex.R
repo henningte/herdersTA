@@ -1,6 +1,3 @@
-#' @importFrom Rdpack reprompt
-NULL
-
 #' Check if the Next Visit is at the Same Location.
 #'
 #' \code{trackvisitsSetNextvisitsamelocationindex} sets the index of the next visit

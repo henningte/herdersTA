@@ -7,7 +7,7 @@
 altitudeRangeTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{altitude} in the data slot.}
 }
 \value{
@@ -16,7 +16,7 @@ of \code{currenttrack}.
 }
 \description{
 \code{altitudeRangeTrack} extracts the altitude range
-\code{\link[trajectories:Track]{Track}} object with a variable
+\code{\link[trajectories:Track-class]{Track}} object with a variable
 \code{altitude} in the data slot. \code{NA}s are removed.
 }
 \examples{

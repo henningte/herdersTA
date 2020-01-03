@@ -1,9 +1,9 @@
-#' @importFrom Rdpack reprompt
+#' @importFrom sp coordinates SpatialPoints proj4string CRS
+#' @importFrom spacetime STIDF
 #' @importFrom trajectories Track
-#' @importFrom sp coordinates
-#' @importFrom data.table rbindlist
-#' @importFrom dplyr left_join
 #' @importFrom tidyr fill
+#' @importFrom dplyr left_join
+#' @importFrom stats median
 NULL
 
 #' Equalise Track Coordinates to Locations
@@ -38,7 +38,8 @@ equaliseLocationsCoordinatesTrack <- function(currenttrack){
   }
 
   # extract the locations
-  xlocations <- data.frame(location = currenttrack$location)
+  xlocations <- data.frame(location = currenttrack$location,
+                           stringsAsFactors = FALSE)
 
   # extract the coordinates
   xcoords <- sp::coordinates(currenttrack@sp)
@@ -50,21 +51,34 @@ equaliseLocationsCoordinatesTrack <- function(currenttrack){
     }else{
       notfilled <- !currenttrack$filled[x]
     }
-    mediancoords <- apply(xcoords[x[notfilled], , drop = FALSE], 2, function(y) median(y, na.rm = TRUE))
-    data.frame(location = currenttrack$location[x[1]], longitude = mediancoords[1], latitude = mediancoords[2])
+    mediancoords <- apply(xcoords[x[notfilled], , drop = FALSE], 2, function(y) stats::median(y, na.rm = TRUE))
+    data.frame(location = currenttrack$location[x[1]],
+               longitude = mediancoords[1],
+               latitude = mediancoords[2],
+               stringsAsFactors = FALSE)
   }, simplify = FALSE))
 
   # set xcoordsperlocation to NA for location == 0
   xcoordsperlocation[xcoordsperlocation$location == 0, 2:3] <- NA
 
   # merge the values
-  xlocations <- dplyr::left_join(x = xlocations, y = xcoordsperlocation, by = "location")
+  xlocations <- dplyr::left_join(x = xlocations,
+                                 y = xcoordsperlocation,
+                                 by = "location")
 
   # fill in coordinates for gaps
-  xlocations <- tidyr::fill(xlocations, seq_len(ncol(xlocations)), .direction = "up")
-  xlocations <- tidyr::fill(xlocations, seq_len(ncol(xlocations)), .direction = "down")
+  xlocations <- tidyr::fill(xlocations,
+                            seq_len(ncol(xlocations)),
+                            .direction = "up")
+  xlocations <- tidyr::fill(xlocations,
+                            seq_len(ncol(xlocations)),
+                            .direction = "down")
 
   # add the new coordinates to currenttrack
-  Track(spacetime::STIDF(sp = SpatialPoints(coords = xlocations[,2:3], proj4string = CRS(proj4string(currenttrack))), time = currenttrack@time, data = currenttrack@data, endTime = currenttrack@time))
+  trajectories::Track(spacetime::STIDF(sp = sp::SpatialPoints(coords = xlocations[,2:3],
+                                                              proj4string = sp::CRS(sp::proj4string(currenttrack))),
+                                       time = currenttrack@time,
+                                       data = currenttrack@data,
+                                       endTime = currenttrack@time))
 
 }

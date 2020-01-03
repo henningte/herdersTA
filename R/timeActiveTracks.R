@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-NULL
-
 #' Analyses the temporal coverage of GPS tracks.
 #'
 #' \code{timeActiveTracks} computes the time [s] during which position data was
@@ -19,10 +15,12 @@ NULL
 #' specified \code{\link[trajectories:Track-class]{Tracks}} object. This value corresponds to
 #' the number of seconds the \code{\link[trajectories:Track-class]{Tracks}} object and the time
 #' period intersect.
-#' @seealso \code{\link{timeActiveTrack}}, \code{\link{timeActiveTrackCollection}}.
+#' @seealso \code{\link{timeActiveTrack}}, \code{\link{timeActiveTracksCollection}}.
 #' @examples #
 #' @export
-timeActiveTracks <- function(currenttracks, tstart, tend){
+timeActiveTracks <- function(currenttracks,
+                             tstart,
+                             tend) {
 
   # sum all results of timeActiveTrack for all Track objects
   sum(unlist(

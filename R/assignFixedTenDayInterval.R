@@ -1,8 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import raster
-NULL
-
 #' Assigns days to fixed ten-day intervals.
 #'
 #' \code{assignFixedTenDayInterval} assigns each value of a \code{POSIXct}
@@ -27,7 +22,8 @@ NULL
 #' \code{\link{extractRasterTracks}}.
 #' @examples #
 #' @export
-assignFixedTenDayInterval <- function(timedate, startnew = TRUE){
+assignFixedTenDayInterval <- function(timedate,
+                                      startnew = TRUE) {
 
   # get the years covered
   years <- unique(strftime(timedate, format = "%Y"))

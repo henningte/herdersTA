@@ -4,11 +4,10 @@
 \alias{countUniqueLocationsTrack}
 \title{Computes the number of unique locations of a Track object.}
 \usage{
-countUniqueLocationsTrack(currenttrack, campsite = TRUE,
-  repeated = FALSE)
+countUniqueLocationsTrack(currenttrack, campsite = TRUE, repeated = FALSE)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location}, \code{campsite} and \code{norepeatedcampsitevisits}.
 as created by \code{\link{locationsTrack}} in the data slot.}
 
@@ -25,7 +24,7 @@ in \code{currenttrack}.
 }
 \description{
 \code{countUniqueLocationsTrack} counts unique lcoations of a
-\code{\link[trajectories:Track]{Track}}. Several options are available.
+\code{\link[trajectories:Track-class]{Track}}. Several options are available.
 }
 \examples{
 #

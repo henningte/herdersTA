@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-NULL
-
 #' Extracts sub-daily connection values of GPS tracks.
 #'
 #' \code{getNightConnectionsTrack} subsets the values of the slot
@@ -24,7 +20,7 @@ NULL
 #' @export
 getNightConnectionsTrack <- function(currenttrack,
                                      tstart = 16,
-                                     tend = 20){
+                                     tend = 20) {
 
   # get indices of fixes within time frame
   nightindexes <- which(hour(currenttrack@time) >= tstart & hour(currenttrack@time) < tend)

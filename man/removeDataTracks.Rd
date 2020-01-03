@@ -4,8 +4,13 @@
 \alias{removeDataTracks}
 \title{Classifies GPS track parts as evaluatable.}
 \usage{
-removeDataTracks(currenttracks, timeinterval = "month", threshold = 40,
-  cores = 1, clcall = NULL)
+removeDataTracks(
+  currenttracks,
+  timeinterval = "month",
+  threshold = 40,
+  cores = 1,
+  clcall = NULL
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
@@ -34,27 +39,27 @@ all data values will be assigned to one class. Default is
 
 \item{threshold}{A numerical value representing the maximum proportion
 of data values within a timeinterval that is allowed to represent gaps
-(\code{currenttrack@data$gap == TRUE}) in order to \emph{not} discard all data
-values for the corresponding month [%]. Default is \code{threshold = 40}.}
+(\code{$gap == TRUE}) in order to \emph{not} discard all data
+values for the corresponding month [\%]. Default is \code{threshold = 40}.}
 
 \item{cores}{An integer value representing the number of cores to
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 A \code{\link[trajectories:Track-class]{Tracks}} object identical with
-\code{currenttracks}, except for a new column \code{currenttrack@data$remove}
+\code{currenttracks}, except for a new column \code{remove}
 in each \code{\link[trajectories:Track-class]{Track}} (\code{currenttrack}) object
 indicating if a data value should be included in following analyses (
-\code{currenttrack@data$remove == FALSE}) or not (
-\code{currenttrack@data$remove == TRUE}), based on the specifications of the user,
-a new column \code{currenttrack@data$id_timeinterval} representing the id of the
+\code{remove == FALSE}) or not (
+\code{remove == TRUE}), based on the specifications of the user,
+a new column \code{id_timeinterval} representing the id of the
 respective time interval specified by \code{timeinterval} and a new column
-\code{currenttrack@data$proportion_gaps} representing the temporal proportion of
+\code{proportion_gaps} representing the temporal proportion of
 missing values within a time interval specified by
-\code{currenttrack@data$id_timeinterval}.
+\code{id_timeinterval}.
 }
 \description{
 \code{removeDataTracks} determine for all

@@ -4,11 +4,14 @@
 \alias{averageLocationsAltitudeTrack}
 \title{Computes the average altitude of locations of a Track object.}
 \usage{
-averageLocationsAltitudeTrack(currenttrack, fun = median,
-  campsite = TRUE)
+averageLocationsAltitudeTrack(
+  currenttrack,
+  fun = stats::median,
+  campsite = TRUE
+)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{altitude} and a variable \code{location} and \code{campsite}
 as created by \code{\link{locationsTrack}} in the data slot.}
 
@@ -23,7 +26,7 @@ a numeric value representing the average altitude of the locations in \code{curr
 }
 \description{
 \code{averageLocationsAltitudeTrack} computes the average altitude of lcoations of a
-\code{\link[trajectories:Track]{Track}}. Several options are available. For each
+\code{\link[trajectories:Track-class]{Track}}. Several options are available. For each
 location, only one value is considered (i.e. thetemporal duration of visits is not
 considered as weights during computations).
 }

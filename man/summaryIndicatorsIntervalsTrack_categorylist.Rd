@@ -2,10 +2,14 @@
 % Please edit documentation in R/summaryIndicatorsIntervalsTrack_categorylist.R
 \name{summaryIndicatorsIntervalsTrack_categorylist}
 \alias{summaryIndicatorsIntervalsTrack_categorylist}
-\title{Extracts a Vector of Matched Unique Values for Fixed Ten-Day Intervals}
+\title{#' Extracts a Vector of Matched Unique Values for Fixed Ten-Day Intervals}
 \usage{
-summaryIndicatorsIntervalsTrack_categorylist(currenttrack, what,
-  whatcondition = NULL, conditionvalue = TRUE)
+summaryIndicatorsIntervalsTrack_categorylist(
+  currenttrack,
+  what,
+  whatcondition = NULL,
+  conditionvalue = TRUE
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that

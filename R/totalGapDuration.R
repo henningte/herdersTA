@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-NULL
-
 #' Computes the duration of gaps in GPS tracks.
 #'
 #' \code{gapDuration} computes the duration of gaps [s] for all
@@ -34,12 +30,15 @@ totalGapDuration <- function(currenttracks,
                              tstart = min(currenttracks@tracksData$tmin),
                              tend = max(currenttracks@tracksData$tmax),
                              threshold = 18000,
-                             tolerance = 2){
+                             tolerance = 2) {
 
   # compute the duration of gaps within the Tracks object
-  sum(unlist(
-    lapply(
-      currenttracks@tracks, gapDuration, tstart = tstart, tend = tend, threshold = threshold, tolerance = tolerance
+  sum(unlist(lapply(currenttracks@tracks,
+                    gapDuration,
+                    tstart = tstart,
+                    tend = tend,
+                    threshold = threshold,
+                    tolerance = tolerance
     )
   ))
 

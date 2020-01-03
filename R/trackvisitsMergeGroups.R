@@ -1,8 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @importFrom data.table rbindlist
-#' @importFrom lubridate is.POSIXct
-NULL
-
 #' Merges Grouped Visits from Track Objects
 #'
 #' \code{trackvisitsMergeGroups} merges groups of visits at the same location.
@@ -45,7 +40,10 @@ NULL
 #' @seealso \code{\link{trackvisits}}.
 #' @examples #
 #' @export
-trackvisitsMergeGroups <- function(currenttrackvisits, tmin, timeinterval = 30*60, keepgroup = FALSE){
+trackvisitsMergeGroups <- function(currenttrackvisits,
+                                   tmin,
+                                   timeinterval = 30*60,
+                                   keepgroup = FALSE) {
 
   # checks
   if(!(inherits(currenttrackvisits, "trackvisits"))){

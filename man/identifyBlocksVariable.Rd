@@ -37,7 +37,7 @@ same value for the specified variable.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
+\code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
 \code{\link{redefineIndices}}, \code{\link{fillGapTrack}},
 \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 }

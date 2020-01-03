@@ -35,5 +35,5 @@ individual \code{\link[trajectories:Track-class]{Track}} object) within a given 
 #
 }
 \seealso{
-\code{\link{timeActiveTracks}}, \code{\link{timeActiveTrackCollection}}.
+\code{\link{timeActiveTracks}}, \code{\link{timeActiveTracksCollection}}.
 }

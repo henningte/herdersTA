@@ -7,7 +7,7 @@
 longitudeDifferenceTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{altitude} in the data slot.}
 }
 \value{
@@ -17,7 +17,7 @@ most western and most eastern points in \code{currenttrack}.
 \description{
 \code{longitudeDifferenceTrack} computes the longitudinal difference between
 the most western and most eastern points of a
-\code{\link[trajectories:Track]{Track}}.
+\code{\link[trajectories:Track-class]{Track}}.
 }
 \examples{
 #

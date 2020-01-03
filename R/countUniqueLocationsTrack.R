@@ -1,13 +1,9 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Computes the number of unique locations of a Track object.
 #'
 #' \code{countUniqueLocationsTrack} counts unique lcoations of a
-#' \code{\link[trajectories:Track]{Track}}. Several options are available.
+#' \code{\link[trajectories:Track-class]{Track}}. Several options are available.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location}, \code{campsite} and \code{norepeatedcampsitevisits}.
 #' as created by \code{\link{locationsTrack}} in the data slot.
 #' @param campsite A logical value indicating if only campsites should be considered

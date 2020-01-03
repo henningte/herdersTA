@@ -1,11 +1,10 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import spacetime
-#' @import doParallel
-#' @import foreach
+#' @importFrom trajectories Tracks TracksCollection
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel clusterExport makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
 NULL
 
-#' Imputes gaps in a \code{\link[trajectories]{Tracks}} object.
+#' Imputes gaps in a \code{Tracks} object.
 #'
 #' \code{fillGapTracksNight} imputes missing values in all
 #' \code{\link[trajectories:Track-class]{Track}} objects of the
@@ -51,8 +50,8 @@ NULL
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
-#' \code{\link[parallel]{clusterCall}}.
-#' @return The input \code{\link[trajectories]{Tracks}} object with filled
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
+#' @return The input \code{\link[trajectories:Track-class]{Tracks}} object with filled
 #' gaps.
 #' @seealso \code{\link{reorganizeTracks}}.
 #' @examples #
@@ -62,33 +61,34 @@ fillGapTracksNight <- function(currenttracks,
                                maxdistance,
                                night = c(16, 20),
                                cores = 1,
-                               clcall = NULL){
+                               clcall = NULL) {
 
   # extract the names
   currenttracksnames <- names(currenttracks@tracksCollection)
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == F){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
+  on.exit(expr = parallel::stopCluster(cl))
 
   # fill gaps
-  newcurrenttracks <- trajectories::TracksCollection(foreach::foreach(x = currenttracks@tracksCollection, .packages = c("trajectories", "sp", "lubridate"), .export = c("fillGapTrackNight"))%dopar%{
+  newcurrenttracks <- trajectories::TracksCollection(
+    foreach::foreach(x = currenttracks@tracksCollection,
+                     .packages = c("trajectories", "sp", "lubridate"),
+                     .export = c("fillGapTrackNight"))%dopar%{
 
-    newtracks1 <- Tracks(list(fillGapTrackNight(currenttrack = x@tracks[[1]],
-                                                maxduration = maxduration,
-                                                maxdistance = maxdistance,
-                                                night = night)))
+                       newtracks1 <- trajectories::Tracks(list(fillGapTrackNight(currenttrack = x@tracks[[1]],
+                                                                                 maxduration = maxduration,
+                                                                                 maxdistance = maxdistance,
+                                                                                 night = night)))
 
   })
 
   # restore the names
   names(newcurrenttracks@tracksCollection) <- currenttracksnames
-
-  # stop cluster
-  stopCluster(cl)
 
   # return result
   return(newcurrenttracks)

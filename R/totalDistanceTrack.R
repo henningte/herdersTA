@@ -1,14 +1,10 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Computes the total distance covered by a Track object.
 #'
 #' \code{totalDistanceTrack} computes the total distance covered by a
-#' \code{\link[trajectories:Track]{Track}}. This is the sum of all distance
+#' \code{\link[trajectories:Track-class]{Track}}. This is the sum of all distance
 #' values in the \code{connections} slot.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}.
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}.
 #' @return a numeric value representing the total distance covered by \code{currenttrack}.
 #' @seealso .
 #' @examples #

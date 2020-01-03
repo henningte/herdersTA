@@ -1,6 +1,3 @@
-#'@importFrom Rdpack reprompt
-NULL
-
 #' Finds non-empty folders in a directory.
 #'
 #' \code{removeEmptyFolders} returns the names of non-empty folders within a
@@ -11,7 +8,7 @@ NULL
 #' @seealso \code{\link{removeEmptyFiles}}.
 #' @examples #
 #' @export
-removeEmptyFiles <- function(listname){
+removeEmptyFolders <- function(listname){
 
   # create empty character vector to store names of empty folders in
   remove <- character()

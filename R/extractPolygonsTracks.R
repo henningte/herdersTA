@@ -1,20 +1,19 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @importFrom sp over SpatialPointsDataFrame
-#' @importFrom dplyr left_join
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel clusterExport makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
 NULL
 
 #' Extracts corresponding raster values for GPS tracks.
 #'
 #' \code{extractPolygonsTracks} is a function
-#' in order to extract values from \code{\link[sp:SpatialPolygons]{SpatialPolygons}} objects
+#' in order to extract values from \code{\link[sp:SpatialPolygons-class]{SpatialPolygons}} objects
 #' for an object of class \code{\link[trajectories:Track-class]{TracksCollection}}.
 #'
 #' @param x A \code{\link[sp:SpatialPolygons]{SpatialPolygons}} object.
 #' @param y A \code{\link[trajectories:Track-class]{TracksCollection}} object.
 #' Depending on other parameters set, there may be certain variables required.
 #' @param fn function to summarize the values (e.g. \code{mean}).
-#' @param ... further arguments passed to \code{\link[sp]{over}}.
+#' @param ... further arguments passed to \code{\link[sp:over]{over}}.
 #' @param fixedlocationcoords A logical value indicating if for each location in \code{y}
 #' the same position is assumed for all data values. In this case, computation
 #' can be speed up by setting \code{location = TRUE} and the function uses
@@ -28,8 +27,14 @@ NULL
 #' @seealso \code{\link{extractRasterTrack}}, \code{\link{extractPolygonsTrack}}.
 #' @examples #
 #' @export
-extractPolygonsTracks <- function(x, y, fn = NULL, ..., fixedlocationcoords = TRUE, what = NULL, cores, clcall = NULL
-){
+extractPolygonsTracks <- function(x,
+                                  y,
+                                  fn = NULL,
+                                  ...,
+                                  fixedlocationcoords = TRUE,
+                                  what = NULL,
+                                  cores,
+                                  clcall = NULL) {
 
   # checks
   if(!(inherits(y, "TracksCollection"))){
@@ -37,17 +42,23 @@ extractPolygonsTracks <- function(x, y, fn = NULL, ..., fixedlocationcoords = TR
   }
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == FALSE){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  on.exit(expr = stopCluster(cl))
+  on.exit(expr = parallel::stopCluster(cl))
 
   # merge the Track objects of each Tracks object
-  foreach(tracks = seq_along(y@tracksCollection), .packages = c("trajectories", "sp", "dplyr"), .export = c("extractPolygonsTrack"))%dopar%{
+  foreach::foreach(tracks = seq_along(y@tracksCollection),
+                   .packages = c("trajectories", "sp", "dplyr"),
+                   .export = c("extractPolygonsTrack"))%dopar%{
 
-    extractPolygonsTrack(x = x, y = y@tracksCollection[[tracks]]@tracks[[1]], fn = fn, ..., fixedlocationcoords = fixedlocationcoords, what = what)
+    extractPolygonsTrack(x = x,
+                         y = y@tracksCollection[[tracks]]@tracks[[1]],
+                         fn = fn, ...,
+                         fixedlocationcoords = fixedlocationcoords,
+                         what = what)
 
   }
 

@@ -1,5 +1,4 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom sp spTransform SpatialPoints CRS
 NULL
 
 #' Extracts centroid coordinates of visits from GPS tracks.
@@ -36,7 +35,9 @@ NULL
 #' \code{\link{removeDataTracks}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
 #' @export
-extractCoordinatesVisitsTrack <- function(currenttrack, aggregated = FALSE, crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
+extractCoordinatesVisitsTrack <- function(currenttrack,
+                                          aggregated = FALSE,
+                                          crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0") {
 
   # convert currenttrack to a SpatialPointsDataFrame
   trsSP <- TrackToSpatialPointsDataFrame(currenttrack, crs = crs)
@@ -56,8 +57,8 @@ extractCoordinatesVisitsTrack <- function(currenttrack, aggregated = FALSE, crs 
     )
 
   # convert to SpatialPoints object
-  meanvaluessp <- SpatialPoints(cords <- meanvalues[,2:3], proj4string = CRS(crs))
-  meanvaluessp <- spTransform(meanvaluessp, currenttrack@sp@proj4string)
+  meanvaluessp <- sp::SpatialPoints(cords <- meanvalues[,2:3], proj4string = sp::CRS(crs))
+  meanvaluessp <- sp::spTransform(meanvaluessp, currenttrack@sp@proj4string)
 
   data.frame(
     lon = do.call(c, lapply(unique(indexvisitlocation), function(x){rep(meanvaluessp@coords[meanvalues[,1] == x, 1], length(which(indexvisitlocation == x)))})),

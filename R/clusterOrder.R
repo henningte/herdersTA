@@ -1,12 +1,10 @@
-#'@importFrom Rdpack reprompt
-#'@import spatstat
-#'@import sp
+#' @importFrom sp over spTransform
 NULL
 
 #' Identifies clusters in GPS tracks considered as campsites.
 #'
 #' \code{clusterOrder} identifies campsites (clusters of points) of a household
-#' (\code{\link[trajectories]{Tracks}} object) and for each cluster/campsite
+#' (\code{\link[trajectories:Track-class]{Tracks}} object) and for each cluster/campsite
 #' determines the number of visits, the order in which the clusters have been
 #' visited, and the start and end times (first and last point) of each visit.
 #'
@@ -15,12 +13,12 @@ NULL
 #' \code{link{searchNextVisit}} and \code{\link{findStarts}}.
 #'
 #' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object.
-#' @param targetQsize Numerical value representing the target size of the
+#' @param cellsize Numerical value representing the target size of the
 #' quadrats to create.
 #' @param threshold An integer value specifying the minimum number of
 #' points within a grid cell needed in order to consider these points
 #' as cluster.
-#' @return A \code{\link[sp]{SpatialPointsDataFrame}} holding grid cells
+#' @return A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} holding grid cells
 #' determined as clusters including data on the number of visits per cluster,
 #' start and end times etc.
 #' @seealso \code{\link{qTopology}}, \code{\link{pointsPerQuad}},
@@ -28,33 +26,40 @@ NULL
 #' \code{\link{findStarts}}.
 #' @examples #
 #' @export
-clusterOrder <- function(currenttracks, cellsize = 800, threshold = 20){
+clusterOrder <- function(currenttracks,
+                         cellsize = 800,
+                         threshold = 20){
 
   # extract the clusters within the grid
   clusters <- extractClusters(currenttracks = currenttracks,
-                              cellsize = cellsize,
+                              targetQsize = cellsize,
                               threshold = threshold)
 
   # save id of cell in dataframe as "clid"
   clusters$clid <- rownames(clusters@data)
 
   # convert to SpatialPointsDataFrame
-  trs_spdf <- spTransform(as(currenttracks, "SpatialPointsDataFrame"), CRSobj = clusters@proj4string)
+  trs_spdf <- sp::spTransform(as(currenttracks, "SpatialPointsDataFrame"),
+                              CRSobj = clusters@proj4string)
 
   # assign clid of corresponding cluster to each point
-  trs_spdf@data$clid <- over(trs_spdf, clusters)$clid
+  trs_spdf@data$clid <- sp::over(trs_spdf, clusters)$clid
 
   ## begin ordering
   # detect and rank first visit of each cluster/campsite:
 
   # determine first visit for each cluster
-  visit1_start <- aggregate(trs_spdf["time"], by = clusters, FUN = min)$time
+  visit1_start <- aggregate(trs_spdf["time"],
+                            by = clusters,
+                            FUN = min)$time
 
   # rank cluster regarding first visit
   visit1_rank <- rank(visit1_start)
 
   # determine latest point of the track within each cluster
-  clusters$last_in_cluster <- aggregate(trs_spdf["time"], by = clusters, FUN = max)$time
+  clusters$last_in_cluster <- aggregate(trs_spdf["time"],
+                                        by = clusters,
+                                        FUN = max)$time
 
   # temporarily set end of first visit to the last point in cluster (will be updated during ordering below)
   visit1_end <- clusters$last_in_cluster
@@ -67,7 +72,7 @@ clusterOrder <- function(currenttracks, cellsize = 800, threshold = 20){
   remove(visit1_rank, visit1_start, visit1_end)
 
   # assign rank of cluster to corresponding points of trs_spdf
-  trs_spdf@data$clrank <- over(trs_spdf, clusters)$visit1_rank
+  trs_spdf@data$clrank <- sp::over(trs_spdf, clusters)$visit1_rank
 
   # create vector for holding information on whether a new visit has been detected
   newVisit <- rep(TRUE, length(clusters$visit1_rank))

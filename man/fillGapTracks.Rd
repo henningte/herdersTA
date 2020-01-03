@@ -2,10 +2,16 @@
 % Please edit documentation in R/fillGapTracks.R
 \name{fillGapTracks}
 \alias{fillGapTracks}
-\title{Imputes gaps in a \code{\link[trajectories:Track-class]{Tracks}} object.}
+\title{Imputes gaps in a \code{Tracks} object.}
 \usage{
-fillGapTracks(currenttracks, maxduration, maxdistance, timeinterval,
-  cores = 1, clcall = NULL)
+fillGapTracks(
+  currenttracks,
+  maxduration,
+  maxdistance,
+  timeinterval,
+  cores = 1,
+  clcall = NULL
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object with
@@ -29,7 +35,7 @@ of a time interval represented by one data value of \code{track} [s].}
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 The input \code{\link[trajectories:Track-class]{Tracks}} object with filled
@@ -48,7 +54,7 @@ value after the gap is \eqn{\le} a user specified distance threshold.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{extractClutersBuffer}},
+\code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
 \code{\link{redefineIndices}},
 \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 }

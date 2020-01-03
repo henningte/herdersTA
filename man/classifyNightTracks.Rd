@@ -2,13 +2,13 @@
 % Please edit documentation in R/classifyNightTracks.R
 \name{classifyNightTracks}
 \alias{classifyNightTracks}
-\title{Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.}
+\title{Classifies Data Values of a \code{Tracks} object as Night or Day Values.}
 \usage{
 classifyNightTracks(currenttracks, night)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object
-with \code{\link[trajectories]{Track}} objects with the same time
+with \code{\link[trajectories:Track-class]{Track}} objects with the same time
 vectors (i.e. data values for the same time interval) (as returned
 by \code{\link{reorganizeTracks}}). \code{currenttracks} must have
 a variable \code{time} indicating the time of all data values.}

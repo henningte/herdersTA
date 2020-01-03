@@ -11,7 +11,7 @@ mergeTracksCollection(trackscollection, cores = 1, clcall = NULL)
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 
 \item{currenttrackscollection}{A
 \code{\link[trajectories:Track-class]{TracksCollection}} object.}

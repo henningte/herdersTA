@@ -1,7 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Computes summary indicators for GPS tracks.
 #'
 #' \code{summaryIndicatorsIntervalsTrack_absaltitude} computes the sum of
@@ -28,8 +24,7 @@ NULL
 #' @examples #
 #' @export
 summaryIndicatorsIntervalsTrack_absaltitude <- function(currenttrack,
-                                                     normalise = FALSE
-){
+                                                        normalise = FALSE) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -37,7 +32,8 @@ summaryIndicatorsIntervalsTrack_absaltitude <- function(currenttrack,
   }
 
   # assign each day in currenttrack$day to a ftdi
-  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
+  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"),
+                                    startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
   ftdi <- ftdi - min(ftdi) + 1
 
@@ -63,7 +59,9 @@ summaryIndicatorsIntervalsTrack_absaltitude <- function(currenttrack,
       currentconnections <- as.data.frame(connections[c(x[1]-1, x),])
 
       # identify block of gaps in connection
-      currentgapblocks <- identifyBlocksVariable(currenttrack = currentconnections, variable = "gap", value = TRUE)
+      currentgapblocks <- identifyBlocksVariable(currenttrack = currentconnections,
+                                                 variable = "gap",
+                                                 value = TRUE)
       if(!is.null(currentgapblocks)){
 
         # remove blocks at the boundary of the tdi

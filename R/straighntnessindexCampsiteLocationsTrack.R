@@ -1,14 +1,14 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom trajectories Track
+#' @importFrom spacetime STIDF
 NULL
 
 #' Computes the straightness index for the trajectory between the first and last campsite location in a Track object.
 #'
 #' \code{straighntnessindexCampsiteLocationsTrack} computes the straightness index
 #' for the trajectory between the first and last locations of a
-#' \code{\link[trajectories:Track]{Track}} in the order of movement.
+#' \code{\link[trajectories:Track-class]{Track}} in the order of movement.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location} and \code{campsite}
 #' @return a numeric value representing the straightness index for
 #' \code{currenttrack}.

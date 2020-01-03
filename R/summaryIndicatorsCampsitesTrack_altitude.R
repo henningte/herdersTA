@@ -1,5 +1,6 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom sp coordinates SpatialPoints proj4string CRS
+#' @importFrom spacetime STIDF
+#' @importFrom trajectories Track
 NULL
 
 #' Extracts Altitudinal Differences Between Campsite Locations.
@@ -41,10 +42,10 @@ summaryIndicatorsCampsitesTrack_altitude <- function(currenttrack
   if(length(index) > 1){
 
     # construct a new Track object omitting gaps and with one value per campsite
-    currenttrack <- Track(track = STIDF(
-      sp = SpatialPoints(coords = data.frame(lon = currenttrack$longitude,
+    currenttrack <- trajectories::Track(track = spacetime::STIDF(
+      sp = sp::SpatialPoints(coords = data.frame(lon = currenttrack$longitude,
                                              lat = currenttrack$latitude)[index,],
-                         proj4string = CRS(proj4string(currenttrack@sp))),
+                         proj4string = sp::CRS(sp::proj4string(currenttrack@sp))),
       time = currenttrack@time[index],
       endTime = currenttrack@time[index],
       data = currenttrack@data[index,])
@@ -74,7 +75,8 @@ summaryIndicatorsCampsitesTrack_altitude <- function(currenttrack
 
   # summarise the values in summarisedvalues
   summarisedvalues <- data.frame(campsite = uniquecampsites,
-                                 distance = c(NA, altitudinaldistances))
+                                 distance = c(NA, altitudinaldistances),
+                                 stringsAsFactors = FALSE)
 
   # return summarisedvalues
   return(summarisedvalues)

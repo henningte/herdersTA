@@ -1,5 +1,6 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom sp CRS proj4string
+#' @importFrom trajectories Track
+#' @importFrom spacetime STIDF
 NULL
 
 #' Extracts Linear Distances Between Campsite Locations.
@@ -27,8 +28,7 @@ NULL
 #' @seealso \code{\link{removeDataTracks}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
 #' @export
-summaryIndicatorsCampsitesTrack_distance <- function(currenttrack
-){
+summaryIndicatorsCampsitesTrack_distance <- function(currenttrack) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -41,10 +41,10 @@ summaryIndicatorsCampsitesTrack_distance <- function(currenttrack
   if(length(index) > 1){
 
     # construct a new Track object omitting gaps and with one value per campsite
-    currenttrack <- Track(track = STIDF(
+    currenttrack <- trajectories::Track(track = spacetime::STIDF(
       sp = SpatialPoints(coords = data.frame(lon = currenttrack$longitude,
                                              lat = currenttrack$latitude)[index,],
-                         proj4string = CRS(proj4string(currenttrack@sp))),
+                         proj4string = sp::CRS(sp::proj4string(currenttrack@sp))),
       time = currenttrack@time[index],
       endTime = currenttrack@time[index],
       data = currenttrack@data[index,])

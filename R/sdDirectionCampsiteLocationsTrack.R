@@ -1,23 +1,24 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom stats median sd
+#' @importFrom trajectories Track
+#' @importFrom spacetime STIDF
 NULL
 
 #' Computes the standard eviation of the direction (as absolute difference of angles) between campsite locations of a Track object in the order of movement.
 #'
 #' \code{sdDirectionCampsiteLocationsTrack} computes the standard deviation of directions
-#' between locations of a \code{\link[trajectories:Track]{Track}} in the order of movement.
+#' between locations of a \code{\link[trajectories:Track-class]{Track}} in the order of movement.
 #' Directions are computed as angle difference between the previous campsite location
 #' and the current campsite location and the next campsite location and the current
 #' campsite location. Several options are available.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location} and \code{campsite}.
 #' @return a numeric value representing the standard deviation of directions between
 #' campsites in the order of movement.
 #' @seealso .
 #' @examples #
 #' @export
-sdDirectionCampsiteLocationsTrack <- function(currenttrack, fun = median){
+sdDirectionCampsiteLocationsTrack <- function(currenttrack, fun = stats::median){
 
   # checks
   stopifnot(inherits(currenttrack, "Track"))
@@ -39,6 +40,6 @@ sdDirectionCampsiteLocationsTrack <- function(currenttrack, fun = median){
   }
 
   # compute the standard deviation of directions
-  sd(angdiff(newcurrenttrack@connections$direction[-1], newcurrenttrack@connections$direction[-nrow(newcurrenttrack@connections)]))
+  stats::sd(angdiff(newcurrenttrack@connections$direction[-1], newcurrenttrack@connections$direction[-nrow(newcurrenttrack@connections)]))
 
 }

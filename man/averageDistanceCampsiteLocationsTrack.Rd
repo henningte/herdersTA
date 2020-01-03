@@ -4,10 +4,10 @@
 \alias{averageDistanceCampsiteLocationsTrack}
 \title{Computes the mean distance between campsite locations of a Track object in the order of movement.}
 \usage{
-averageDistanceCampsiteLocationsTrack(currenttrack, fun = median)
+averageDistanceCampsiteLocationsTrack(currenttrack, fun = stats::median)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location} and \code{campsite}}
 
 \item{fun}{One of \code{mean} or \code{median)}, depending on which function should be
@@ -19,7 +19,7 @@ in \code{currenttrack}.
 }
 \description{
 \code{averageDistanceCampsiteLocationsTrack} computes the mean distance between
-locations of a \code{\link[trajectories:Track]{Track}} in the order of movement.
+locations of a \code{\link[trajectories:Track-class]{Track}} in the order of movement.
 Several options are available.
 }
 \examples{

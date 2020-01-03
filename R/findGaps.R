@@ -1,5 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#' @importFrom stats na.omit
 NULL
 
 #' Finds gaps in GPS tracks.
@@ -35,7 +34,7 @@ findGaps <- function(currenttrack,
                      tstart = min(index(currenttrack@time)),
                      tend = max(index(currenttrack@time)),
                      threshold = 18000,
-                     tolerance = 2){
+                     tolerance = 2) {
 
 
   if (is.null(threshold) == TRUE){
@@ -47,7 +46,7 @@ findGaps <- function(currenttrack,
     connectionsub <- currenttrack@connections[index(currenttrack@time) >= tstart &
                                               index(currenttrack@time) <= tend,]
 
-    na.omit(connectionsub[connectionsub$duration > gap_thresh,])
+    stats::na.omit(connectionsub[connectionsub$duration > gap_thresh,])
 
   }else{
 
@@ -55,7 +54,7 @@ findGaps <- function(currenttrack,
     connectionsub <- currenttrack@connections[index(currenttrack@time) >= tstart &
                                                 index(currenttrack@time) <= tend,]
 
-    na.omit(connectionsub[connectionsub$duration > threshold,])
+    stats::na.omit(connectionsub[connectionsub$duration > threshold,])
 
   }
 

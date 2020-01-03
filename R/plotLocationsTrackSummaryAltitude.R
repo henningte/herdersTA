@@ -1,7 +1,5 @@
-#'@importFrom Rdpack reprompt
-#'@import ggplot2
-#'@importFrom cowplot theme_cowplot
-#'@importFrom ggrepel geom_label_repel
+#' @import ggplot2
+#' @importFrom ggrepel geom_label_repel
 NULL
 
 #' Plots Altitude Profiles of Summarised Tracks as Returned by \code{\link{locationsTrack}}.
@@ -27,12 +25,15 @@ NULL
 #'   \item{\code{colour}}{A character value indicating the colour used in order to fill
 #'   the label boxes of visits with arrivals within the respective seasons.}
 #' }
-#' @return A  \code{\link[ggplot2]{ggplotobj}} object.
+#' @return A  \code{\link[ggplot2]{ggplot}} object.
 #' @seealso \code{\link{locationsTrack}}, \code{\link{locationsTracks}},
 #' \code{\link{plotLocationsTrackSummary}}.
 #' @examples #
 #' @export
-plotLocationsTrackSummaryAltitude <- function(x, seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1", "lightgray"))){
+plotLocationsTrackSummaryAltitude <- function(x,
+                                              seasons = data.frame(start = c(3, 5, 9, 11),
+                                                                   end = c(4, 8, 10, 2),
+                                                                   colour = c("yellow", "red", "burlywood1", "lightgray"))){
 
   # get the season that crosses the end/begin of a year
   seasoncrossyear <- seasons$end[ifelse(seasons$start > seasons$end, TRUE, FALSE)]
@@ -83,14 +84,34 @@ plotLocationsTrackSummaryAltitude <- function(x, seasons = data.frame(start = c(
   }
 
   # plot
-  ggplot(data = plotdfpoints, aes(x = time, y = alt)) +
-    geom_path() +
-    geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
-    geom_point(aes(fill = plotdfpoints$campsite), shape = 21, size = 3) +
-    scale_fill_manual(values = scale_fill_manual_values) +
-    theme(legend.position = "none") +
+  ggplot2::ggplot(data = plotdfpoints,
+                  ggplot2::aes(x = time,
+                               y = alt)) +
+    ggplot2::geom_path() +
+    ggplot2::geom_segment(data = plotdfsegmentsgaps,
+                          ggplot2::aes(x = xstart,
+                                       xend = xend,
+                                       y = ystart,
+                                       yend = yend),
+                          colour = "white",
+                          linetype = 2) +
+    ggplot2::geom_point(ggplot2::aes(fill = plotdfpoints$campsite),
+                        shape = 21,
+                        size = 3) +
+    ggplot2::scale_fill_manual(values = scale_fill_manual_values) +
+    ggplot2::theme(legend.position = "none") +
     # arrow
     # geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend), arrow = arrow(length = unit(0.03, "npc"))) +
-    geom_label_repel(data = plotdfpoints[seq(1, nrow(plotdfpoints)-1, by = 2),], aes(x = time, y = alt, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival]))
+    ggrepel::geom_label_repel(data = plotdfpoints[seq(1, nrow(plotdfpoints)-1, by = 2),],
+                              ggplot2::aes(x = time,
+                                           y = alt,
+                                           label = labels),
+                              segment.colour = "gray",
+                              point.padding = 0.2,
+                              size = 1.5,
+                              nudge_x = 0,
+                              nudge_y = 0,
+                              box.padding = 0.7,
+                              fill = as.character(seasons$colour[seasonsarrival]))
 
 }

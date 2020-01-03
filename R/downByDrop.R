@@ -1,5 +1,5 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#' @importFrom spacetime STIDF
+#' @importFrom trajectories Track
 NULL
 
 #' Cleans and regularises GPS tracks.
@@ -26,7 +26,8 @@ NULL
 #' \code{\link{getNightConnectionsTrack}}.
 #' @examples #
 #' @export
-downByDrop <- function(currenttrack, timeInterval = 1770){
+downByDrop <- function(currenttrack,
+                       timeInterval = 1770) {
 
   # get the number of values in the Track objetc
   j <- length(currenttrack@time)
@@ -53,8 +54,8 @@ downByDrop <- function(currenttrack, timeInterval = 1770){
   # build new Track from data at all indexes not in 'dropindexes', but only if there are at least two of them
   if(length(dropindexes) < length(currenttrack@time) - 1){
     downsampled <-
-      Track(
-        STIDF(
+      trajectories::Track(
+        spacetime::STIDF(
           sp = currenttrack@sp[-dropindexes],
           time = currenttrack@time[-dropindexes],
           endTime = currenttrack@endTime[-dropindexes],

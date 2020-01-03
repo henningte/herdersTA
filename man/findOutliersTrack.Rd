@@ -4,8 +4,12 @@
 \alias{findOutliersTrack}
 \title{Finds outliers in GPS tracks.}
 \usage{
-findOutliersTrack(currenttrack, tstart = min(index(currenttrack@time)),
-  tend = max(index(currenttrack@time)), threshold = 180)
+findOutliersTrack(
+  currenttrack,
+  tstart = min(index(currenttrack@time)),
+  tend = max(index(currenttrack@time)),
+  threshold = 180
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}

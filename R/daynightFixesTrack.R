@@ -1,6 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-#'@import sp
+#' @importFrom sp SpatialPointsDataFrame
 NULL
 
 #' Classifies sub-daily values of GPS tracks.
@@ -17,20 +15,20 @@ NULL
 #' @param tend A numeric value indicating the end of the time interval
 #' [h, values between 0 and 24]. \code{tend} has to be larger than
 #' \code{tstart}.
-#' @return a \code{\link[sp]{SpatialPointsDataFrame}} containing all data
+#' @return a \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} containing all data
 #' of the slot \code{data} of the input \code{\link[trajectories:Track-class]{Track}}
 #' object and a column \code{night} indicating if a data point is within
 #' the specified time interval (\code{night = 1}) or not
 #' (\code{night = 0}).
 #' @seealso \code{\link{downByDrop}}, \code{\link{downByDropTrs}},
 #' \code{\link{getNightTrack}}, \code{\link{getNightTrs}},
-#' \code{\link{dayNightFixesTracks}},
+#' \code{\link{daynightFixesTracks}},
 #' \code{\link{getNightConnectionsTrack}}.
 #' @examples #
 #' @export
 daynightFixesTrack <- function (currenttrack,
                                 tstart = 16,
-                                tend = 20){
+                                tend = 20) {
 
   #get indexes of fixes within time frame
   nightindexes <- which(hour(currenttrack@time) >= tstart & hour(currenttrack@time) < tend)
@@ -38,22 +36,26 @@ daynightFixesTrack <- function (currenttrack,
   # get SpatialPoints of all fixes during night
   nightfixes <- currenttrack@sp[nightindexes,]
   nightfixes <-
-    SpatialPointsDataFrame(nightfixes, cbind(currenttrack@data[nightindexes,], data.frame(night = rep(
-      1, length(nightfixes)
-    ))))
+    sp::SpatialPointsDataFrame(coords = nightfixes,
+                               data = cbind(currenttrack@data[nightindexes,],
+                                            data.frame(night = rep( 1, length(nightfixes))))
+                               )
 
   # get SpatialPoints of all other fixes
   if (length(nightfixes) > 0){
     dayfixes <- currenttrack@sp[-nightindexes,]
     dayfixes <-
-      SpatialPointsDataFrame(dayfixes, cbind(currenttrack@data[-nightindexes,], data.frame(night = rep(
-        0, length(dayfixes))))
+      sp::SpatialPointsDataFrame(coords = dayfixes,
+                                 data = cbind(currenttrack@data[-nightindexes,],
+                                              data.frame(night = rep(0, length(dayfixes)))
+                                 )
       )
   }else{
     dayfixes <- currenttrack@sp
     dayfixes <-
-      SpatialPointsDataFrame(dayfixes, cbind(currenttrack@data, data.frame(night = rep(
-        0, length(dayfixes))))
+      sp::SpatialPointsDataFrame(coords = dayfixes,
+                                 data = cbind(currenttrack@data,
+                                              data.frame(night = rep(0, length(dayfixes))))
       )
   }
 

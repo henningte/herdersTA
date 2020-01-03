@@ -1,7 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Determines the duration of non-gaps in GPS tracks.
 #'
 #' \code{nogapDurationTrack} compute the temporal duration of not missing
@@ -28,13 +24,14 @@ NULL
 #' \code{\link{removeDataTracks}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
 #' @export
-nogapDurationTrack <- function(currenttrack, timeinterval = 30 * 60){
+nogapDurationTrack <- function(currenttrack,
+                               timeinterval = 30 * 60) {
 
   # get duration of no gaps for each time interval defined by id_timeinterval
   duration_intervals <- sapply(unique(currenttrack@data$id_timeinterval), function(x){
     a <- length(currenttrack@data$id_timeinterval[which(currenttrack@data$gap == FALSE & currenttrack@data$id_timeinterval == x)]) * timeinterval
     names(a) <- x
-    return(a)
+    a
   })
 
   # assign each value to the respective data values

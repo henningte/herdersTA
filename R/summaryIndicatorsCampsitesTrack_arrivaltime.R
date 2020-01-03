@@ -1,7 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Extracts a Vector of Matched Unique Values for Campsites.
 #'
 #' \code{summaryIndicatorsCampsitesTrack_arrivaltime} extracts for each
@@ -27,8 +23,7 @@ NULL
 #' @seealso \code{\link{removeDataTracks}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
 #' @export
-summaryIndicatorsCampsitesTrack_arrivaltime <- function(currenttrack
-){
+summaryIndicatorsCampsitesTrack_arrivaltime <- function(currenttrack) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){

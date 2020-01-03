@@ -1,10 +1,9 @@
-#'@importFrom Rdpack reprompt
-#'@import spacetime
-#'@import lubridate
+#'@importFrom spacetime STIDF
+#'@importFrom sp SpatialLines SpatialPoints
 #'@importFrom trajectories Track Tracks
 NULL
 
-#' Merges \code{\link[trajectories:Track-class]{Track}} objects of a \code{\link[trajectories:Track-class]{Tracks}} object.
+#' Merges \code{Track} objects of a \code{Tracks} object.
 #'
 #' \code{mergeTracks} merges the \code{\link[trajectories:Track-class]{Track}}
 #' objects of a \code{\link[trajectories:Track-class]{Tracks}} objects into a
@@ -31,6 +30,11 @@ mergeTracks <- function(currenttracks){
   time <- do.call("c", lapply(currenttracks@tracks, function(x) as.POSIXct(x@time)))
 
   # create and return the Track object
-  trajectories::Tracks(list(trajectories::Track(STIDF(sp = trsSP, time = time , data = df, endTime = time))))
+  trajectories::Tracks(list(
+    trajectories::Track(
+      spacetime::STIDF(sp = trsSP,
+                       time = time ,
+                       data = df,
+                       endTime = time))))
 
 }

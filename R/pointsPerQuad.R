@@ -1,6 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import spatstat
-#'@import sp
+#'@importFrom sp SpatialGridDataFrame proj4string GridTopology
 NULL
 
 #' Counts the number of points in the cells of a spatial grid.
@@ -25,7 +23,9 @@ NULL
 #' \code{\link{clusterOrder}}.
 #' @examples #
 #' @export
-pointsPerQuad <- function(currenttrack, targetQsize, crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
+pointsPerQuad <- function(currenttrack,
+                          targetQsize,
+                          crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"){
 
   # transform the Tracks object to UTM
   trsSPtrans <- TrackToSpatialPointsDataFrame(currenttrack = currenttrack, crs = crs)
@@ -41,8 +41,8 @@ pointsPerQuad <- function(currenttrack, targetQsize, crs = "+proj=utm +zone=46 +
   nqy <- qtopo$nqy
 
   # create and return a SpatialGridDataFrame with number of counts of points per grid cell using quadratcount and with dimensions determined above
-  SpatialGridDataFrame(
-    GridTopology(
+  sp::SpatialGridDataFrame(
+    sp::GridTopology(
       c(
         trsPPP$window$xrange[1] + qsizeX / 2,
         trsPPP$window$yrange[1] + qsizeY / 2
@@ -50,11 +50,15 @@ pointsPerQuad <- function(currenttrack, targetQsize, crs = "+proj=utm +zone=46 +
       c(qsizeX, qsizeY),
       c(nqx, nqy)
     ),
-    data.frame(count = as.numeric(matrix(
-      as.numeric(quadratcount(trsPPP, nx = nqx, ny = nqy)), nqx, nqy, byrow =
-        T
-    ))),
-    proj4string = proj4string(trsSPtrans)
+    data.frame(count = as.numeric(
+      matrix(
+        as.numeric(quadratcount(trsPPP, nx = nqx, ny = nqy)),
+        nqx,
+        nqy,
+        byrow = TRUE
+      )),
+      stringsAsFactors = FALSE),
+    proj4string = sp::proj4string(trsSPtrans)
   )
 
 }

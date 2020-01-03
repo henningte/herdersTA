@@ -4,8 +4,12 @@
 \alias{summaryIndicatorsCampsitesTrackGeneric}
 \title{Computes summary indicators for GPS tracks.}
 \usage{
-summaryIndicatorsCampsitesTrackGeneric(currenttrack, normalise = TRUE,
-  fun = mean, what)
+summaryIndicatorsCampsitesTrackGeneric(
+  currenttrack,
+  normalise = TRUE,
+  fun = mean,
+  what
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
@@ -36,7 +40,7 @@ and two columns
 \description{
 \code{summaryIndicatorsCampsitesTrackGeneric} can be used to compute various
 summary indicators for a \code{\link[trajectories:Track-class]{Track}} object
-that has been processed with \code{\link{reorganizeTrack}},
+that has been processed with \code{\link{reorganizeTracks}},
 \code{\link{locationsTrack}} and \code{\link{aggregateDailyLocationsTrack}}.
 Summary indicators are computed for each campsite.
 \code{summaryIndicatorsIntervalsTrackGeneric}

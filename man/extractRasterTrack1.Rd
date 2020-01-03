@@ -12,7 +12,7 @@ has a column \code{day} containing the time information of the data
 values.}
 
 \item{raster}{raster based time series (\code{RasterBrick} or
-\code{RasterStack} object, see: \code{\link[raster]{Raster-class}}).
+\code{RasterStack} object, see: \code{\link[raster:Raster-classes]{Raster-classes}}).
 Eacj layer of \code{raster} has to correspond to a value in
 \code{currenttrack}, i.e. both must have daily resolution and
 the same number of values and layers, respectively.}
@@ -31,7 +31,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 \description{
 \code{extractRasterTrack1} extracts values from raster based time series
 (\code{RasterBrick} or \code{RasterStack} object, see:
-\code{\link[raster]{Raster-class}}) that correspond the the respective
+\code{\link[raster:Raster-classes]{Raster-classes}}) that correspond the the respective
 position and time of a \code{\link[trajectories:Track-class]{Track}} object with
 daily resolution.
 }

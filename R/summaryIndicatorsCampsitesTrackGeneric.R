@@ -1,12 +1,8 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Computes summary indicators for GPS tracks.
 #'
 #' \code{summaryIndicatorsCampsitesTrackGeneric} can be used to compute various
 #' summary indicators for a \code{\link[trajectories:Track-class]{Track}} object
-#' that has been processed with \code{\link{reorganizeTrack}},
+#' that has been processed with \code{\link{reorganizeTracks}},
 #' \code{\link{locationsTrack}} and \code{\link{aggregateDailyLocationsTrack}}.
 #' Summary indicators are computed for each campsite.
 #' \code{summaryIndicatorsIntervalsTrackGeneric}
@@ -39,8 +35,7 @@ NULL
 summaryIndicatorsCampsitesTrackGeneric <- function(currenttrack,
                                                    normalise = TRUE,
                                                    fun = mean,
-                                                   what
-){
+                                                   what) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){

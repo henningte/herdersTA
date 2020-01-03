@@ -4,11 +4,18 @@
 \alias{locationsTracks}
 \title{Identifies and classifies visits in GPS tracks.}
 \usage{
-locationsTracks(currenttracks, radius = 800, tmin = 345600,
-  tmaxinterstices = 345600, tmaxintersticenotvalid = data.frame(start =
-  as.POSIXct("2016-01-01 00:00:00"), end =
-  as.POSIXct("2016-05-01 00:00:00")), summary = TRUE, night = c(16,
-  20), cores = 1, clcall = NULL)
+locationsTracks(
+  currenttracks,
+  radius = 800,
+  tmin = 345600,
+  tmaxinterstices = 345600,
+  tmaxintersticenotvalid = data.frame(start = as.POSIXct("2016-01-01 00:00:00"), end =
+    as.POSIXct("2016-05-01 00:00:00")),
+  summary = TRUE,
+  night = c(16, 20),
+  cores = 1,
+  clcall = NULL
+)
 }
 \arguments{
 \item{currenttracks}{A \code{\link[trajectories:Track-class]{Tracks}} object.}
@@ -33,11 +40,9 @@ time periods in which the argument \code{tmaxinterstice} will be ignored,
 i.e. visits at the same location are merged irrespective of the duration
 between these visits if there is no campsite visit at a different location
 in-between. Each row indicates a time period in which this should be valid.
-\code{tmaxintersticenotvalid} must contain two columns:
-\describe{
-  \item{\code{start}}{Represents the start time of the time interval.}
-  \item{\code{end}}{Represents the end time of the time interval.}
-}
+\code{tmaxintersticenotvalid} must contain two columns: \code{start} represents
+the start time of the time interval and \code{end} represents the end time of
+the time interval.
 It is evaluated for each visit if its endtime (\code{trackvisits$endtime})
 is within any of the time periods or the starttime (\code{trackvisits$starttime})
 of the next visit at the same location.}
@@ -59,7 +64,7 @@ information.}
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 \describe{
@@ -69,7 +74,7 @@ use in parallel computing.}
   to the input \code{\link[trajectories:Track-class]{Track}} objects, but
   have four additional columns in their \code{data} slot:
   \describe{
-    \item {\code{location}}{An integer value for each identified
+    \item{\code{location}}{An integer value for each identified
     spatial point cluster (location) increasing with the time starting
     from 1.}
     \item{\code{campsite}}{A logical value indicating if a visits of a
@@ -93,11 +98,11 @@ use in parallel computing.}
     \item{location}{An integer value for each identified
     spatial point cluster (location) increasing with the time starting
     from 1.}
-    \code{lon}{The longitude of the respective location (as mean value of
+    \item{lon}{The longitude of the respective location (as mean value of
     the coordinates of the data values assigned to the visit).}
-    \code{lat}{The latitude of the respective location (as mean value of
+    \item{lat}{The latitude of the respective location (as mean value of
     the coordinates of the data values assigned to the visit).}
-    \code{alt}{The altitude of the respective location (as mean value of
+    \item{alt}{The altitude of the respective location (as mean value of
     the coordinates of the data values assigned to the visit).}
     \item{\code{visitsloc}}{An integer vector indicating the number of
     visits at a specific location the data point is assigned to (i.e.
@@ -115,7 +120,7 @@ use in parallel computing.}
     time of the visit from the respective location.}
     \item{residencetime}{A numerical vector indicating the residence time
     of each visit [s].}
-    \code{speed}{The speed of the respective location (as mean value of
+    \item{speed}{The speed of the respective location (as mean value of
     the speed values of the data values assigned to the visit).}
   }
   }

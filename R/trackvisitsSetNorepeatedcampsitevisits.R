@@ -1,6 +1,3 @@
-#' @importFrom Rdpack reprompt
-NULL
-
 #' Get the Number of Repeated Campsite Visits.
 #'
 #' \code{trackvisitsSetNorepeatedcampsitevisits} sets the number of repeated campsite visits

@@ -12,7 +12,7 @@ has a column \code{day} containing the time information of the data
 values.}
 
 \item{raster}{A \code{RasterBrick} or \code{RasterStack} (see:
-\code{\link[raster]{Raster-class}}). from which values should be
+\code{\link[raster:Raster-classes]{Raster-classes}}). from which values should be
 extracted. Each layer has to correspond to a time interval with
 a duration longer than a day.}
 
@@ -34,7 +34,7 @@ If a value of \code{raster} cannot be assigned to a respective data value,
 }
 \description{
 \code{extractRasterTrackTimeinterval} extracts values from a \code{RasterBrick}
-or \code{RasterStack} object (see: \code{\link[raster]{Raster-class}}) with a
+or \code{RasterStack} object (see: \code{\link[raster:Raster-classes]{Raster-classes}}) with a
 temporal resolution greater than one day that corresponds to the respective
 position of values of a \code{\link[trajectories:Track-class]{Track}} object with
 daily resolution.

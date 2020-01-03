@@ -4,9 +4,11 @@
 \alias{plotLocationsTrackSummaryAltitude}
 \title{Plots Altitude Profiles of Summarised Tracks as Returned by \code{\link{locationsTrack}}.}
 \usage{
-plotLocationsTrackSummaryAltitude(x, seasons = data.frame(start = c(3, 5,
-  9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1",
-  "lightgray")))
+plotLocationsTrackSummaryAltitude(
+  x,
+  seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour =
+    c("yellow", "red", "burlywood1", "lightgray"))
+)
 }
 \arguments{
 \item{x}{An object as returned by \code{\link{locationsTrack}} with
@@ -24,7 +26,7 @@ and three columns:
 }}
 }
 \value{
-A  \code{\link[ggplot2]{ggplotobj}} object.
+A  \code{\link[ggplot2]{ggplot}} object.
 }
 \description{
 \code{plotLocationsTrackSummaryAltitude} plots the result of \code{\link{locationsTrack}}

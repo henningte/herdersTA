@@ -1,19 +1,17 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import sp
+#' @importFrom sp SpatialPointsDataFrame CRS proj4string
 NULL
 
-#' Assigns \code{\link[sp]{SpatialPolygonsDataFrame}} values to values of a GPS tracks.
+#' Assigns \code{SpatialPolygonsDataFrame} values to values of a GPS tracks.
 #'
 #' \code{extractSpatialPolygonsDataFrameTrack} extracts for each data
 #' value of a \code{\link[trajectories:Track-class]{Track}} object a value
-#' of a \code{\link[sp]{SpatialPolygonsDataFrame}} object of a specified
+#' of a \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} object of a specified
 #' variable.
 #'
 #' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object that
 #' has a column \code{time} containing the time information of the data
 #' values.
-#' @param sppdf A \code{\link[sp]{SpatialPolygonsDataFrame}} object.
+#' @param sppdf A \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} object.
 #' @param variable A \code{character} value indicating for which variable
 #' to extract values from \code{sppdf}.
 #' @return A vector with a value for each data value of \code{currenttrack}
@@ -23,7 +21,9 @@ NULL
 #' @seealso .
 #' @examples #
 #' @export
-extractSpatialPolygonsDataFrameTrack <- function(currenttrack, sppdf, variable){
+extractSpatialPolygonsDataFrameTrack <- function(currenttrack,
+                                                 sppdf,
+                                                 variable) {
 
   # check if currenttrack is of class Track
   if(!inherits(currenttrack, "Track")){
@@ -42,7 +42,9 @@ extractSpatialPolygonsDataFrameTrack <- function(currenttrack, sppdf, variable){
 
   # extract the position of each location from currenttrack
   locationsdata <- currenttrack@data[!duplicated(currenttrack@data$location), c(2,3,4)]
-  locationsdata <- SpatialPointsDataFrame(coords = locationsdata[,c(2,3)], data = locationsdata, proj4string = CRS(proj4string(currenttrack@sp)))
+  locationsdata <- sp::SpatialPointsDataFrame(coords = locationsdata[,c(2,3)],
+                                              data = locationsdata,
+                                              proj4string = sp::CRS(sp::proj4string(currenttrack@sp)))
 
   # extract the location for each day
   eachdaylocation <- currenttrack@data$location
@@ -57,7 +59,7 @@ extractSpatialPolygonsDataFrameTrack <- function(currenttrack, sppdf, variable){
   eachdaylocation <- eachdaylocation[indexnongaps]
 
   # get the id of the variable to extract
-  variableid <- base::match(x = variable, table = colnames(sppdf@data))
+  variableid <- match(x = variable, table = colnames(sppdf@data))
 
   # extract the values for all locations
   extractedvalues <- unlist(over(x = locationsdata, y = sppdf[,variableid], returnList = TRUE))
@@ -69,6 +71,6 @@ extractSpatialPolygonsDataFrameTrack <- function(currenttrack, sppdf, variable){
   res[indexnongaps] <- extractedvalues
 
   # return res
-  return(res)
+  res
 
 }

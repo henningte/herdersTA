@@ -2,10 +2,13 @@
 % Please edit documentation in R/TrackToSpatialPointsDataFrame.R
 \name{TrackToSpatialPointsDataFrame}
 \alias{TrackToSpatialPointsDataFrame}
-\title{Converts a \code{\link[trajectories:Track-class]{Track}} object to a \code{\link[sp]{SpatialPointsDataFrame}}.}
+\title{Converts a \code{Track} object to a \code{SpatialPointsDataFrame}.}
 \usage{
-TrackToSpatialPointsDataFrame(currenttrack, toproject = TRUE,
-  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+TrackToSpatialPointsDataFrame(
+  currenttrack,
+  toproject = TRUE,
+  crs = "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object.}
@@ -19,14 +22,14 @@ by \code{crs} (\code{project = TRUE}) or not
 in the \code{PROJ.4} format (see \code{\link[rgdal]{projInfo}}).}
 }
 \value{
-A \code{\link[sp]{SpatialPointsDataFrame}} object
+A \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} object
 containing the information of the slot \code{sp} and \code{data}
 of the corresponding \code{\link[trajectories:Track-class]{Track}} object.
 }
 \description{
 \code{TrackToSpatialPointsDataFrame} converts a
 \code{\link[trajectories:Track-class]{Track}} object to a
-\code{\link[sp]{SpatialPointsDataFrame}} and projects it to
+\code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} and projects it to
 a user specified coordinate reference system if specified.
 }
 \examples{

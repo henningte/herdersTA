@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-NULL
-
 #' Computes the relative duration of gaps in GPS tracks.
 #'
 #' \code{gapProprtion} computes the relative duration of gaps [s] in a given

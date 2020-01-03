@@ -4,11 +4,17 @@
 \alias{extractPolygonsTrack}
 \title{Extracts corresponding raster values for GPS tracks.}
 \usage{
-extractPolygonsTrack(x, y, fn = NULL, ..., fixedlocationcoords = TRUE,
-  what = NULL)
+extractPolygonsTrack(
+  x,
+  y,
+  fn = NULL,
+  ...,
+  fixedlocationcoords = TRUE,
+  what = NULL
+)
 }
 \arguments{
-\item{x}{A \code{\link[sp]{SpatialPolygonsDataFrame}} object.}
+\item{x}{A \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} object.}
 
 \item{y}{A \code{\link[trajectories:Track-class]{Track}} object.
 Depending on other parameters set, there may be certain variables required.}
@@ -34,7 +40,7 @@ If a value of \code{x} cannot be assigned to a respective data value,
 }
 \description{
 \code{extractPolygonsTrack} is a function
-in order to extract values from \code{\link[sp]{SpatialPolygonsDataFrame}} objects
+in order to extract values from \code{\link[sp:SpatialPolygons]{SpatialPolygonsDataFrame}} objects
 for an object of class \code{\link[trajectories:Track-class]{Track}}.
 }
 \examples{

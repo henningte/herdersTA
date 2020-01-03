@@ -7,7 +7,7 @@
 latitudeDifferenceTrack(currenttrack)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{altitude} in the data slot.}
 }
 \value{
@@ -17,7 +17,7 @@ most northern and most southern points in \code{currenttrack}.
 \description{
 \code{latitudeDifferenceTrack} computes the latitudinal difference between
 the most northern and most southern points of a
-\code{\link[trajectories:Track]{Track}}.
+\code{\link[trajectories:Track-class]{Track}}.
 }
 \examples{
 #

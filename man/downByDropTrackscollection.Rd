@@ -4,8 +4,12 @@
 \alias{downByDropTrackscollection}
 \title{Cleans and regularises GPS tracks.}
 \usage{
-downByDropTrackscollection(currenttrackscollection, timeInterval = 1770,
-  cores = 1, clcall = NULL)
+downByDropTrackscollection(
+  currenttrackscollection,
+  timeInterval = 1770,
+  cores = 1,
+  clcall = NULL
+)
 }
 \arguments{
 \item{currenttrackscollection}{A
@@ -19,7 +23,7 @@ object. Default is \code{timeInterval = 1770} (i.e. 29.5 minutes).}
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
-\code{\link[parallel]{clusterCall}}.}
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 The downsampled \code{\link[trajectories:Track-class]{TracksCollection}}

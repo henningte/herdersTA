@@ -1,8 +1,7 @@
-#' @importFrom Rdpack reprompt
 #' @importFrom plyr join
-#' @importFrom data.table rbindlist
+#' @importFrom data.table rbindlist rleidv
 #' @importFrom tidyr fill
-#' @importFrom sp coordinates SpatialPoints
+#' @importFrom sp coordinates SpatialPoints spDists
 #' @importFrom spacetime STIDF
 #' @importFrom trajectories Track
 NULL
@@ -301,7 +300,7 @@ gapdurationnextcampsite_wis <- function(agg){
 #' are considered as visits.
 #'
 #' @param agg A \code{data.frame} object as created internally in \code{\link{aggregateTrack}}.
-#' @param aggcoords A \code{\link[sp]{SpatialPoints}} object with a value for each value
+#' @param aggcoords A \code{\link[sp:SpatialPoints-class]{SpatialPoints}} object with a value for each value
 #' in \code{agg}.
 #' @return A numeric vector containing the linear distance between locations of adjacent visits,
 #' whereby short-term visits are not counted as gaps and are considered as visits. Values for a following
@@ -354,7 +353,7 @@ distancenextvisit_wis <- function(agg, aggcoords){
 #' of adjacent campsites, whereby short-term visits are counted as gaps.
 #'
 #' @param agg A \code{data.frame} object as created internally in \code{\link{aggregateTrack}}.
-#' @param aggcoords A \code{\link[sp]{SpatialPoints}} object with a value for each value
+#' @param aggcoords A \code{\link[sp:SpatialPoints-class]{SpatialPoints}} object with a value for each value
 #' in \code{agg}.
 #' @return A numeric vector containing the linear distance between locations of adjacent campsites,
 #' whereby short-term visits are counted as gaps. Values for a following

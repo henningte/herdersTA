@@ -4,8 +4,12 @@
 \alias{summaryIndicatorsIntervalsTrackGeneric}
 \title{Computes summary indicators for GPS tracks.}
 \usage{
-summaryIndicatorsIntervalsTrackGeneric(currenttrack, normalise = TRUE,
-  fun = mean, what)
+summaryIndicatorsIntervalsTrackGeneric(
+  currenttrack,
+  normalise = TRUE,
+  fun = mean,
+  what
+)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that
@@ -49,7 +53,7 @@ containing the following variables:
 \description{
 \code{summaryIndicatorsIntervalsTrackGeneric} computes various summary indicators
 for a \code{\link[trajectories:Track-class]{Track}} object that has been processed
-with \code{\link{reorganizeTrack}}, \code{\link{locationsTrack}} and
+with \code{\link{reorganizeTracks}}, \code{\link{locationsTracks}} and
 \code{\link{aggregateDailyLocationsTrack}}. Summary
 indicators are computed for a temporal resolution of fixed ten-day intervals. In
 contrast to

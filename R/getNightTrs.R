@@ -1,5 +1,4 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
+#'@importFrom trajectories Tracks
 NULL
 
 #' Extracts sub-daily values of GPS tracks.
@@ -22,7 +21,9 @@ NULL
 #' \code{\link{getNightConnectionsTrack}}.
 #' @examples #
 #' @export
-getNightTrs <- function(currenttrs, tstart = 16, tend = 20){
+getNightTrs <- function(currenttrs,
+                        tstart = 16,
+                        tend = 20) {
 
   # apply getNightTrack to all Track objects of the Tracks object
   tracklist <- lapply(currenttrs@tracks,
@@ -35,6 +36,6 @@ getNightTrs <- function(currenttrs, tstart = 16, tend = 20){
 
   # return the downsampled Tracks object
   if(length(tracklist) > 0){
-    Tracks(tracklist)
+    trajectories::Tracks(tracklist)
   }
 }

@@ -1,8 +1,4 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
-#' Classifies Data Values of a \code{\link[trajectories:Track-class]{Tracks}} object as Night or Day Values.
+#' Classifies Data Values of a \code{Tracks} object as Night or Day Values.
 #'
 #' \code{classifyNightTracks} creates labels for the data values
 #' of a \code{\link[trajectories:Track-class]{Tracks}} object with
@@ -12,7 +8,7 @@ NULL
 #' boundaries are specified by the user.
 #'
 #' @param currenttracks A \code{\link[trajectories:Track-class]{Tracks}} object
-#' with \code{\link[trajectories]{Track}} objects with the same time
+#' with \code{\link[trajectories:Track-class]{Track}} objects with the same time
 #' vectors (i.e. data values for the same time interval) (as returned
 #' by \code{\link{reorganizeTracks}}). \code{currenttracks} must have
 #' a variable \code{time} indicating the time of all data values.
@@ -31,7 +27,8 @@ NULL
 #' @seealso #
 #' @examples #
 #' @export
-classifyNightTracks <- function(currenttracks, night){
+classifyNightTracks <- function(currenttracks,
+                                night) {
 
   # check if currenttracks is specified correctly
   if(!inherits(currenttracks, "Tracks")){

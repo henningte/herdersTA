@@ -1,14 +1,10 @@
-#'@importFrom Rdpack reprompt
-#'@import spacetime
-#'@import lubridate
-#'@import ggplot2
-#'@importFrom cowplot theme_cowplot
-#'@import ggrepel
+#' @import ggplot2
+#' @importFrom ggrepel geom_label_repel
 NULL
 
-#' Plots Summarised Tracks as Returned by \code{\link{locaitonsTrack}}.
+#' Plots Summarised Tracks as Returned by \code{locationsTrack}.
 #'
-#' \code{plotLocationsTrackSummary} plots the result of \code{\link{locaitonsTrack}}
+#' \code{plotLocationsTrackSummary} plots the result of \code{\link{locationsTrack}}
 #' (with parameter  \code{summary = TRUE}) for a \code{\link[trajectories:Track-class]{Track}}
 #' object. This means that idividual campsites are plotted as dots linked with a
 #' line. Labels indicate the step (i.e. the sequence of visits), the location id,
@@ -27,11 +23,14 @@ NULL
 #'   \item{\code{colour}}{A character value indicating the colour used in order to fill
 #'   the label boxes of visits with arrivals within the respective seasons.}
 #' }
-#' @return A  \code{\link[ggplot2]{ggplotobj}} object.
+#' @return A  \code{\link[ggplot2]{ggplot}} object.
 #' @seealso \code{\link{locationsTrack}}, \code{\link{locationsTracks}}.
 #' @examples #
 #' @export
-plotLocationsTrackSummary <- function(x, seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour = c("yellow", "red", "burlywood1", "lightgray"))){
+plotLocationsTrackSummary <- function(x,
+                                      seasons = data.frame(start = c(3, 5, 9, 11),
+                                                           end = c(4, 8, 10, 2),
+                                                           colour = c("yellow", "red", "burlywood1", "lightgray"))){
 
   # get the season that crosses the end/begin of a year
   seasoncrossyear <- seasons$end[ifelse(seasons$start > seasons$end, TRUE, FALSE)]
@@ -70,16 +69,38 @@ plotLocationsTrackSummary <- function(x, seasons = data.frame(start = c(3, 5, 9,
   plotdfsegmentsgaps <- plotdfsegmentsgaps[which(ifelse(difftime(as.POSIXct(x$departuretime[-nrow(x)]), as.POSIXct(x$arrivaltime[-1]), units = "sec") >= 44*60*60, TRUE, FALSE)),]
 
   # plot
-  ggplot(data = x, aes(x = lon, y = lat)) +
-    geom_point() +
+  ggplot2::ggplot(data = x,
+                  ggplot2::aes(x = lon,
+                               y = lat)) +
+    ggplot2::geom_point() +
     # arrow
-    # geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend), arrow = arrow(length = unit(0.03, "npc"))) +
-    geom_segment(data = tracksegments, aes(x = x, y = y, xend = xend, yend = yend)) +
-    geom_segment(data = plotdfsegmentsgaps, aes(x = xstart, xend = xend, y = ystart, yend = yend), colour = "white", linetype = 2) +
-    geom_label_repel(data = x, aes(x = lon, y = lat, label = labels), segment.colour = "gray", point.padding = 0.2, size = 1.5, nudge_x = 0, nudge_y = 0, box.padding = 0.7, fill = as.character(seasons$colour[seasonsarrival])) +
-    coord_fixed() +
-    theme(axis.text = element_blank()) +
-    scale_x_continuous(limits = c(min(x$lon) - abs(diff(range(x$lon)))*0.15, max(x$lon) + abs(diff(range(x$lon)))*0.15)) +
-    scale_y_continuous(limits = c(min(x$lat) - abs(diff(range(x$lat)))*0.15, max(x$lat) + abs(diff(range(x$lat)))*0.15))
+    # ggplot2::geom_segment(data = tracksegments, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), arrow = arrow(length = unit(0.03, "npc"))) +
+    ggplot2::geom_segment(data = tracksegments,
+                          ggplot2::aes(x = x,
+                                       y = y,
+                                       xend = xend,
+                                       yend = yend)) +
+    ggplot2::geom_segment(data = plotdfsegmentsgaps,
+                          ggplot2::aes(x = xstart,
+                                       xend = xend,
+                                       y = ystart,
+                                       yend = yend),
+                          colour = "white",
+                          linetype = 2) +
+    ggrepel::geom_label_repel(data = x,
+                              ggplot2::aes(x = lon,
+                                           y = lat,
+                                           label = labels),
+                              segment.colour = "gray",
+                              point.padding = 0.2,
+                              size = 1.5,
+                              nudge_x = 0,
+                              nudge_y = 0,
+                              box.padding = 0.7,
+                              fill = as.character(seasons$colour[seasonsarrival])) +
+    ggplot2::coord_fixed() +
+    ggplot2::theme(axis.text = element_blank()) +
+    ggplot2::scale_x_continuous(limits = c(min(x$lon) - abs(diff(range(x$lon)))*0.15, max(x$lon) + abs(diff(range(x$lon)))*0.15)) +
+    ggplot2::scale_y_continuous(limits = c(min(x$lat) - abs(diff(range(x$lat)))*0.15, max(x$lat) + abs(diff(range(x$lat)))*0.15))
 
 }

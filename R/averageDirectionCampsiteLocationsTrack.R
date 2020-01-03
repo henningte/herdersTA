@@ -1,16 +1,17 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
+#' @importFrom stats median
+#' @importFrom trajectories Track
+#' @importFrom spacetime STIDF
 NULL
 
 #' Computes the average direction (as absolute difference of angles) between campsite locations of a Track object in the order of movement.
 #'
 #' \code{averageDirectionCampsiteLocationsTrack} computes the average direction between
-#' locations of a \code{\link[trajectories:Track]{Track}} in the order of movement.
+#' locations of a \code{\link[trajectories:Track-class]{Track}} in the order of movement.
 #' Directions are computed as angle difference between the previous campsite location
 #' and the current campsite location and the next campsite location and the current
 #' campsite location. Several options are available.
 #'
-#' @param currenttrack An object of class \code{\link[trajectories:Track]{Track}}
+#' @param currenttrack An object of class \code{\link[trajectories:Track-class]{Track}}
 #' with a variable \code{location} and \code{campsite}
 #' @param fun One of \code{mean} or \code{median)}, depending on which function should be
 #' used in order to compute average values.
@@ -19,7 +20,7 @@ NULL
 #' @seealso .
 #' @examples #
 #' @export
-averageDirectionCampsiteLocationsTrack <- function(currenttrack, fun = median){
+averageDirectionCampsiteLocationsTrack <- function(currenttrack, fun = stats::median){
 
   # checks
   stopifnot(inherits(currenttrack, "Track"))

@@ -1,9 +1,6 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-#' @import jsonlite
+#' @importFrom stats na.omit
 NULL
-
-#' Extracts a Vector of Matched Unique Values for Fixed Ten-Day Intervals
+#' #' Extracts a Vector of Matched Unique Values for Fixed Ten-Day Intervals
 #'
 #' \code{summaryIndicatorsIntervalsTrack_categorylist} extracts for each
 #' fixed ten-day interval a vector of unique values of a categorial variable,
@@ -40,7 +37,8 @@ summaryIndicatorsIntervalsTrack_categorylist <- function(currenttrack,
   }
 
   # assign each day in currenttrack$day to a ftdi
-  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"), startnew = FALSE)
+  ftdi <- assignFixedTenDayInterval(as.POSIXct(currenttrack$day, format = "%Y-%m-%d"),
+                                    startnew = FALSE)
   ftdi <- ftdi[names(ftdi) %in% currenttrack$day]
   ftdi <- ftdi - min(ftdi) + 1
 
@@ -54,7 +52,7 @@ summaryIndicatorsIntervalsTrack_categorylist <- function(currenttrack,
       }
 
       # extract the unique categorial values
-      whatvaluesftdi <- na.omit(currenttrack@data[x,what])
+      whatvaluesftdi <- stats::na.omit(currenttrack@data[x,what])
       whatvaluesftdi <- whatvaluesftdi[!duplicated(whatvaluesftdi)]
       if(length(whatvaluesftdi) > 0){
         names(whatvaluesftdi) <- paste0("V", seq_along(whatvaluesftdi))

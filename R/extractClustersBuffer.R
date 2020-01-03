@@ -1,6 +1,5 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
 #' @importFrom sp SpatialPoints coordinates
+#' @importFrom dbscan dbscan
 NULL
 
 #' Identifies clusters of points of GPS tracks.
@@ -34,10 +33,13 @@ NULL
 #' \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-extractClustersBuffer <- function(currenttrack, radius = 800){
+extractClustersBuffer <- function(currenttrack,
+                                  radius = 800) {
 
   # use density based clustering in order to identify locations
-  locations_night <- dbscan(x = coordinates(currenttrack@sp)[attributes(currenttrack)$night == TRUE,], eps = radius, minPts = 5)
+  locations_night <- dbscan::dbscan(x = sp::coordinates(currenttrack@sp)[attributes(currenttrack)$night == TRUE,],
+                                    eps = radius,
+                                    minPts = 5)
 
   # insert the location ids into a vector for all data values
   locations_night_all <- rep(0, nrow(currenttrack@data))

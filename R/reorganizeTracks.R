@@ -1,10 +1,10 @@
-#' @importFrom Rdpack reprompt
+#' @importFrom sp coordinates SpatialPoints proj4string CRS
 #' @importFrom spacetime STIDF
-#' @import lubridate
-#' @import trajectories
-#' @import rgdal
-#' @importFrom sp coordinates SpatialPoints
-#' @import doParallel
+#' @importFrom lubridate floor_date ceiling_date
+#' @importFrom trajectories TracksCollection Tracks Track
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel clusterExport makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
 #' @importFrom tidyr fill
 NULL
 
@@ -30,7 +30,7 @@ NULL
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
-#' \code{\link[parallel]{clusterCall}}.
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return A \code{\link[trajectories:Track-class]{Tracks}} object containing
 #' the reorganised \code{\link[trajectories:Track-class]{Track}} objects of the
 #' input A \code{\link[trajectories:Track-class]{Tracks}} object.
@@ -42,7 +42,7 @@ reorganizeTracks <- function(currenttracks,
                              tz = "GMT",
                              crs = "+proj=longlat +ellps=WGS84",
                              cores = 1,
-                             clcall = NULL){
+                             clcall = NULL) {
 
   # extract the names
   currenttracksnames <- names(currenttracks@tracksCollection)
@@ -50,10 +50,13 @@ reorganizeTracks <- function(currenttracks,
   # define a vector with time points equally spaced according to interval
   tstart <- lubridate::floor_date(min(currenttracks@tracksCollectionData$tmin), unit = "hours")
   tend <- lubridate::ceiling_date(max(currenttracks@tracksCollectionData$tmax), unit = "hours")
-  times <- seq(from = tstart, by = interval, length.out = ceiling(as.numeric(difftime(tend, tstart, units = "secs"))/interval))
+  times <- seq(from = tstart,
+               by = interval,
+               length.out = ceiling(as.numeric(difftime(tend, tstart, units = "secs"))/interval))
 
   # define a data.frame for time
-  dftime <- data.frame(time = times)
+  dftime <- data.frame(time = times,
+                       stringsAsFactors = FALSE)
 
   # define a funciton to round POSIXct to the next half hour
   round_date_halfhour <- function(date){
@@ -70,14 +73,14 @@ reorganizeTracks <- function(currenttracks,
   }
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == F){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  on.exit(expr = stopCluster(cl))
+  on.exit(expr = parallel::stopCluster(cl))
 
-  newcurrenttracks <- trajectories::TracksCollection(foreach(x = currenttracks@tracksCollection, .packages = c("lubridate", "tidyr", "trajectories", "spacetime", "sp"))%dopar%{
+  newcurrenttracks <- trajectories::TracksCollection(foreach::foreach(x = currenttracks@tracksCollection, .packages = c("lubridate", "tidyr", "trajectories", "spacetime", "sp"))%dopar%{
 
     # extract the corresponding Track object
     x <- x@tracks[[1]]
@@ -110,7 +113,14 @@ reorganizeTracks <- function(currenttracks,
     xdata <- tidyr::fill(xdata, seq_len(ncol(xdata)), .direction = "down")
 
     # create the reorganised Track object
-    trajectories::Tracks(list(trajectories::Track(STIDF(sp = SpatialPoints(coords = xdata[,c("longitude", "latitude")], proj4string = CRS(proj4string(x))), time = xdata$time, data = xdata[,!names(xdata) %in% c("time", "longitude", "latitude")], endTime = xdata$time))))
+    trajectories::Tracks(list(
+      trajectories::Track(
+        spacetime::STIDF(
+          sp = sp::SpatialPoints(coords = xdata[,c("longitude", "latitude")],
+                                 proj4string = sp::CRS(sp::proj4string(x))),
+          time = xdata$time,
+          data = xdata[,!names(xdata) %in% c("time", "longitude", "latitude")],
+          endTime = xdata$time))))
 
   })
 

@@ -1,8 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @importFrom data.table rbindlist
-#' @importFrom lubridate is.POSIXct
-NULL
-
 #' Groups Visits from Track Objects
 #'
 #' \code{trackvisitsGetGroups} defines groups of visits at the same location
@@ -41,7 +36,11 @@ NULL
 #' @seealso \code{\link{trackvisits}}.
 #' @examples #
 #' @export
-trackvisitsGetGroups <- function(trackvisits, tmin, timeinterval = 30*60, tmaxintersticenotvalid = NULL, tmaxinterstice){
+trackvisitsGetGroups <- function(trackvisits,
+                                 tmin,
+                                 timeinterval = 30*60,
+                                 tmaxintersticenotvalid = NULL,
+                                 tmaxinterstice) {
 
   # checks
   if(!(inherits(trackvisits, "trackvisits"))){
@@ -52,7 +51,7 @@ trackvisitsGetGroups <- function(trackvisits, tmin, timeinterval = 30*60, tmaxin
   }
 
   # check for each visit if nextvisitsamelocationduration < tmaxinterstice
-  check_nextvisitsamelocationduration <- ifelse(trackvisits$nextvisitsamelocationduration*timeinterval < tmaxinterstice, TRUE, FALSE)
+  check_nextvisitsamelocationduration <- ifelse(trackvisits$nextvisitsamelocationduration * timeinterval < tmaxinterstice, TRUE, FALSE)
 
   # check for each visit if campsiteinbetween == FALSE
   check_campsiteinbetween <- !trackvisits$campsiteinbetween

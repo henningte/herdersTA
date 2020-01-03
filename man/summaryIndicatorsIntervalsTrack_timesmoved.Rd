@@ -4,8 +4,7 @@
 \alias{summaryIndicatorsIntervalsTrack_timesmoved}
 \title{Computes summary indicators for GPS tracks.}
 \usage{
-summaryIndicatorsIntervalsTrack_timesmoved(currenttrack,
-  normalise = FALSE)
+summaryIndicatorsIntervalsTrack_timesmoved(currenttrack, normalise = FALSE)
 }
 \arguments{
 \item{currenttrack}{A \code{\link[trajectories:Track-class]{Track}} object that

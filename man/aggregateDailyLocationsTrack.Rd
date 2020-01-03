@@ -2,7 +2,7 @@
 % Please edit documentation in R/aggregateDailyLocationsTrack.R
 \name{aggregateDailyLocationsTrack}
 \alias{aggregateDailyLocationsTrack}
-\title{Aggregates a \code{\link[trajectories:Track-class]{Track}} object to Daily Resolution and to Locations.}
+\title{Aggregates a \code{Track} object to Daily Resolution and to Locations.}
 \usage{
 aggregateDailyLocationsTrack(currenttrack, crs)
 }
@@ -44,5 +44,5 @@ with a temporal resolution greater than sub-daily resolution.
 #
 }
 \seealso{
-\code{\link{reorganizeTrack}}.
+\code{\link{reorganizeTracks}}.
 }

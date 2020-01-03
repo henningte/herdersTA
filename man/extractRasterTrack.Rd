@@ -4,9 +4,17 @@
 \alias{extractRasterTrack}
 \title{Extracts corresponding raster values for GPS tracks.}
 \usage{
-extractRasterTrack(x, y, datetime = NULL, method = "simple",
-  buffer = 0, small = TRUE, fun = NULL, na.rm = TRUE,
-  fixedlocationcoords = FALSE)
+extractRasterTrack(
+  x,
+  y,
+  datetime = NULL,
+  method = "simple",
+  buffer = 0,
+  small = TRUE,
+  fun = NULL,
+  na.rm = TRUE,
+  fixedlocationcoords = FALSE
+)
 }
 \arguments{
 \item{x}{A Raster* object. \code{x} must either have one layer or

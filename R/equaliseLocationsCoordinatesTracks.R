@@ -1,7 +1,7 @@
-#' @importFrom Rdpack reprompt
-#' @importFrom trajectories Track
-#' @importFrom sp coordinates
-#' @importFrom data.table rbindlist
+#' @importFrom trajectories TracksCollection Tracks
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel clusterExport makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
 NULL
 
 #' Equalise Track Coordinates to Locations.
@@ -24,13 +24,15 @@ NULL
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to
-#' \code{\link[parallel]{clusterCall}}.
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return \code{currenttracks} with the same longitude and latitude values for
 #' each location for all \code{\link[trajectories:Track-class]{Track}} objetcs.
 #' @seealso \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
-equaliseLocationsCoordinatesTracks <- function(currenttracks, cores = 1, clcall = NULL){
+equaliseLocationsCoordinatesTracks <- function(currenttracks,
+                                               cores = 1,
+                                               clcall = NULL) {
 
   # checks
   if(!(inherits(currenttracks, "TracksCollection"))){
@@ -41,16 +43,19 @@ equaliseLocationsCoordinatesTracks <- function(currenttracks, cores = 1, clcall 
   currenttracksnames <- names(currenttracks@tracksCollection)
 
   # set up cluster
-  cl <- makeCluster(cores, outfile="", type = "PSOCK")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
+  doParallel::registerDoParallel(cl)
   if(is.null(clcall) == F){
-    clusterCall(cl, clcall)
+    parallel::clusterCall(cl, clcall)
   }
-  on.exit(expr = stopCluster(cl))
+  on.exit(expr = parallel::stopCluster(cl))
 
   # adjust the coordinates
-  newcurrenttracks <- trajectories::TracksCollection(foreach::foreach(x = currenttracks@tracksCollection, .packages = c("trajectories", "sp", "data.table"), .export = c("equaliseLocationsCoordinatesTrack"))%dopar%{
-    Tracks(list(equaliseLocationsCoordinatesTrack(currenttrack = x@tracks[[1]])))
+  newcurrenttracks <- trajectories::TracksCollection(
+    foreach::foreach(x = currenttracks@tracksCollection,
+                     .packages = c("trajectories", "sp", "data.table"),
+                     .export = c("equaliseLocationsCoordinatesTrack"))%dopar%{
+    trajectories::Tracks(list(equaliseLocationsCoordinatesTrack(currenttrack = x@tracks[[1]])))
   })
 
   # restore the names

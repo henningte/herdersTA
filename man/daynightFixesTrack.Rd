@@ -18,7 +18,7 @@ daynightFixesTrack(currenttrack, tstart = 16, tend = 20)
 \code{tstart}.}
 }
 \value{
-a \code{\link[sp]{SpatialPointsDataFrame}} containing all data
+a \code{\link[sp:SpatialPoints]{SpatialPointsDataFrame}} containing all data
 of the slot \code{data} of the input \code{\link[trajectories:Track-class]{Track}}
 object and a column \code{night} indicating if a data point is within
 the specified time interval (\code{night = 1}) or not
@@ -36,6 +36,6 @@ recorded during daytime and nighttime).
 \seealso{
 \code{\link{downByDrop}}, \code{\link{downByDropTrs}},
 \code{\link{getNightTrack}}, \code{\link{getNightTrs}},
-\code{\link{dayNightFixesTracks}},
+\code{\link{daynightFixesTracks}},
 \code{\link{getNightConnectionsTrack}}.
 }

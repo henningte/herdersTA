@@ -1,7 +1,3 @@
-#'@importFrom Rdpack reprompt
-#'@import trajectories
-NULL
-
 #' Counts gaps in GPS tracks.
 #'
 #' \code{countGaps} counts gaps in a given \code{\link[trajectories:Track-class]{Track}} object
@@ -11,10 +7,10 @@ NULL
 #' @param currenttrack A \code{\link[trajectories:Track-class]{Track}} object.
 #' @param tstart A \code{POSIXct} object indicating the date and time of the start
 #' of the target period. Default is the first value of the
-#' \code{\link[trajectories]{Track}} object.
+#' \code{\link[trajectories:Track-class]{Track}} object.
 #' @param tend A \code{POSIXct} object indicating the date and time of the end of
 #' the target period. Default is the last value of the
-#' \code{\link[trajectories]{Track}} object.
+#' \code{\link[trajectories:Track-class]{Track}} object.
 #' @param threshold An integer value indicating the threshold for the time between
 #' two data points [s] above which this is considered as a gap in the
 #' \code{\link[trajectories:Track-class]{Track}} object. Default is \code{threshold = 18000},
@@ -33,7 +29,7 @@ countGaps <- function(currenttrack,
                       tstart = min(index(currenttrack@time)),
                       tend = max(index(currenttrack@time)),
                       threshold = 18000,
-                      tolerance = 2){
+                      tolerance = 2) {
 
   # get the number of entries of the result of findGaps
   length(

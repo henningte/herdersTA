@@ -4,10 +4,10 @@
 \alias{siTrack}
 \title{Computes various summary indicators for a Track object.}
 \usage{
-siTrack(currenttrack, fun = median)
+siTrack(currenttrack, fun = stats::median)
 }
 \arguments{
-\item{currenttrack}{An object of class \code{\link[trajectories:Track]{Track}}
+\item{currenttrack}{An object of class \code{\link[trajectories:Track-class]{Track}}
 with a variable \code{location} and \code{campsite}}
 
 \item{fun}{One of \code{mean} or \code{median)}, depending on which function should be

@@ -1,7 +1,3 @@
-#' @importFrom Rdpack reprompt
-#' @import trajectories
-NULL
-
 #' Assigns values of GPS tracks to time intervals.
 #'
 #' \code{identifyTimeIntervals} assign each data value (row) in
@@ -35,7 +31,8 @@ NULL
 #' \code{\link{nogapDurationTrack}}, \code{\link{nogapDurationTracks}}.
 #' @examples #
 #' @export
-identifyTimeIntervals <- function(currenttrack, timeinterval = "month"){
+identifyTimeIntervals <- function(currenttrack,
+                                  timeinterval = "month") {
 
   # assign data values to time intervals
   switch(timeinterval,
@@ -75,7 +72,7 @@ assignyear <- function(currenttrack){
     iter <- iter + 1
   }
 
-  return(timeinterval)
+  timeinterval
 }
 
 # function in order to classify on a monthly resolution
@@ -90,7 +87,7 @@ assignmonth <- function(currenttrack){
     iter <- iter + 1
   }
 
-  return(timeinterval)
+  timeinterval
 
 }
 
@@ -103,7 +100,11 @@ assigntendayinterval <- function(currenttrack){
   # get the number of days in each year
   days <- list()
   for(year_i in seq_along(years)){
-    days[[year_i]] <- seq(as.POSIXct(paste0(years[year_i], "-01-01"), tz = attr(currenttrack@data$time, "tzone")), as.POSIXct(paste0(years[year_i], "-12-31"), tz = attr(currenttrack@data$time, "tzone")), "day")
+    days[[year_i]] <- seq(as.POSIXct(paste0(years[year_i], "-01-01"),
+                                     tz = attr(currenttrack@data$time, "tzone")),
+                          as.POSIXct(paste0(years[year_i], "-12-31"),
+                                     tz = attr(currenttrack@data$time, "tzone")),
+                          "day")
   }
 
   # create a list with indices for days
@@ -150,7 +151,7 @@ assigntendayinterval <- function(currenttrack){
   # adjust indices so that minimum is 1
   timeinterval <- timeinterval - min(timeinterval)+1
 
-  return(timeinterval)
+  timeinterval
 
 }
 
@@ -166,6 +167,6 @@ assignday <- function(currenttrack){
     iter <- iter + 1
   }
 
-  return(timeinterval)
+  timeinterval
 
 }
