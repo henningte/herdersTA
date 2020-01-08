@@ -14,9 +14,6 @@ NULL
 #' and if the distance between the spatial position of the last data
 #' value before the gap and the spatial position of the first data
 #' value after the gap is \eqn{\le} a user specified distance threshold.
-#' In contrast to \code{\link{fillGapTrack}}, \code{fillGapTrackNight}
-#' considers only values in a specified time interval of the day (e.g.
-#' during night).
 #'
 #' It has to be paid
 #' attention to the fact that \code{maxduration} should be adapted to
@@ -53,7 +50,8 @@ NULL
 #' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return The input \code{\link[trajectories:Track-class]{Tracks}} object with filled
 #' gaps.
-#' @seealso \code{\link{reorganizeTracks}}.
+#' @seealso
+#' \code{\link{fillGapTrackNight}}.
 #' @examples #
 #' @export
 fillGapTracksNight <- function(currenttracks,
@@ -62,6 +60,9 @@ fillGapTracksNight <- function(currenttracks,
                                night = c(16, 20),
                                cores = 1,
                                clcall = NULL) {
+
+  # avoid no visible bindings message
+  x <- NULL
 
   # extract the names
   currenttracksnames <- names(currenttracks@tracksCollection)

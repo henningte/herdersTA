@@ -8,7 +8,7 @@
 #' @seealso \code{\link{removeEmptyFiles}}.
 #' @examples #
 #' @export
-removeEmptyFolders <- function(listname){
+removeEmptyFolders <- function(dirlist){
 
   # create empty character vector to store names of empty folders in
   remove <- character()
@@ -24,7 +24,7 @@ removeEmptyFolders <- function(listname){
   }
 
   # check which folders are empty
-  remove = lapply(dirlist,checkDir)
+  remove = lapply(dirlist, checkDir)
   remove = remove[!is.na(remove)]
 
   # print message

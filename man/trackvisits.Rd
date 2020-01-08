@@ -56,8 +56,17 @@ location of the visit.}
 between the end of the current visit and the start of the current
 visit in row numbers.}
 
+\item{nextvisitduration}{A numeric value representing the duration
+between the end of the current visit and the start of the following
+visit in row numbers. The last value must be \code{NA}.}
+
 \item{nextvisitsamelocationindex}{A numeric value representing the index of
 the visit that is at the same location as the current visit. The last value
+must be \code{NA}.}
+
+\item{nextvisitsamelocationduration}{A numeric value representing the duration
+between the end of the current visit and the start of the next
+following visit at the same location in row numbers. The last value
 must be \code{NA}.}
 
 \item{nextvisitsamelocation}{A logical value indicating of the current visit
@@ -74,33 +83,8 @@ and the start of the next following visit at the same location.}
 should be merged with the next visit (\code{TRUE}) or not (\code{FALSE}).
 If set to \code{NULL}, \code{NA} will be inserted.}
 
-\item{nextvisitsduration}{A numeric value representing the duration
-between the end of the current visit and the start of the following
-visit in row numbers. The last value must be \code{NA}.}
-
-\item{nextvisitssamelocationduration}{A numeric value representing the duration
-between the end of the current visit and the start of the next
-following visit at the same location in row numbers. The last value
-must be \code{NA}.}
-
-\item{currenttrack}{A \code{data.frame} object with a variable
-\code{location} that is an id for locations. Gap values must have
-the value \code{0} for \code{location}.}
-
-\item{tmin}{The minimum residence time at a specific location [s]
-which is used to classify visits as campsites (if the residence
-time at a specific location is larger than \code{tmin}) in
-contrast to short-term visits of locations. The default is
-\code{tmin = 345600}, i.e. 4 days.}
-
-\item{tmaxinterstices}{The maximum time threshold between subsequent
-visits at the same location [s]. If the duration between the two visits
-is \eqn{<} \code{tmaxinterstices} and if there is no other visit
-classified as campsite in-between, the two visits will be merged to one
-visit.}
-
-\item{timeinterval}{The number of seconds one data value (row) in
-\code{currenttrack} covers.}
+\item{norepeatedcampsitevisits}{A numeric value representing the number
+of repeated campsite visits at the same location until this visit.}
 }
 \value{
 An object of class \code{trackvisits}. Object of class \code{trackvisits} are
@@ -186,7 +170,10 @@ based on visits and locations.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-\code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-\code{\link{extractClustersBuffer}}.
+\code{\link{plot.trackvisits}},
+\code{\link{trackvisitsFromTrack}},
+\code{\link{trackvisitsGetGroups}},
+\code{\link{trackvisitsMergeGroups}},
+\code{\link{trackvisitsSetNextvisitsamelocationindex}},
+\code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 }

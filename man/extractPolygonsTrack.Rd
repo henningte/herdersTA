@@ -47,5 +47,6 @@ for an object of class \code{\link[trajectories:Track-class]{Track}}.
 #
 }
 \seealso{
-\code{\link{extractRasterTrack}}, \code{\link{extractPolygonsTracks}}.
+\code{\link{extractRasterTrack}},
+\code{\link{extractPolygonsTracks}}.
 }

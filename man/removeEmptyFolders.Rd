@@ -4,7 +4,7 @@
 \alias{removeEmptyFolders}
 \title{Finds non-empty folders in a directory.}
 \usage{
-removeEmptyFolders(listname)
+removeEmptyFolders(dirlist)
 }
 \arguments{
 \item{dirlist}{A list of folder names that should be chekced.}

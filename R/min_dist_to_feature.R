@@ -18,13 +18,18 @@ NULL
 #' distance values of \code{NA}.
 #' @param feature A SpatialLines or SpatialPolygons object containing the features
 #' to compute distance to.
+#' @param minrange A numerical value > 0 representing the minimum buffer radius within which
+#' \code{min_dist_to_feature} initially searches for the closest polyline or polygon border
+#' around a location. The unit of \code{minrange} is the same as for the reference system of
+#' \code{currenttrack}.
 #' @return A \code{vector} with the shortest distance of all locations in \code{currenttrack}
 #' to the closest feature in \code{feature}. For each value in \code{currenttrack}, a distance
 #' value will be returned in the order of data values.
-#' @seealso
 #' @examples #
 #' @export
-min_dist_to_feature <- function(currenttrack, feature, minrange = 10000){
+min_dist_to_feature <- function(currenttrack,
+                                feature,
+                                minrange = 10000) {
 
   #extract SpatialPoints of locations
   #locationIDs <- sort(unique(currenttracks@tracks[[1]]@data$location[currenttracks@tracks[[1]]@data$location>0]))

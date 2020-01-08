@@ -8,7 +8,13 @@
 #' @return An object of class \code{\link{trackvisits}} in which
 #' nextvisitsamelocationindex is defined.
 #'
-#' @seealso \code{\link{trackvisits}}.
+#' @seealso
+#' \code{\link{trackvisits}},
+#' \code{\link{plot.trackvisits}},
+#' \code{\link{trackvisitsFromTrack}},
+#' \code{\link{trackvisitsGetGroups}},
+#' \code{\link{trackvisitsMergeGroups}},
+#' \code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 #' @examples #
 #' @export
 trackvisitsSetNextvisitsamelocationindex <- function(currenttrackvisits){

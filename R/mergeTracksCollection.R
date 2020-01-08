@@ -10,7 +10,7 @@ NULL
 #' \code{\link[trajectories:Track-class]{TracksCollection}} into a
 #' singular \code{\link[trajectories:Track-class]{Track}} object.
 #'
-#' @param currenttrackscollection A
+#' @param trackscollection A
 #' \code{\link[trajectories:Track-class]{TracksCollection}} object.
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
@@ -25,7 +25,9 @@ NULL
 #' @seealso \code{\link{mergeTracks}}, \code{\link{reorganizeTracks}}.
 #' @examples #
 #' @export
-mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
+mergeTracksCollection <- function(trackscollection,
+                                  cores = 1,
+                                  clcall = NULL) {
 
     # set up cluster
     cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")
@@ -34,10 +36,10 @@ mergeTracksCollection <- function(trackscollection, cores = 1, clcall = NULL){
       parallel::clusterCall(cl, clcall)
     }
     on.exit(expr = parallel::stopCluster(cl))
-    parallel::clusterCall(cl, function(){library("lubridate")})
-    parallel::clusterCall(cl, function(){library("spacetime")})
-    parallel::clusterCall(cl, function(){library("data.table")})
-    parallel::clusterCall(cl, function(){library("trajectories")})
+    parallel::clusterCall(cl, function(){requireNamespace("lubridate")})
+    parallel::clusterCall(cl, function(){requireNamespace("spacetime")})
+    parallel::clusterCall(cl, function(){requireNamespace("data.table")})
+    parallel::clusterCall(cl, function(){requireNamespace("trajectories")})
     parallel::clusterExport(cl = cl, varlist = list("exDataTracks",
                                                     "mergeTracks",
                                                     "trackscollection"),

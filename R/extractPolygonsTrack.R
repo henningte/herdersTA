@@ -24,7 +24,9 @@ NULL
 #' columns specified with \code{what}.
 #' If a value of \code{x} cannot be assigned to a respective data value,
 #' \code{NA} is returned for the respective data value.
-#' @seealso \code{\link{extractRasterTrack}}, \code{\link{extractPolygonsTracks}}.
+#' @seealso
+#' \code{\link{extractRasterTrack}},
+#' \code{\link{extractPolygonsTracks}}.
 #' @examples #
 #' @export
 extractPolygonsTrack <- function(x,
@@ -64,7 +66,7 @@ extractPolygonsTrack <- function(x,
   }
 
   # extract the values for all locations
-  res <- sp::over(x = ypts, y = x, fn = fn, returnList = FALSE, ...)[,what]
+  res <- sp::over(x = ypts, y = x, fn = fn, returnList = FALSE, ...)[, what]
 
   if(fixedlocationcoords){
 

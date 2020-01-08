@@ -36,6 +36,7 @@ NULL
 #'
 #' @param x An object of class \code{link{trackvisits}} with the variable
 #' \code{campsite} being defined.
+#' @param ... Further arguments, will be ignored.
 #' @param what A character value defining which plot to create. See the description section.
 #' @param seasons A \code{data.frame} object with a row for each season
 #' and three columns:
@@ -52,12 +53,17 @@ NULL
 #' \code{timethreshold}, this will be shown as dashed line in the plot.
 #' @return A  \code{\link[ggplot2]{ggplot}} object
 #'
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-#' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-#' \code{\link{extractClustersBuffer}}.
+#' @seealso
+#' \code{\link{trackvisits}},
+#' \code{\link{trackvisitsFromTrack}},
+#' \code{\link{trackvisitsGetGroups}},
+#' \code{\link{trackvisitsMergeGroups}},
+#' \code{\link{trackvisitsSetNextvisitsamelocationindex}},
+#' \code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 #' @examples #
 #' @export
 plot.trackvisits <- function(x,
+                             ...,
                              what = "lonlatanonymuous",
                              seasons = data.frame(start = c(3, 5, 9, 11),
                                                   end = c(4, 8, 10, 2),
@@ -142,26 +148,26 @@ plot.trackvisits <- function(x,
          lonlat = {
 
            ggplot2::ggplot() +
-             ggplot2::geom_point(data = plotdfpoints, ggplot2::aes(x = x,
-                                                                   y = y,
+             ggplot2::geom_point(data = plotdfpoints, ggplot2::aes(x = .data$x,
+                                                                   y = .data$y,
                                                                    fill = plotdfpoints$campsite),
                                  shape = 21,
                                  size = 3) +
              ggplot2::geom_segment(data = tracksegments,
-                                   ggplot2::aes(x = x,
-                                                y = y,
-                                                xend = xend,
-                                                yend = yend)) +
+                                   ggplot2::aes(x = .data$x,
+                                                y = .data$y,
+                                                xend = .data$xend,
+                                                yend = .data$yend)) +
              ggplot2::geom_segment(data = plotdfsegmentsgaps,
-                                   ggplot2::aes(x = xstart,
-                                                xend = xend,
-                                                y = ystart,
-                                                yend = yend),
+                                   ggplot2::aes(x = .data$xstart,
+                                                xend = .data$xend,
+                                                y = .data$ystart,
+                                                yend = .data$yend),
                                    colour = "white",
                                    linetype = 2) +
              ggrepel::geom_label_repel(data = plotdfpoints[which(seq_len(nrow(plotdfpoints)) %% 2 == 0)-1,],
-                                       ggplot2::aes(x = x,
-                                                    y = y,
+                                       ggplot2::aes(x = .data$x,
+                                                    y = .data$y,
                                                     label = labels),
                                        segment.colour = "gray",
                                        point.padding = 0.2,
@@ -181,26 +187,26 @@ plot.trackvisits <- function(x,
 
            ggplot2::ggplot() +
              ggplot2::geom_point(data = plotdfpoints,
-                                 ggplot2::aes(x = x,
-                                              y = y,
+                                 ggplot2::aes(x = .data$x,
+                                              y = .data$y,
                                               fill = plotdfpoints$campsite),
                                  shape = 21,
                                  size = 3) +
              ggplot2::geom_segment(data = tracksegments,
-                                   ggplot2::aes(x = x,
-                                                y = y,
-                                                xend = xend,
-                                                yend = yend)) +
+                                   ggplot2::aes(x = .data$x,
+                                                y = .data$y,
+                                                xend = .data$xend,
+                                                yend = .data$yend)) +
              ggplot2::geom_segment(data = plotdfsegmentsgaps,
-                                   ggplot2::aes(x = xstart,
-                                                xend = xend,
-                                                y = ystart,
-                                                yend = yend),
+                                   ggplot2::aes(x = .data$xstart,
+                                                xend = .data$xend,
+                                                y = .data$ystart,
+                                                yend = .data$yend),
                                    colour = "white",
                                    linetype = 2) +
              ggrepel::geom_label_repel(data = plotdfpoints[which(seq_len(nrow(plotdfpoints)) %% 2 == 0)-1,],
-                                       ggplot2::aes(x = x,
-                                                    y = y,
+                                       ggplot2::aes(x = .data$x,
+                                                    y = .data$y,
                                                     label = labels),
                                        segment.colour = "gray",
                                        point.padding = 0.2,
@@ -221,25 +227,26 @@ plot.trackvisits <- function(x,
 
            ggplot2::ggplot() +
              ggplot2::geom_path(data = plotdfpoints,
-                                ggplot2::aes(x = time, y = alt)) +
+                                ggplot2::aes(x = .data$time,
+                                             y = .data$alt)) +
              ggplot2::geom_segment(data = plotdfsegmentsgaps,
-                                   ggplot2::aes(x = xstarttime,
-                                                xend = xendtime,
-                                                y = ystartaltitude,
-                                                yend = yendaltitude),
+                                   ggplot2::aes(x = .data$xstarttime,
+                                                xend = .data$xendtime,
+                                                y = .data$ystartaltitude,
+                                                yend = .data$yendaltitude),
                                    colour = "white",
                                    linetype = 2) +
              ggplot2::geom_point(data = plotdfpoints,
-                                 ggplot2::aes(x = time,
-                                              y = alt,
+                                 ggplot2::aes(x = .data$time,
+                                              y = .data$alt,
                                               fill = plotdfpoints$campsite),
                                  shape = 21,
                                  size = 3) +
              ggplot2::scale_fill_manual(values = scale_fill_manual_values) +
              ggplot2::theme(legend.position = "none") +
              ggrepel::geom_label_repel(data = plotdfpoints[seq(1, nrow(plotdfpoints)-1, by = 2),],
-                                       ggplot2::aes(x = time,
-                                                    y = alt,
+                                       ggplot2::aes(x = .data$time,
+                                                    y = .data$alt,
                                                     label = labels),
                                        segment.colour = "gray",
                                        point.padding = 0.2,

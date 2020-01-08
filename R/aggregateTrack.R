@@ -27,9 +27,15 @@ NULL
 #' \code{POSIXct} value in order to aggregate to daily values.
 #' @return The temporally aggregated \code{x}.
 #'
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-#' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-#' \code{\link{extractClustersBuffer}}.
+#' @seealso
+#' \code{\link{gapdurationnextcampsite_wos}},
+#' \code{\link{gapdurationnextcampsite_wis}},
+#' \code{\link{distancenextvisit_wis}},
+#' \code{\link{distancenextvisit_wos}},
+#' \code{\link{distancenextvisit_wis_campsite}},
+#' \code{\link{altitudinaldistancenextvisit_wis}},
+#' \code{\link{altitudinaldistancenextvisit_wos}},
+#' \code{\link{altitudinaldistancenextvisit_wis_campsite}}.
 #' @examples #
 #' @export
 aggregateTrack <- function(x, by = list(strftime(x@time, format = "%Y-%m-%d"))){
@@ -52,7 +58,7 @@ aggregateTrack <- function(x, by = list(strftime(x@time, format = "%Y-%m-%d"))){
   }, simplify = FALSE))
 
   # convert by to POSIXct
-  by[[1]] <- as.POSIXct(by[[1]], tz = tzone(x@time))
+  by[[1]] <- as.POSIXct(by[[1]], tz = xts::tzone(x@time))
 
   # compute aggregated time values
   agg <- data.frame(time = unique(by[[1]]))

@@ -9,9 +9,6 @@ NULL
 #' and if the distance between the spatial position of the last data
 #' value before the gap and the spatial position of the first data
 #' value after the gap is \eqn{\le} a user specified distance threshold.
-#' In contrast to \code{\link{fillGapTrack}}, \code{fillGapTrackNight}
-#' considers only values in a specified time interval of the day (e.g.
-#' during night) as nearest points prior/after a gap.
 #'
 #' It has to be paid
 #' attention to the fact that \code{maxduration} should be adapted to
@@ -46,7 +43,8 @@ NULL
 #' the variable \code{gap} set to \code{FALSE} for filled gap values. Additionally,
 #' the output has a new variable \code{filled} indicating if a gap was filled
 #' (\code{filled = TRUE}) or not (\code{filled = FALSE})
-#' @seealso \code{\link{reorganizeTracks}}).
+#' @seealso
+#' \code{\link{fillGapTracksNight}}.
 #' @examples #
 #' @export
 fillGapTrackNight <- function(currenttrack,

@@ -59,5 +59,10 @@ with \code{\link{trackvisitsGetGroups}} first or the variable
 #
 }
 \seealso{
-\code{\link{trackvisits}}.
+\code{\link{trackvisits}},
+\code{\link{plot.trackvisits}},
+\code{\link{trackvisitsFromTrack}},
+\code{\link{trackvisitsGetGroups}},
+\code{\link{trackvisitsSetNextvisitsamelocationindex}},
+\code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 }

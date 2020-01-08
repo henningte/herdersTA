@@ -117,9 +117,8 @@ NULL
 #'   }
 #'   }
 #' }
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-#' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-#' \code{\link{extractClustersBuffer}}.
+#' @seealso
+#' \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
 locationsTracks <- function(currenttracks,
@@ -131,6 +130,9 @@ locationsTracks <- function(currenttracks,
                             night = c(16, 20),
                             cores = 1,
                             clcall = NULL){
+
+  # avoid no visible bindings message
+  track_i <- NULL
 
   # set up cluster
   cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")

@@ -16,7 +16,8 @@ NULL
 #' is automatically assumed that this is the case.
 #' @param y A \code{\link[trajectories:Track-class]{TracksCollection}} object.
 #' Depending on other parameters set, there may be certain variables required.
-#' @param character. \code{"simple"} or \code{"bilinear"}. If \code{"simple"}
+#' @param datetime A POSIXct vector with a date (day) for each layer in \code{x}.
+#' @param method A character value. \code{"simple"} or \code{"bilinear"}. If \code{"simple"}
 #' values for the cell a point falls in are returned. If \code{"bilinear"} the
 #' returned values are interpolated from the values of the four nearest raster
 #' cells.
@@ -41,19 +42,37 @@ NULL
 #' the same position is assumed for all data values. In this case, computation
 #' can be speed up by setting \code{location = TRUE} and the function uses
 #' simply the coordinates of the first value for each location.
+#' @param cores An integer value representing the number of cores to
+#' use in parallel computing.
+#' @param clcall A function that is passed to
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return A vector with a value for each data value of \code{currenttrack}.
 #' If a value of \code{raster} cannot be assigned to a respective data value,
 #' \code{NA} is returned for the respective data value.
-#' @seealso \code{\link{extractRasterTrack}}.
+#' @seealso
+#' \code{\link{extractPolygonsTracks}},
+#' \code{\link{extractRasterTrack}}.
 #' @examples #
 #' @export
-extractRasterTracks <- function(x, y, datetime, method = "simple", buffer = 0, small = TRUE, fun = NULL, na.rm = TRUE, fixedlocationcoords = FALSE, cores = 1, clcall = NULL
-){
+extractRasterTracks <- function(x,
+                                y,
+                                datetime,
+                                method = "simple",
+                                buffer = 0,
+                                small = TRUE,
+                                fun = NULL,
+                                na.rm = TRUE,
+                                fixedlocationcoords = FALSE,
+                                cores = 1,
+                                clcall = NULL) {
 
   # checks
   if(!(inherits(y, "TracksCollection"))){
     stop("y must be a TracksCollection object\n")
   }
+
+  # avoid no visible bindings message
+  tracks <- NULL
 
   # set up cluster
   cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")

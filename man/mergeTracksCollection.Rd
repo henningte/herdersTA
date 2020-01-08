@@ -7,14 +7,14 @@
 mergeTracksCollection(trackscollection, cores = 1, clcall = NULL)
 }
 \arguments{
+\item{trackscollection}{A
+\code{\link[trajectories:Track-class]{TracksCollection}} object.}
+
 \item{cores}{An integer value representing the number of cores to
 use in parallel computing.}
 
 \item{clcall}{A function that is passed to
 \code{\link[parallel:clusterApply]{clusterCall}}.}
-
-\item{currenttrackscollection}{A
-\code{\link[trajectories:Track-class]{TracksCollection}} object.}
 }
 \value{
 A \code{\link[trajectories:Track-class]{TracksCollection}} object with

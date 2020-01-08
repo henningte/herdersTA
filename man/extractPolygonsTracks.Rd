@@ -33,6 +33,12 @@ simply the coordinates of the first value for each location.}
 \item{what}{A numeric vector specifying the column(s) of \code{x}
 from which to retain values. I fset to \code{NULL}, values for all
 columns will be extracted.}
+
+\item{cores}{An integer value representing the number of cores to
+use in parallel computing.}
+
+\item{clcall}{A function that is passed to
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 A vector with a value for each data value of \code{y}.
@@ -48,5 +54,6 @@ for an object of class \code{\link[trajectories:Track-class]{TracksCollection}}.
 #
 }
 \seealso{
-\code{\link{extractRasterTrack}}, \code{\link{extractPolygonsTrack}}.
+\code{\link{extractRasterTrack}},
+\code{\link{extractPolygonsTrack}}.
 }

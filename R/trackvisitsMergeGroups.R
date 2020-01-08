@@ -37,7 +37,13 @@
 #'   \item{\code{mergewithnext}}{reset to \code{NA}.}
 #' }
 #'
-#' @seealso \code{\link{trackvisits}}.
+#' @seealso
+#' \code{\link{trackvisits}},
+#' \code{\link{plot.trackvisits}},
+#' \code{\link{trackvisitsFromTrack}},
+#' \code{\link{trackvisitsGetGroups}},
+#' \code{\link{trackvisitsSetNextvisitsamelocationindex}},
+#' \code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 #' @examples #
 #' @export
 trackvisitsMergeGroups <- function(currenttrackvisits,

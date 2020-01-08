@@ -11,7 +11,13 @@
 #' @return An object of class \code{\link{trackvisits}} in which the number of
 #' repeated campsite visits at the same location is set.
 #'
-#' @seealso \code{\link{trackvisits}}.
+#' @seealso
+#' \code{\link{trackvisits}},
+#' \code{\link{plot.trackvisits}},
+#' \code{\link{trackvisitsFromTrack}},
+#' \code{\link{trackvisitsGetGroups}},
+#' \code{\link{trackvisitsMergeGroups}},
+#' \code{\link{trackvisitsSetNextvisitsamelocationindex}}.
 #' @examples #
 #' @export
 trackvisitsSetNorepeatedcampsitevisits <- function(currenttrackvisits){

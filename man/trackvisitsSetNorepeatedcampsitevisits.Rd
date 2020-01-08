@@ -25,5 +25,10 @@ location.
 #
 }
 \seealso{
-\code{\link{trackvisits}}.
+\code{\link{trackvisits}},
+\code{\link{plot.trackvisits}},
+\code{\link{trackvisitsFromTrack}},
+\code{\link{trackvisitsGetGroups}},
+\code{\link{trackvisitsMergeGroups}},
+\code{\link{trackvisitsSetNextvisitsamelocationindex}}.
 }

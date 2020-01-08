@@ -36,8 +36,3 @@ same value for the specified variable.
 \examples{
 #
 }
-\seealso{
-\code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
-\code{\link{redefineIndices}}, \code{\link{fillGapTrack}},
-\code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
-}

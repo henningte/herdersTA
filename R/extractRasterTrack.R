@@ -18,7 +18,8 @@ NULL
 #' is automatically assumed that this is the case.
 #' @param y A \code{\link[trajectories:Track-class]{Track}} object.
 #' Depending on other parameters set, there may be certain variables required.
-#' @param character. \code{"simple"} or \code{"bilinear"}. If \code{"simple"}
+#' @param datetime A POSIXct vector with a date (day) for each layer in \code{x}.
+#' @param method A character value. \code{"simple"} or \code{"bilinear"}. If \code{"simple"}
 #' values for the cell a point falls in are returned. If \code{"bilinear"} the
 #' returned values are interpolated from the values of the four nearest raster
 #' cells.
@@ -45,7 +46,8 @@ NULL
 #' @return A vector with a value for each data value of \code{currenttrack}.
 #' If a value of \code{raster} cannot be assigned to a respective data value,
 #' \code{NA} is returned for the respective data value.
-#' @seealso \code{\link{assignFixedTenDayInterval}},
+#' @seealso
+#' \code{\link{extractPolygonsTrack}},
 #' \code{\link{extractRasterTracks}}.
 #' @examples #
 #' @export

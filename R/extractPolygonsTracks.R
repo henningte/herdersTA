@@ -21,10 +21,16 @@ NULL
 #' @param what A numeric vector specifying the column(s) of \code{x}
 #' from which to retain values. I fset to \code{NULL}, values for all
 #' columns will be extracted.
+#' @param cores An integer value representing the number of cores to
+#' use in parallel computing.
+#' @param clcall A function that is passed to
+#' \code{\link[parallel:clusterApply]{clusterCall}}.
 #' @return A vector with a value for each data value of \code{y}.
 #' If a value of \code{x} cannot be assigned to a respective data value,
 #' \code{NA} is returned for the respective data value.
-#' @seealso \code{\link{extractRasterTrack}}, \code{\link{extractPolygonsTrack}}.
+#' @seealso
+#' \code{\link{extractRasterTrack}},
+#' \code{\link{extractPolygonsTrack}}.
 #' @examples #
 #' @export
 extractPolygonsTracks <- function(x,
@@ -40,6 +46,9 @@ extractPolygonsTracks <- function(x,
   if(!(inherits(y, "TracksCollection"))){
     stop("y must be a TracksCollection object\n")
   }
+
+  # avoid no visible bindings message
+  tracks <- NULL
 
   # set up cluster
   cl <- parallel::makeCluster(cores, outfile="", type = "PSOCK")

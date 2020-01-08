@@ -43,9 +43,6 @@ if their duration is \eqn{\le} a user specified duration threshold
 and if the distance between the spatial position of the last data
 value before the gap and the spatial position of the first data
 value after the gap is \eqn{\le} a user specified distance threshold.
-In contrast to \code{\link{fillGapTrack}}, \code{fillGapTrackNight}
-considers only values in a specified time interval of the day (e.g.
-during night) as nearest points prior/after a gap.
 }
 \details{
 It has to be paid
@@ -62,5 +59,5 @@ is the duration of the time interval specified as night in hours.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}).
+\code{\link{fillGapTracksNight}}.
 }

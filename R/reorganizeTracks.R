@@ -27,6 +27,10 @@ NULL
 #' @param currenttracks A \code{\link[trajectories:Track-class]{TracksCollection}} object
 #' with only one \code{\link[trajectories:Track-class]{Track}} object per
 #' \code{\link[trajectories:Track-class]{Tracks}} object.
+#' @param interval A numeric value > 0 representing the duration of each time interval
+#' the data are reorganised to [s]. The deault is \code{60*30}, i.e. half an hour.
+#' @param tz A character value indicating the time zone of the data in \code{currenttracks}.
+#' @param crs A character value indicating the coordinate reference system of \code{currenttracks}.
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.
 #' @param clcall A function that is passed to

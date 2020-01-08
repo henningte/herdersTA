@@ -32,5 +32,10 @@ An object of class \code{\link{trackvisits}}.
 #
 }
 \seealso{
-\code{\link{trackvisits}}.
+\code{\link{trackvisits}},
+\code{\link{plot.trackvisits}},
+\code{\link{trackvisitsGetGroups}},
+\code{\link{trackvisitsMergeGroups}},
+\code{\link{trackvisitsSetNextvisitsamelocationindex}},
+\code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 }

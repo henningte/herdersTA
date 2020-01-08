@@ -24,7 +24,7 @@ mergeTracks <- function(currenttracks){
   df <- exDataTracks(currenttracks = currenttracks)
 
   # extract spatial data
-  trsSP <- as(as(currenttracks, "SpatialLines"), "SpatialPoints")
+  trsSP <- methods::as(methods::as(currenttracks, "SpatialLines"), "SpatialPoints")
 
   # extract time information
   time <- do.call("c", lapply(currenttracks@tracks, function(x) as.POSIXct(x@time)))

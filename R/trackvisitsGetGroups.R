@@ -33,7 +33,13 @@
 #' of the next visit at the same location.
 #' @return An object of class \code{\link{trackvisits}}.
 #'
-#' @seealso \code{\link{trackvisits}}.
+#' @seealso
+#' \code{\link{trackvisits}},
+#' \code{\link{plot.trackvisits}},
+#' \code{\link{trackvisitsFromTrack}},
+#' \code{\link{trackvisitsMergeGroups}},
+#' \code{\link{trackvisitsSetNextvisitsamelocationindex}},
+#' \code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 #' @examples #
 #' @export
 trackvisitsGetGroups <- function(trackvisits,

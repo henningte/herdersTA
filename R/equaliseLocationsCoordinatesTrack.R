@@ -37,6 +37,9 @@ equaliseLocationsCoordinatesTrack <- function(currenttrack){
     stop("currenttrack$location must be numeric with integer values")
   }
 
+  # avoid no visible bindings message
+  location <- NULL
+
   # extract the locations
   xlocations <- data.frame(location = currenttrack$location,
                            stringsAsFactors = FALSE)

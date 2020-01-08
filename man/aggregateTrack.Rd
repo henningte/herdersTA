@@ -34,7 +34,12 @@ defined in \code{\link{locationsTracks}}.
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-\code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-\code{\link{extractClustersBuffer}}.
+\code{\link{gapdurationnextcampsite_wos}},
+\code{\link{gapdurationnextcampsite_wis}},
+\code{\link{distancenextvisit_wis}},
+\code{\link{distancenextvisit_wos}},
+\code{\link{distancenextvisit_wis_campsite}},
+\code{\link{altitudinaldistancenextvisit_wis}},
+\code{\link{altitudinaldistancenextvisit_wos}},
+\code{\link{altitudinaldistancenextvisit_wis_campsite}}.
 }

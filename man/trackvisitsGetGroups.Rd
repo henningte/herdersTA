@@ -57,5 +57,10 @@ it is given advice on visits to merge.
 #
 }
 \seealso{
-\code{\link{trackvisits}}.
+\code{\link{trackvisits}},
+\code{\link{plot.trackvisits}},
+\code{\link{trackvisitsFromTrack}},
+\code{\link{trackvisitsMergeGroups}},
+\code{\link{trackvisitsSetNextvisitsamelocationindex}},
+\code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 }

@@ -23,9 +23,6 @@ NULL
 #' where the block begins and the second column indicates the row of
 #' \code{currenttrack@data} where the block ends or \code{NULL} if
 #' \code{value} does not exist for \code{variable}.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{extractClustersBuffer}},
-#' \code{\link{redefineIndices}}, \code{\link{fillGapTrack}},
-#' \code{\link{fillGapTracks}}, \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
 identifyBlocksVariable <- function(currenttrack,

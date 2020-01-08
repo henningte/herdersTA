@@ -145,7 +145,5 @@ for each visit of a location (\code{summary = TRUE}).
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-\code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-\code{\link{extractClustersBuffer}}.
+\code{\link{locationsTrack}}.
 }

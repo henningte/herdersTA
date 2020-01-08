@@ -87,9 +87,8 @@ NULL
 #'   \item{If (\code{summary = TRUE})}{An object of class \code{\link{trackvisits}}
 #'   summarising the locations and visits for \code{currenttrack}.}
 #' }
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-#' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-#' \code{\link{extractClustersBuffer}}.
+#' @seealso
+#' \code{\link{locationsTracks}}.
 #' @examples #
 #' @export
 locationsTrack <- function(currenttrack,

@@ -27,6 +27,13 @@ is automatically assumed that this is the case.}
 \item{y}{A \code{\link[trajectories:Track-class]{TracksCollection}} object.
 Depending on other parameters set, there may be certain variables required.}
 
+\item{datetime}{A POSIXct vector with a date (day) for each layer in \code{x}.}
+
+\item{method}{A character value. \code{"simple"} or \code{"bilinear"}. If \code{"simple"}
+values for the cell a point falls in are returned. If \code{"bilinear"} the
+returned values are interpolated from the values of the four nearest raster
+cells.}
+
 \item{buffer}{A numeric value indicating the radius of the buffer
 around each point that should be considered during extraction of
 the raster values. If the data are not projected
@@ -53,10 +60,11 @@ the same position is assumed for all data values. In this case, computation
 can be speed up by setting \code{location = TRUE} and the function uses
 simply the coordinates of the first value for each location.}
 
-\item{character.}{\code{"simple"} or \code{"bilinear"}. If \code{"simple"}
-values for the cell a point falls in are returned. If \code{"bilinear"} the
-returned values are interpolated from the values of the four nearest raster
-cells.}
+\item{cores}{An integer value representing the number of cores to
+use in parallel computing.}
+
+\item{clcall}{A function that is passed to
+\code{\link[parallel:clusterApply]{clusterCall}}.}
 }
 \value{
 A vector with a value for each data value of \code{currenttrack}.
@@ -73,5 +81,6 @@ options are available.
 #
 }
 \seealso{
+\code{\link{extractPolygonsTracks}},
 \code{\link{extractRasterTrack}}.
 }

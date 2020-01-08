@@ -6,6 +6,7 @@
 \usage{
 \method{plot}{trackvisits}(
   x,
+  ...,
   what = "lonlatanonymuous",
   seasons = data.frame(start = c(3, 5, 9, 11), end = c(4, 8, 10, 2), colour =
     c("yellow", "red", "burlywood1", "lightgray")),
@@ -15,6 +16,8 @@
 \arguments{
 \item{x}{An object of class \code{link{trackvisits}} with the variable
 \code{campsite} being defined.}
+
+\item{...}{Further arguments, will be ignored.}
 
 \item{what}{A character value defining which plot to create. See the description section.}
 
@@ -71,7 +74,10 @@ A  \code{\link[ggplot2]{ggplot}} object
 #
 }
 \seealso{
-\code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-\code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-\code{\link{extractClustersBuffer}}.
+\code{\link{trackvisits}},
+\code{\link{trackvisitsFromTrack}},
+\code{\link{trackvisitsGetGroups}},
+\code{\link{trackvisitsMergeGroups}},
+\code{\link{trackvisitsSetNextvisitsamelocationindex}},
+\code{\link{trackvisitsSetNorepeatedcampsitevisits}}.
 }

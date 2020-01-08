@@ -39,8 +39,3 @@ reflect a daily resolution with respect to different locations.
 \examples{
 #
 }
-\seealso{
-\code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-\code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-\code{\link{locationsTrack}}.
-}

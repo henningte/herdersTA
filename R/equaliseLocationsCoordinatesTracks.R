@@ -39,6 +39,9 @@ equaliseLocationsCoordinatesTracks <- function(currenttracks,
     stop("currenttracks must be a TracksCollection\n")
   }
 
+  # avoid no visible bindings message
+  x <- NULL
+
   # extract the names
   currenttracksnames <- names(currenttracks@tracksCollection)
 

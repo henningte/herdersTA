@@ -28,9 +28,6 @@ NULL
 #' \code{currenttrack} indicating to which cluster each point is assigned. Cluster
 #' indices are not ordered, however points of \code{trsSP} representing gaps
 #' (as indicated by \code{currenttrack$gap}) get the cluster index \code{0}.
-#' @seealso \code{\link{reorganizeTracks}}, \code{\link{redefineIndices}},
-#' \code{\link{fillGapTrack}}, \code{\link{fillGapTracks}},
-#' \code{\link{locationsTrack}}.
 #' @examples #
 #' @export
 extractClustersBuffer <- function(currenttrack,

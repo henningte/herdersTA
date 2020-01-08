@@ -14,6 +14,11 @@ distance values of \code{NA}.}
 
 \item{feature}{A SpatialLines or SpatialPolygons object containing the features
 to compute distance to.}
+
+\item{minrange}{A numerical value > 0 representing the minimum buffer radius within which
+\code{min_dist_to_feature} initially searches for the closest polyline or polygon border
+around a location. The unit of \code{minrange} is the same as for the reference system of
+\code{currenttrack}.}
 }
 \value{
 A \code{vector} with the shortest distance of all locations in \code{currenttrack}
@@ -30,7 +35,4 @@ iteratively.
 }
 \examples{
 #
-}
-\seealso{
-
 }

@@ -12,8 +12,8 @@
 #' @seealso #.
 #' @examples #
 #' @export
-redefineIndices <- function(x, notchange = NULL
-){
+redefineIndices <- function(x,
+                            notchange = NULL) {
 
   # checks
   if(!(is.numeric(x) || all(x%%1==0))){
