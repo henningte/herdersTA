@@ -19,7 +19,7 @@ NULL
 #' can be speed up by setting \code{location = TRUE} and the function uses
 #' simply the coordinates of the first value for each location.
 #' @param what A numeric vector specifying the column(s) of \code{x}
-#' from which to retain values. I fset to \code{NULL}, values for all
+#' from which to retain values. If set to \code{NULL}, values for all
 #' columns will be extracted.
 #' @param cores An integer value representing the number of cores to
 #' use in parallel computing.

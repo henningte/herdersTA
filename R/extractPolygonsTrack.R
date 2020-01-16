@@ -18,7 +18,7 @@ NULL
 #' can be speed up by setting \code{location = TRUE} and the function uses
 #' simply the coordinates of the first value for each location.
 #' @param what A numeric vector specifying the column(s) of \code{x}
-#' from which to retain values. I fset to \code{NULL}, values for all
+#' from which to retain values. If set to \code{NULL}, values for all
 #' columns will be extracted.
 #' @return A data.frame with a value for each data value of \code{y} in
 #' columns specified with \code{what}.
