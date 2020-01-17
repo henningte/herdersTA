@@ -1,5 +1,5 @@
 Package: herdersTA
-Title: Analysis of GPS Tracks of Individuals
+Title: Extracting Movement Characteristics from GPS Trajectories of Nomadic Households
 Version: 0.0.0.9000
 Authors@R:
     c(person(given = "Henning",
