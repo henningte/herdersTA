@@ -1,0 +1,61 @@
+---
+output: 
+  github_document
+bibliography: inst\\REFERENCES.bib
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# herdersTA
+
+herdersTA provides functions in order to extract movement characteristics from high-temporal resolution GPS trajectories of nomadic households. Key functions are the extraction of visited locations using density-based clustering and flexible time thresholding, the identification of individual visits, gap filling, temporal aggregation and the extraction of raster and polygon data at locations. Moreover, functions to plot the time course of visited locations with additional information while ensuring anonymisation are provided.
+
+herdersTA makes use of the [trajectories](https://github.com/edzer/trajectories) package for general GPS trajectory handling and the [dbscan](https://github.com/mhahsler/dbscan) package for density based clustering with which locations are identified. 
+
+### How to install
+
+You can install herdersTA from GitHub using R via:
+```{r installation, eval = FALSE}
+remotes::install_github(repo = "henningte/herdersTA")
+```
+
+### How to use
+
+You can load herdersTA in R with:
+```{r load_herdersTA}
+library(herdersTA) 
+```
+
+
+### How to cite
+
+Please cite this R package as:
+
+> Henning Teickner and Christian Knoth (`r format(Sys.Date(), "%Y")`). _herdersTA: Extracting Movement Characteristics from GPS Trajectories of Nomadic Households'_. Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://github.com/henningte/herdersTA>.
+
+
+### Licenses
+
+**Text and figures :**  [CC-BY-4.0](http://creativecommons.org/licenses/by/4.0/)
+
+**Code :** See the [DESCRIPTION](DESCRIPTION) file
+
+**Data :** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) attribution requested in reuse (Note that currently no sample data is provided).
+
+### Contributions
+
+We welcome contributions from everyone. Before you get started, please see our [contributor guidelines](CONTRIBUTING.md). Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+### Sources
+
+This packages was developed in R (`r R.Version()$version.string`) [@RCoreTeam.2017] using functions from devtools [@Wickham.2019], usethis [@Wickham.2019b], rrtools [@Marwick.2019] and roxygen2 [@Wickham.2019c].
+
+### References

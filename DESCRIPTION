@@ -11,8 +11,13 @@ Authors@R:
            role = c("aut"),
            email = "christian.knoth@uni-muenster.de")     
            )
-Description: herdersTA provides functions in order to process and summarise GPS based
-  trajectories of individuals. 
+Description: herdersTA provides functions in order to extract movement characteristics 
+  from high-temporal resolution GPS trajectories of nomadic households. Key functions are 
+  the extraction of visited locations using density-based clustering and flexible time 
+  thresholding, the identification of individual visits, gap filling, temporal aggregation and the 
+  extraction of raster and polygon data at locations. Moreover, functions to plot the 
+  time course of visited locations with additional information while ensuring anonymisation 
+  are provided.
 Depends: 
   R (>= 3.2.0)
 Imports:

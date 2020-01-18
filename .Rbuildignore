@@ -1,3 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\./R/summaryIndicatorsIntervalsTrack_categorylist\.R$
+^CONDUCT\.md$
+^CONTRIBUTING\.md$
+^README\.md$
+^README\.Rmd$
